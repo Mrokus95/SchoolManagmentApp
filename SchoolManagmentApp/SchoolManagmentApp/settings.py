@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['DEFAULT_FILE_STORAGE']
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,7 @@ ROOT_URLCONF = 'SchoolManagmentApp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'usersApp', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,9 +94,6 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
@@ -110,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'pl-pl'
+LANGUAGE_CODE = 'en-en'
 
 TIME_ZONE = 'Europe/Warsaw'
 
@@ -135,15 +133,10 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
 
-# S3 bucket
 
-AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
-AWS_S3_REGION_NAME = os.environ['AWS_S3_REGION_NAME']
-AWS_S3_FILE_OVERWRITE = os.environ['AWS_S3_FILE_OVERWRITE']
-AWS_DEFAULT_ACL = os.environ['AWS_DEFAULT_ACL']
-AWS_S3_VERIFY = os.environ['AWS_S3_VERIFY']
-AWS_S3_ADDRESSING_STYLE = os.environ['AWS_S3_ADDRESSING_STYLE']
-AWS_S3_ENDPOINT_URL = os.environ['AWS_S3_ENDPOINT_URL']
-DEFAULT_FILE_STORAGE = os.environ['DEFAULT_FILE_STORAGE']
+# Login redirecting
+LOGIN_URL = 'home'
+LOGOUT_URL = 'home'
+LOGIN_REDIRECT_URL = 'home'
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{%load static %}
 <html lang="pl">
 	<head>
 		<meta charset="UTF-8" />
@@ -14,14 +15,28 @@
 			src="https://kit.fontawesome.com/04a6da9d09.js"
 			crossorigin="anonymous"
 		></script>
-		<link rel="stylesheet" href="./css/style.css" />
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+			crossorigin="anonymous"
+		/>
+		<link rel="stylesheet" href="{% static '/css/style.css' %}" />
 		<title>Liceum Ogólnokształcące</title>
 	</head>
 	<body>
+		{% if messages%}
+			{% for message in messages %}
+				{% if message.tags == 'error' %}
+					<span class="alert alert-danger message red" id="error">{{ message }}</span>
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		
 		<section class="hero">
 			<div class="main-width">
 				<header class="logo">
-					<div><img src=".\img\logo.png" alt="" /></div>
+					<div><img class="logo-img" src="{% static 'img/logo.png' %}" alt="" /></div>
 					<nav>
 						<div class="hamb">
 							<span></span>
@@ -32,7 +47,11 @@
 							<li><a href="#">Home</a></li>
 							<li><a href="#">About project</a></li>
 							<li><a href="#">Authors</a></li>
-							<li id="login-nav-btn" class="btn"><a href="#">Log In</a></li>
+							{% if not user.is_authenticated %}
+								<li><a href=""><button id="login-nav-btn" class="login-nav-btn">Login</button></a></li>
+							{% else %}
+								<li><a href="{% url 'logout' %}"><button id="login-nav" class="login-nav-btn" >Logout</button></a></li>
+							{%endif%}
 						</ul>
 					</nav>
 				</header>
@@ -68,46 +87,20 @@
 	
 					</div>
 					<div id="login-form" class="login-form">
-						<form>
+						<form action="{% url 'home' %}" method="POST">
 							<h3>Login Here</h3>
-							<label for="username">Username</label>
-							<input type="text" placeholder="Email or Phone" id="username">
-							<label for="password">Password</label>
-							<input type="password" placeholder="Password" id="password">
-							<button>Log In</button>
+							<label for="id_username">Username</label>
+							<input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username" placeholder="Username">
+							<label for="id_password">Password:</label>
+							<input type="password" name="password" autocomplete="current-password" required="" id="id_password" placeholder="Password">
+							{% csrf_token %}
+							<button type="submit">Log In</button>
 						</form>
 					</div>
-
 				</div>
-
-				
-
-
 			</div>
 		</section>
-		<script type="text/javascript" src="js/script.js"></script>
 		<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-		<script>
-			var typed = new Typed(".input", {
-				strings: [
-					"Szkołą Prywatną.",
-					"Wsparciem Ucznia.",
-					"Przyjaciółmi Rodziców.",
-					"5 LO w Zabrzu!",
-				],
-				typeSpeed: 70,
-				backSpeed: 60,
-				loop: true,
-			});
-
-
-
-			const commentButton = document.getElementById("login-nav-btn");
-			const commentSection = document.getElementById("login-form");
-
-			commentButton.addEventListener("click", () => {
-			commentSection.classList.toggle("comment-section-hide");
-			});
-</script>
+		<script type="text/javascript" src="{% static 'js/script.js' %}"></script>
 	</body>
 </html>

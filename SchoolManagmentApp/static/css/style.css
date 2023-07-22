@@ -99,7 +99,8 @@ nav .nav-list li:not(:last-child) a:hover {
   transition: 0.4s;
 }
 
-nav .nav-list li.btn a {
+.login-nav-btn {
+  font-size: 18px;
   display: inline-block;
   background: transparent;
   border: 2px solid #2ecc71;
@@ -110,7 +111,7 @@ nav .nav-list li.btn a {
   font-weight: 500;
 }
 
-nav .nav-list li.btn:hover a {
+.login-nav-btn:hover{
   background: #2ecc71;
   color: #fff;
   border: 2px solid transparent;
@@ -286,6 +287,7 @@ span {
   display: flex;
   flex-direction: column;
   align-items: center; 
+  transition: opacity .7s;
 }
 
 .login-form * {
@@ -354,13 +356,52 @@ span {
 }
 
 .login-form-hide{
-  display: none;
+  opacity: 0;
+  overflow: hidden;
 }
 
 @media screen and (max-width: 930px) {
-  /* Twoje style dla mediów o szerokości do 930px */
 }
 
 @media only screen and (max-width: 600px) {
-  /* Twoje style dla mediów o szerokości do 600px */
+}
+
+
+.red{
+	background-color: red;
+}
+
+.green{
+	background-color: limegreen;
+}
+
+.message{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  font-size: 20px;
+  padding: 10px;
+  color: white;
+  text-align: center;
+  z-index: 9999;
+  display: inherit;
+  animation: errorAnimation 10s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+}
+
+@keyframes errorAnimation {
+    0% {
+        opacity: 0;
+    }
+
+	25%{
+		opacity: 100;
+	}
+    50% {
+        opacity: 100;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }

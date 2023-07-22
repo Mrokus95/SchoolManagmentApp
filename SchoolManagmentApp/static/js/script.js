@@ -15,13 +15,14 @@ var typed = new Typed(".input", {
     typeSpeed: 70,
     backSpeed: 60,
     loop: true,
-})
-
+});
 
 // commentSection 
-const commentButton = document.getElementById("login-nav-btn");
-const commentSection = document.getElementById("login-form");
+const commentButtons = document.getElementById("login-nav-btn");
+const commentSections = document.getElementsByClassName("login-form");
 
-commentButton.addEventListener("click", () => {
-  commentSection.classList.toggle("comment-section-hide");
+commentButtons[0].addEventListener("click", (event) => {
+  event.preventDefault();
+  commentSections[0].classList.toggle("login-form-hide");
 });
+

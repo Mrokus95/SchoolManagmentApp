@@ -8,13 +8,13 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 # Users
 
 class Profile(models.Model):
-    TEACHER = "Nauczyciel"
-    PARENT = "Rodzic"
-    STUDENT = "Uczeń"
+    TEACHER = "Teacher"
+    PARENT = "Parent"
+    STUDENT = "Student"
     TYPE_ACCOUNT_CHOICES = [
-        (TEACHER, "Nauczyciel"),
-        (PARENT, "Rodzic"),
-        (STUDENT, "Uczeń"),
+        (TEACHER, "Teacher"),
+        (PARENT, "Parent"),
+        (STUDENT, "Student"),
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -43,7 +43,7 @@ class ClassUnit(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='student')
     parent = models.OneToOneField(Parent, on_delete=models.CASCADE)
-    klasa = models.OneToOneField(ClassUnit, models.DO_NOTHING, blank=False, null=False, related_name='uczniowie')
+    klasa = models.OneToOneField(ClassUnit, models.DO_NOTHING, blank=False, null=False, related_name='students_in_class')
 
     def __str__(self):
         return f'{self.user.user.first_name} {self.user.user.last_name}'

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'usersApp'
 
 ]
 
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'SchoolManagmentApp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'usersApp', 'templates')],
+        'DIRS': [BASE_DIR / 'baseTemplate'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

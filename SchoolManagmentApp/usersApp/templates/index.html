@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<script
+			src="https://kit.fontawesome.com/04a6da9d09.js"
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="./css/style.css" />
+		<title>Liceum Ogólnokształcące</title>
+	</head>
+	<body>
+		<section class="hero">
+			<div class="main-width">
+				<header class="logo">
+					<div><img src=".\img\logo.png" alt="" /></div>
+					<nav>
+						<div class="hamb">
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+						<ul class="nav-list">
+							<li><a href="#">Home</a></li>
+							<li><a href="#">About project</a></li>
+							<li><a href="#">Authors</a></li>
+							<li id="login-nav-btn" class="btn"><a href="#">Log In</a></li>
+						</ul>
+					</nav>
+				</header>
+				<div class="container">
+					<div class="hero-text">
+						<h3>Witamy!</h3>
+						<h1>Jesteśmy <span class="input"></span></h1>
+						<p>
+							Od 70 lat kształcimy przyszłych naukowców,lekarzy, architektów,
+							prawników i artystów. <br />
+
+							Od 40 lat jesteśmy Szkołą Stowarzyszoną UNESCO.<br />
+
+							Organizujemy międzynarodowe wyjazdy i przedsięwzięcia -
+							odwiedziliśmy już niemal całą Europę, byliśmy także w Tajlandii i
+							w Japonii.<br />
+
+							Rozwijamy talenty naukowe, sportowe i artystyczne!<br />
+
+							Stawiamy na naukę!
+						</p>
+						<div class="social">
+							<a href="https://www.facebook.com/2lozabrze/" target="_blank"
+								><i class="fa-brands fa-facebook"></i
+							></a>
+							<a href="https://twitter.com/lostrzelno" target="_blank"
+								><i class="fa-brands fa-twitter"></i
+							></a>
+							<a href="https://www.instagram.com/2loptb/" target="_blank"
+								><i class="fa-brands fa-instagram"></i
+							></a>
+						</div>
+	
+					</div>
+					<div id="login-form" class="login-form">
+						<form>
+							<h3>Login Here</h3>
+							<label for="username">Username</label>
+							<input type="text" placeholder="Email or Phone" id="username">
+							<label for="password">Password</label>
+							<input type="password" placeholder="Password" id="password">
+							<button>Log In</button>
+						</form>
+					</div>
+
+				</div>
+
+				
+
+
+			</div>
+		</section>
+		<script type="text/javascript" src="js/script.js"></script>
+		<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+		<script>
+			var typed = new Typed(".input", {
+				strings: [
+					"Szkołą Prywatną.",
+					"Wsparciem Ucznia.",
+					"Przyjaciółmi Rodziców.",
+					"5 LO w Zabrzu!",
+				],
+				typeSpeed: 70,
+				backSpeed: 60,
+				loop: true,
+			});
+
+
+
+			const commentButton = document.getElementById("login-nav-btn");
+			const commentSection = document.getElementById("login-form");
+
+			commentButton.addEventListener("click", () => {
+			commentSection.classList.toggle("comment-section-hide");
+			});
+</script>
+	</body>
+</html>

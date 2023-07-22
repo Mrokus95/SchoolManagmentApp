@@ -21,7 +21,7 @@
 			integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
 			crossorigin="anonymous"
 		/>
-		<link rel="stylesheet" href="{% static '/css/style.css' %}" />
+		<link rel="stylesheet" href="{% static '/css/base_style.css' %}" />
 		<title>{% block title %} {% endblock title %}</title>
 	</head>
 	<body>
@@ -36,7 +36,7 @@
 		<section class="hero">
 			<div class="main-width">
 				<header class="logo">
-					<div><img class="logo-img" src="{% static 'img/logo.png' %}" alt="" /></div>
+					<div><a href="{% url 'home' %}"><img class="logo-img" src="{% static 'img/logo.png' %}" alt="" /></a></div>
 					<nav>
 						<div class="hamb">
 							<span></span>

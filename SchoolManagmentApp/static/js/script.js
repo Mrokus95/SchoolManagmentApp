@@ -21,7 +21,8 @@ var typed = new Typed(".input", {
 const commentButtons = document.getElementById("login-nav-btn");
 const commentSections = document.getElementsByClassName("login-form");
 
-commentButtons[0].addEventListener("click", (event) => {
+commentButtons.addEventListener("click", (event) => {
+  console.log('click');
   event.preventDefault();
   commentSections[0].classList.toggle("login-form-hide");
 });

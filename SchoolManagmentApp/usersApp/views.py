@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.shortcuts import render
+from django.contrib.auth.views import PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetView
+from django.urls import reverse_lazy
 
 class HomeView(View):
     template_name = 'index.html'
@@ -34,4 +36,28 @@ class HomeView(View):
             context = {'form': form, 'next': request.GET.get('next', '')}
             return render(request, self.template_name, context)
         
-    
+
+class CustomPasswordResetView(PasswordResetView):
+    success_url = reverse_lazy("password_reset_done")
+    template_name = "password_reset_form.html"
+    html_email_template_name = "password_reset_email.html"
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = "password_reset_done.html"
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+        success_url = reverse_lazy("password_reset_complete")
+        template_name = "password_reset_confirm.html"
+
+        def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            context['uidb64'] = self.kwargs['uidb64']
+            context['token'] = self.kwargs['token']
+            return context
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = "password_reset_complete.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

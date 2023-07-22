@@ -86,7 +86,7 @@
 						</div>
 	
 					</div>
-					<div id="login-form" class="login-form">
+					<div id="login-form" class="login-form login-form-hide">
 						<form action="{% url 'home' %}" method="POST">
 							<h3>Login Here</h3>
 							<label for="id_username">Username</label>
@@ -94,8 +94,9 @@
 							<label for="id_password">Password:</label>
 							<input type="password" name="password" autocomplete="current-password" required="" id="id_password" placeholder="Password">
 							{% csrf_token %}
-							<button type="submit">Log In</button>
+							<button  type="submit">Log In</button>
 						</form>
+						<div class="mt-2"><a href="{% url 'password_reset' %}">Forgot password?</a></div>
 					</div>
 				</div>
 			</div>

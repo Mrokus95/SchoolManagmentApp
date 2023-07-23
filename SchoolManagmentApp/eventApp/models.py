@@ -20,11 +20,9 @@ class Subject(models.Model):
     name = models.CharField(max_length=100, choices=SUBJECT_CHOICES, default='')
 
     def __str__(self):
-        return f'{self.name} prowadzący: {self.subject_teachers.user}'
+        return self.name
 
-class Teacher(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.DO_NOTHING, related_name='teacher', to_field= 'last_name')
-    lesson_type = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=False, null=False, related_name='subject_teachers')
+
 
 class Day(models.Model):
     DAYS_OF_WEEK = [
@@ -48,6 +46,15 @@ class Lesson(models.Model):
         MaxValueValidator(7)
     ])
     
+
+class Teacher(models.Model):
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='teacher_student', limit_choices_to={'account_type': 'Teacher'})
+
+    lesson_type = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=False, null=False, related_name='subject_teachers')
+
+    def __str__(self):
+        return f'{self.user.user.first_name} {self.user.user.last_name}'
+
 # Conduction of lesson
 
 class LessonReport(models.Model):
@@ -58,8 +65,30 @@ class LessonReport(models.Model):
     lesson_title = models.CharField(max_length=250)
     lesson_description = models.TextField()
 
+
+
 class CalendarEvents(models.Model):
-    pass
+
+
+    EVENT_TYPES=[
+    ('Other' ,'other'),
+    ('Small Test','small_test'),
+    ('Test','test'),
+    ('Essay','essay'),
+    ('Project','project')
+    ]
+
+    description = models.TextField()
+    event_type = models.CharField(choices=EVENT_TYPES)
+    realisation_time = models.DateField()
+    add_time = models.DateTimeField(auto_now_add=True)
+    subject = models.ForeignKey(Subject, related_name='subject', on_delete=models.DO_NOTHING)
+    connected_to_lesson = models.OneToOneField(LessonReport, related_name='related_lesson', on_delete=models.DO_NOTHING, null=True, blank=True)
+    author = models.ForeignKey(Teacher, related_name='author', on_delete=models.DO_NOTHING)
+    visited = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.event_type} added by: {self.author} on: {self.subject}'
        
 
  
@@ -71,3 +100,4 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f"{self.student_name} - {self.lesson.day} - {self.lesson_report.create_date} - {'Obecny' if self.is_present else 'Nieobecny'}"
+    

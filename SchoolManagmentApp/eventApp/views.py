@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import CalendarEvents
+from eventApp.models import CalendarEvents
+
 from datetime import date
 
 # Create your views here.
@@ -76,6 +77,8 @@ def event_detail(request, eventId):
 
     if CalendarEvents.objects.filter(id=eventId).exists():
         event = CalendarEvents.objects.get(id=eventId)
+        event.visited = True
+        event.save()
         return render(request, 'event_detail.html', {'event': event})
     else:
         messages.error(

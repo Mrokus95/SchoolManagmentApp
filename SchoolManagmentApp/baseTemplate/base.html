@@ -26,11 +26,13 @@
 	</head>
 	<body>
 		{% if messages %}
+		<ul class="alert alert-danger message red" id="error">
 			{% for message in messages %}
 				{% if message.tags == 'error' %}
-					<span class="alert alert-danger message red" id="error">{{ message }}</span>
+					<li>{{ message }}</li>
 				{% endif %}
 			{% endfor %}
+		</ul>
 		{% endif %}
 		
 		<section class="hero">

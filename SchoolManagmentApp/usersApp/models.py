@@ -59,4 +59,4 @@ class Parent(models.Model):
 
 
     def __str__(self):
-        return f'Parent: {self.user.first_name} {self.user.last_name}\'s profile'
+        return f'Parent: {self.user.user.first_name} {self.user.user.last_name}\'s profile'

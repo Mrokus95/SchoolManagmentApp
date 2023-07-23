@@ -22,9 +22,6 @@ class Subject(models.Model):
     def __str__(self):
         return f'{self.name} prowadzący: {self.subject_teachers.user}'
 
-class Teacher(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.DO_NOTHING, related_name='teacher', to_field= 'last_name')
-    lesson_type = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=False, null=False, related_name='subject_teachers')
 
 class Day(models.Model):
     DAYS_OF_WEEK = [
@@ -48,6 +45,11 @@ class Lesson(models.Model):
         MaxValueValidator(7)
     ])
     
+
+class Teacher(models.Model):
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='teacher')
+    lesson_type = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=False, null=False, related_name='subject_teachers')
+
 # Conduction of lesson
 
 class LessonReport(models.Model):
@@ -71,3 +73,4 @@ class Attendance(models.Model):
 
     def __str__(self):
         return f"{self.student_name} - {self.lesson.day} - {self.lesson_report.create_date} - {'Obecny' if self.is_present else 'Nieobecny'}"
+    

@@ -23,7 +23,7 @@ class Profile(models.Model):
     account_type = models.CharField(max_length=10, choices=TYPE_ACCOUNT_CHOICES, default=STUDENT)
 
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name} \'s profile'
+        return f'{self.user.first_name} {self.user.last_name}\'s profile'
         
 
 class ClassUnit(models.Model):
@@ -55,5 +55,3 @@ class Parent(models.Model):
     user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='parent', limit_choices_to={'account_type': 'Parent'})
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='children')
 
-class Teacher(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='teacher')

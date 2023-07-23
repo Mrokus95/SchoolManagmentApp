@@ -5,9 +5,12 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.views import PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetView
-from django.urls import reverse_lazy
+from django.contrib.auth.models import User
+from django.views.generic import FormView
+from .forms import MyRegistrationForm
+from .models import Profile, ClassUnit, Student
 
 class HomeView(View):
     template_name = 'index.html'
@@ -61,3 +64,59 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class RegistrationComplete(View):
+    template_name = 'registration_complete.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+class MyRegisterView(FormView):
+    template_name = 'registration.html'
+    form_class = MyRegistrationForm
+    success_url = reverse_lazy('registration_complete')
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        username = form.cleaned_data['username']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        email = form.cleaned_data['email']
+        password1 = form.cleaned_data['password1']
+        password2 = form.cleaned_data['password2']
+        phone_number = form.cleaned_data['phone_number']
+        account_type = form.cleaned_data['account_type']
+        class_id = form.cleaned_data['class_id']
+        photo= form.cleaned_data['photo']
+
+        emailIsTaken = User.objects.filter(email=email).exists()
+        usernameIsTaken = User.objects.filter(username=username).exists()
+
+        if emailIsTaken and usernameIsTaken:
+            form.add_error(None, 'Email and username already taken')
+            return self.form_invalid(form)
+        elif emailIsTaken:
+            form.add_error('email', 'Email already taken')
+            return self.form_invalid(form)
+        elif usernameIsTaken:
+            form.add_error('username', 'Username already taken')
+            return self.form_invalid(form)
+
+        # Tworzenie użytkownika
+        user = User.objects.create_user(username=username, first_name = first_name, last_name=last_name, email=email, password=password1)
+
+        # Dodanie profilu użytkownika
+        profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type=account_type)
+
+        # Tworzenie użytkowanika typu Student
+        # class_unit = ClassUnit.objects.get(id=class_id)
+        student = Student.objects.create(user=profile, klasa=class_id) 
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        # Obsługa błędów walidacji formularza
+        return self.render_to_response(self.get_context_data(form=form))
+    
+    

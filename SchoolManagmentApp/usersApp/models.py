@@ -18,7 +18,7 @@ class Profile(models.Model):
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    photo = models.ImageField(upload_to='users/avatars/', default='users/avatars/anonymous.png', blank=True)
+    photo = models.ImageField(upload_to='users/avatars/', default='users/avatars/musk.webp', blank=True)
     phone_number = models.CharField(max_length=9, blank=True, null=True)
     account_type = models.CharField(max_length=10, choices=TYPE_ACCOUNT_CHOICES, default=STUDENT)
 

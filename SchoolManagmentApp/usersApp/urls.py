@@ -13,4 +13,10 @@ urlpatterns = [
     path('account/reset_password/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('account/reset_password/confirm/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),    
     path('account/reset_password/complete/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+    #Register new user
+    path('account/register/', views.MyRegisterView.as_view(), name='register_user'),
+    path('account/register/complete/', views.RegistrationComplete.as_view(), name='registration_complete'),
+
+
 ]

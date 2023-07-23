@@ -1,0 +1,23 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block title %} 
+Account Created
+{% endblock title %} 
+
+
+
+{%block content %}
+<section class="mt-5 text-white d-flex flex-column justify-content-center align-items-center">
+	<div class="container-fluid text-center" >
+		<h1>Registration successfully</h1>
+		<p>Account has been created.</p>
+		<p>
+			To log in, go to the <a href="{% url 'home' %}">login panel</a>.
+		</p>
+	</div>
+	<div>
+		<img src="{% static 'img/success.png' %}" alt="">
+	</div>
+</section>
+{% endblock content %}
+

@@ -20,7 +20,7 @@ class Subject(models.Model):
     name = models.CharField(max_length=100, choices=SUBJECT_CHOICES, default='')
 
     def __str__(self):
-        return f'{self.name} prowadzący: {self.subject_teachers.user}'
+        return f'{self.name} prowadzący: {self.subject_teachers}'
 
 
 class Day(models.Model):
@@ -47,9 +47,12 @@ class Lesson(models.Model):
     
 
 class Teacher(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='teacher')
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='teacher_student', limit_choices_to={'account_type': 'Teacher'})
     lesson_type = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=False, null=False, related_name='subject_teachers')
 
+    def str(self):
+        return f'{self.user.user.first_name} {self.user.user.last_name}'
+    
 # Conduction of lesson
 
 class LessonReport(models.Model):

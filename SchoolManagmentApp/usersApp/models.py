@@ -25,7 +25,13 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}\'s profile'
         
+class Student(models.Model):
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='student', limit_choices_to={'account_type': 'Student'})
+    
 
+    def __str__(self):
+        return f'{self.user.user.first_name} {self.user.user.last_name} - student'
+    
 class ClassUnit(models.Model):
     start_year = models.IntegerField(
         validators=[MinValueValidator(2023), ], default=2023
@@ -40,18 +46,17 @@ class ClassUnit(models.Model):
         null=False,
         blank=False
     )
+    student = models.ForeignKey(Student, models.DO_NOTHING, related_name='students_in_class')
 
     def __str__(self):
         return f"Class {self.study_year}{self.letter_mark}"
 
-class Student(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='student', limit_choices_to={'account_type': 'Student'})
-    klasa = models.OneToOneField(ClassUnit, models.DO_NOTHING, blank=False, null=False, related_name='students_in_class')
 
-    def __str__(self):
-        return f'{self.user.user.first_name} {self.user.user.last_name} - student'
 
 class Parent(models.Model):
     user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='parent', limit_choices_to={'account_type': 'Parent'})
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='children')
 
+
+    def __str__(self):
+        return f'Parent: {self.user.first_name} {self.user.last_name}\'s profile'

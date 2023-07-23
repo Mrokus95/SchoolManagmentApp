@@ -45,6 +45,9 @@ class Lesson(models.Model):
         MinValueValidator(1),
         MaxValueValidator(7)
     ])
+
+    def __str__(self):
+        return f'Lesson: {self.subject} day: {self.day} order: {self.order}'
     
 
 class Teacher(models.Model):
@@ -65,7 +68,8 @@ class LessonReport(models.Model):
     lesson_title = models.CharField(max_length=250)
     lesson_description = models.TextField()
 
-
+    def __str__(self):
+        return f'Lesson report: {self.subject} from {self.create_date} of {self.class_unit} class.'
 
 class CalendarEvents(models.Model):
 

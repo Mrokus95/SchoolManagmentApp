@@ -78,9 +78,11 @@ class StudentRegisterView(FormView):
     template_name = 'registration.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('registration_complete')
+    context_object_name = 'registration_form'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['registration_form'] = context['form']
         context['view_name'] = 'register_student'
         return context
 
@@ -124,6 +126,11 @@ class TeacherRegisterView(FormView):
         context['view_name'] = 'register_teacher'
         return context
     
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return TeacherRegistrationForm(self.request.POST, self.request.FILES)
+
 
     def form_valid(self, form):
 
@@ -152,9 +159,14 @@ class TeacherRegisterView(FormView):
                 teacher = Teacher.objects.create(user=profile, lesson_type=subject)
 
             return super().form_valid(form)
+        
         else:
+            
+            for field_errors in form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
 
-            return self.render_to_response(self.get_context_data(form=registration_form, teacher_registration_form=teacher_registration_form ))
+            return self.render_to_response(self.get_context_data(registration_form=registration_form, teacher_registration_form=teacher_registration_form))
 
 
     def form_invalid(self, form):
@@ -207,20 +219,13 @@ class ParentRegisterView(FormView):
 
                 # Create a new parent account
                 parent = Parent.objects.create(user=profile, student=student)
-            print("Form is valid1!")
             return super().form_valid(form)
+        
         else:
             
             for field_errors in form.errors.values():
                 for error in field_errors:
                     messages.error(self.request, error)
-             # Print individual field errors
-            for field in registration_form:
-                if field.errors:
-                    print(f"Field '{field.name}': {field.errors} {field.data}")
-            for field in parent_registration_form:
-                if field.errors:
-                    print(f"Field parent '{field.name}': {field.errors}")
 
             return self.render_to_response(self.get_context_data(registration_form=registration_form, parent_registration_form=parent_registration_form))
 
@@ -229,7 +234,7 @@ class ParentRegisterView(FormView):
         parent_registration_form = ParentRegistrationForm(self.request.POST, self.request.FILES)
 
         for field_errors in form.errors.values():
-            for error in field_errors:
-                messages.error(self.request, error)
-        print("Form is invalid2!")
+                for error in field_errors:
+                    messages.error(self.request, error)
+
         return self.render_to_response(self.get_context_data(registration_form=registration_form, parent_registration_form=parent_registration_form))

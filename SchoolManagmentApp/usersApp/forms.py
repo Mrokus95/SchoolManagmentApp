@@ -10,12 +10,12 @@ import re
 class RegistrationForm(forms.ModelForm):
     phone_number = forms.CharField(max_length=9)
     photo = forms.ImageField(required=False)
-    password1 = forms.CharField(widget=forms.PasswordInput())
-    password2 = forms.CharField(widget=forms.PasswordInput())
+    password1 = forms.CharField(widget=forms.PasswordInput(), label='Password')
+    password2 = forms.CharField(widget=forms.PasswordInput(), label='Confirm password')
 
     class Meta:
         model = User
-        fields = ['username', 'photo', 'first_name', 'last_name', 'email', 'password1', 'password2', 'phone_number']
+        fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone_number','photo']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -61,6 +61,8 @@ class RegistrationForm(forms.ModelForm):
 
 class TeacherRegistrationForm(forms.ModelForm):
 
+    name = forms.ModelChoiceField(queryset=Subject.objects.all(), label='Subject:')
+
     class Meta:
         model = Subject
         fields = ['name']
@@ -79,7 +81,7 @@ class TeacherRegistrationForm(forms.ModelForm):
 
 
 class ParentRegistrationForm(forms.ModelForm):
-    student = forms.ModelChoiceField(queryset=Student.objects.all())
+    student = forms.ModelChoiceField(queryset=Student.objects.all(), label='Child\'s name:')
 
     class Meta:
         model = Parent

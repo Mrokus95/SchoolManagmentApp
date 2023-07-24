@@ -3,9 +3,53 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-<!-- okno filtrowania -->
+<!-- filtering  -->
 
-<!-- tytuł strony -->
+<div id="filterButton" class="filter-button">Filtering</div>
+
+<div id="filterWindow" class="filter-window">
+    <div class="filter-content">
+        <span class="filter-close" id="filterButtonClose">&times;</span>
+        <div class="filter-form">
+            <div class="form-field">
+                <form action="{% url 'filter_events' %}" method="post">
+                    {% csrf_token %}
+                <label for="subject">Subject:</label>
+                <select name="subject" id="subject" class="filter-form-control">
+                    <option value="empty">Empty</option>
+                    <option value="Mathematic">Mathematic</option>
+                    <option value="English">English</option>
+                  </select>
+            </div>
+            <div class="form-field">
+                <label for="event_type">Event Type:</label>
+                <select name="event_type" id="event_type" class="filter-form-control">
+                    <option value="Empty">Empty</option>
+                    <option value="Other">Other</option>
+                    <option value="Small Test">Small Test</option>
+                    <option value="Test">Test</option>
+                    <option value="Essay">Essay</option>
+                    <option value="Project">Project</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" class="filter-form-control">
+            </div>
+            <div class="form-field" typ="date">
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" class="filter-form-control">
+            </div>
+        </div>
+        <button type="submit" class="apply-button">Apply</button>
+    </form>
+    </div>
+</div>
+
+
+
+
+<!--title -->
 <br>
 <div class="container">
     <div class="row">
@@ -16,8 +60,8 @@
         </div>
     </div>
 
-    <!-- posty -->
-    <div class="row pt-4 mb-4">
+    <!-- posts -->
+    <div class="row pt-4 mb-1">
         {% for event in pages %}
         <div class="col-md-4 mb-4">
             <a href="{% url 'event_detail' event.id %}" class="text-decoration-none text-white">
@@ -44,9 +88,11 @@
         {% endfor %}
     </div>
 
-    <!-- paginacja -->
+    <!-- pagination -->
+    
     {% if pages  %}
-    <nav aria-label="...">
+    <nav aria-label="..." >
+       
         <ul class="pagination d-flex justify-content-center">
             {% if pages.has_previous %}
             <li class="">
@@ -68,9 +114,14 @@
             </li>
             {% endif %}
         </ul>
-    </nav>
+ 
+        </nav>
     {% endif %}
+
 </div>
 
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% endblock content %}
 </html>

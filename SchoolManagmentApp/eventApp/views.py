@@ -2,24 +2,31 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from eventApp.models import CalendarEvents
+from eventApp.forms import EventFilterForm
+
 
 from datetime import date
 
 # Create your views here.
 
-def filtre(request, queryset):
-
+def events_filter(request, queryset):
+   
     subject_condition = request.POST.get('subject')
-    type_condition = request.POST.get('type')
+    type_condition = request.POST.get('event_type')
+    print(type_condition)
     start_date_condition=request.POST.get('start_date')
     end_date_condition=request.POST.get('end_date')
 
 
-    if subject_condition != 'Brak':
-        queryset = queryset.filter(subject__subject_name=subject_condition)
+    if subject_condition != 'empty':
+        queryset = queryset.filter(subject__name=subject_condition)
+        print(queryset)
+        print(queryset.filter(subject__name='english'))
 
-    if type_condition != 'Brak':
-        queryset = queryset.filter(type__event_type=type_condition)
+
+    if type_condition != 'empty':
+        queryset = queryset.filter(event_type=type_condition)
+  
 
     if start_date_condition:
         queryset = queryset.filter(realisation_time__gte=start_date_condition)
@@ -43,7 +50,7 @@ def show_events(request):
                     event.save()
 
 
-        # filter = EventFilterForm()
+        filter_form = EventFilterForm()
 
 
         if request.method == 'GET':
@@ -53,14 +60,14 @@ def show_events(request):
 
             context = {
             'pages': pages,
-            'filter': filter
+            'filter': filter_form
                 }
             return render(request, 'events.html', context)
             
         else:
-            filtred=filtre(request, events)
+            filtred=events_filter(request, events)
 
-            paginator = Paginator(filtred, 9)
+            paginator = Paginator(filtred, 6)
             page_number = request.GET.get('page')
             pages = paginator.get_page(page_number)
                 

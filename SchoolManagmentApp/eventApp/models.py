@@ -10,8 +10,8 @@ class PlanOfLesson(models.Model):
                                        related_name='plan_of_lesson')
 
 class Subject(models.Model):
-    MATH = "Math"
-    ENGLISH = "English"
+    MATH = "math"
+    ENGLISH = "english"
     SUBJECT_CHOICES = [
     (MATH, "Mathematic"),
     (ENGLISH, "English"),
@@ -73,13 +73,18 @@ class LessonReport(models.Model):
 
 class CalendarEvents(models.Model):
 
+    OTHER = 'other'
+    SMALL_TEST = 'small_Test'
+    TEST = 'test'
+    ESSAY = 'essay'
+    PROJECT = 'project'
 
     EVENT_TYPES=[
-    ('Other' ,'other'),
-    ('Small Test','small_test'),
-    ('Test','test'),
-    ('Essay','essay'),
-    ('Project','project')
+    (OTHER,'Other'),
+    (SMALL_TEST,'Small Test'),
+    (TEST,'Test'),
+    (ESSAY,'Essay'),
+    (PROJECT,'Project')
     ]
 
     description = models.TextField()

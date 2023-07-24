@@ -1,56 +1,63 @@
 <!DOCTYPE html>
-{%load static%}
+{% load static %}
 <html lang="pl">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-			rel="stylesheet"
-		/>
-		<script src="https://kit.fontawesome.com/6a54b64328.js" crossorigin="anonymous"></script>
-		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
-			rel="stylesheet"
-			integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
-			crossorigin="anonymous"
-		/>
-		<link rel="stylesheet" href="{% static '/css/base_style.css' %}" />
-		<title>{% block title %} {% endblock title %}</title>
-	</head>
-	<body>
-		{% if messages %}
-			{% for message in messages %}
-				{% if message.tags == 'error' %}
-					<span class="alert alert-danger message red" id="error">{{ message }}</span>
-				{% endif %}
-			{% endfor %}
-		{% endif %}
-		
-		<section class="hero">
-			<div class="main-width">
-				<header class="logo">
-					<div><a href="{% url 'home' %}"><img class="logo-img" src="{% static 'img/logo.png' %}" alt="" /></a></div>
-					<nav>
-						<div class="hamb">
-							<span></span>
-							<span></span>
-							<span></span>
-						</div>
-						<ul class="nav-list">
-							<li><a href="#">Home</a></li>
-							<li><a href="#">About project</a></li>
-							<li><a href="#">Authors</a></li>
-							<li><a href="{% url 'logout' %}"><button id="login-nav" class="login-nav-btn" >Logout</button></a></li>
-						</ul>
-					</nav>
-				</header>
-				{%block content%}
-				{%endblock content%}
-		<script type="text/javascript" src="{% static 'js/base_script.js' %}"></script>
-		
-	</body>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/6a54b64328.js" crossorigin="anonymous"></script>
+	
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{% static '/css/base_style.css' %}" />
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+
+<body>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <span class="alert alert-danger message red" id="error">{{ message }}</span>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <section class="hero">
+        <div class="main-width">
+            <header class="logo">
+                <div>
+                    <a href="{% url 'home' %}">
+                        <img class="logo-img" src="{% static 'img/logo.png' %}" alt="" />
+                    </a>
+                </div>
+                <nav>
+                    <div class="hamb">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <ul class="nav-list">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About project</a></li>
+                        <li><a href="#">Authors</a></li>
+                        <li>
+                            <a href="{% url 'logout' %}">
+                                <button id="login-nav" class="login-nav-btn">Logout</button>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            {% block content %}
+            {% endblock content %}
+            <script type="text/javascript" src="{% static '/js/base_script.js' %}"></script>
+			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        </div>
+    </section>
+	
+</body>
 </html>

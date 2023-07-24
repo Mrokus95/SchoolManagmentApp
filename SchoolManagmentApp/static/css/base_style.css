@@ -233,6 +233,7 @@ nav .nav-list li:not(:last-child) a:hover {
   background-color: #186428;
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
   transition: background-color 0.3s ease, transform 0.3s ease;
+  border: 0.15rem solid #000000;
 }
 
 .card-events:hover {
@@ -245,7 +246,7 @@ nav .nav-list li:not(:last-child) a:hover {
   border-top: 1px solid #e9ecef;
 }
 
-.card-one{
+.card-one {
   border: 2px solid #103a15;
   border-radius: 2rem;
   padding: 1rem;
@@ -253,15 +254,15 @@ nav .nav-list li:not(:last-child) a:hover {
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
 }
 
-.exclamation{
+.exclamation {
   font-size: 2rem;
 }
 
-.back-icon{
+.back-icon {
   font-size: 2rem;
 }
 
-.size-up-hover:hover{
+.size-up-hover:hover {
   font-size: 1.05rem;
   color: #9bb49b;
 }
@@ -286,7 +287,7 @@ nav .nav-list li:not(:last-child) a:hover {
   border-color: #07491b;
 }
 
-.page-item-active{
+.page-item-active {
   position: relative;
   display: block;
   padding: 0.5rem 0.75rem;
@@ -294,4 +295,94 @@ nav .nav-list li:not(:last-child) a:hover {
   line-height: 1.25;
   background-color: #08852d;
   border: 1px solid #195304;
+}
+
+/* filter */
+
+
+.filter-button {
+  height: 1.8rem;
+  width: 10rem;
+  cursor: pointer;
+  background-color: #07491b;
+  color: #fff;
+  border-radius: 2rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  border: 0.15rem solid #000000;
+}
+.filter-button:hover{
+  background-color: #08852d;
+}
+
+.filter-window {
+  display: none;
+  position: fixed;
+  top: 15rem;
+  left: 0;
+  width: 20rem;
+  height: 22rem;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.filter-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #07491b;
+  border-radius: 2rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+  border: 0.15rem solid #000000;
+}
+
+
+.filter-close {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  font-size: 2.2rem;
+  color: #a51212;
+  cursor: pointer;
+}
+
+.apply-button{
+  height: 1.8rem;
+  width: 10rem;
+  position: absolute;
+  bottom: 4rem;
+  cursor: pointer;
+  background-color: #07491b;
+  color: #fff;
+  border-radius: 2rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  border: 0.15rem solid #000000;
+}
+
+.apply-button:hover{
+  background-color: #08852d;
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+ 
+}
+
+.form-field {
+
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  color: #000000;
+}
+
+.filter-form-control{
+ margin-left: 0.5rem;
+ background-color: #08852d;
 }

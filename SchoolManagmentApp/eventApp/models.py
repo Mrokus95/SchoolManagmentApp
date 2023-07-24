@@ -69,7 +69,7 @@ class LessonReport(models.Model):
     lesson_description = models.TextField()
 
     def __str__(self):
-        return f'Lesson report: {self.subject} from {self.create_date} of {self.class_unit} class.'
+        return f'Lesson report: {self.subject} from {self.create_date} of {self.class_unit}'
 
 class CalendarEvents(models.Model):
 

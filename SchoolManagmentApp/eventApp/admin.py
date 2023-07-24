@@ -7,6 +7,7 @@ admin.site.register(CalendarEvents)
 admin.site.register(Subject)
 admin.site.register(Lesson)
 admin.site.register(Day)
+admin.site.register(LessonReport)
 
 
 

@@ -58,5 +58,5 @@ class Parent(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='children')
 
 
-    def __str__(self):
-        return f'Parent: {self.user.first_name} {self.user.last_name}\'s profile'
+    def str(self):
+        return f'Parent: {self.user.user.first_name} {self.user.user.last_name}"s profile'

@@ -47,7 +47,7 @@ def show_events(request):
 
 
         if request.method == 'GET':
-            paginator = Paginator(events, 9)
+            paginator = Paginator(events, 6)
             page_number = request.GET.get('page')
             pages = paginator.get_page(page_number)
 
@@ -70,7 +70,7 @@ def show_events(request):
                 }
             return render(request, 'events.html', context)
     else:
-        messages.warning(request, 'No events!')
+        messages.error(request, 'No events!')
         return render(request, 'events.html')
     
 def event_detail(request, eventId):

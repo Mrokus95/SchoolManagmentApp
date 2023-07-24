@@ -4,22 +4,32 @@
 
     <div class="row pt-4 justify-content-center mt-4">
         <div class="col-md-4 mb-4">
-            <div class="lc-block border border-dark p-4 shadow-lg rounded" style="background-color: #186428">
+            <div class="card-one">
                 <div class="text-center text-white">
                     <h4 class="my-3" editable="inline">{{event.subject}}
                     </h4>
                     <div class="card-body">
                         <h5 class="card-title text-center mb-3">{{event.event_type}}</h5>
                         <h6 class="card-title text-center mb-3">Realisation: {{event.realisation_time}} </h6>
-                        <p class="card-text">{{event.description}}</p>
-                        <p class="card-text mt-2">{{event.text}}</p>
-               
-                        <p class="card-subtitle mb-2 text-muted">Dodano: {{event.add_time}}</p>
-                        <p class="card-subtitle mb-2 text-muted">Autor: {{event.author}}</p>
+                        <div class="mb-2 mt-2 card-divider"></div>
+                        <div class="">{{event.description}}</div>
+                        <div class="mt-2">{{event.text}}</div>
+                        <a class="text-decoration-none text-white" href="">
+                        <div class="mt-2 size-up-hover">{{event.connected_to_lesson}}</div>
+                        </a>
+                        <div class="mb-2 mt-2 card-divider"></div>
+                        <div class="mt-2 text-muted">Added: {{event.add_time}}</div>
+                        <div class="card-subtitle mb-2 text-muted">Author: {{event.author}}</div>
                
                     
                 </div>
             </div>
+            <div class="back-icon">
+                <a href="{% url 'events' %}">
+            <i class="fa-solid fa-backward" style="color: #023602;"></i>
+        </a>
+            </div>
+        </div>
         </div>
         {% endblock content %}
 </html>

@@ -2,79 +2,75 @@
 {% block content %}
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- okno filtrowania -->
 
+<!-- okno filtrowania -->
 
-
-
-
-    <!-- tytuł strony -->
-    <br>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="lc-block">
-                    <h2 editable="inline" class="display-4 mb-2 text-white"><b>Your events:</b></h2>
-                </div>
-
-                <!-- okno potwirdzenia usunięcia -->
-
-
-
+<!-- tytuł strony -->
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="lc-block">
+                <h2 editable="inline" class="display-4 mb-2 text-white"><b>Your events:</b></h2>
             </div>
         </div>
+    </div>
 
-        <!-- posty -->
-        <div class="row pt-4 mb-4">
-            {% for event in pages %}
-            <div class="col-md-4 mb-4">
-                <div class="lc-block border border-dark p-4 shadow-lg rounded" style="background-color: #186428">
+    <!-- posty -->
+    <div class="row pt-4 mb-4">
+        {% for event in pages %}
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'event_detail' event.id %}" class="text-decoration-none text-white">
+                <div class="card-events">
                     <div class="text-center text-white">
-                        <h4 class="my-3" editable="inline">
-                            <a href="{% url 'event_detail' event.id %}" class="text-decoration-none text-white">{{ event.event_type }}</a>
+                        <h4 class="my-1">
+                            {{ event.event_type }}
                         </h4>
                         <h5 class="my-3 text-white" editable="inline">Realisation: {{ event.realisation_time }}</h5>
-                        <p>Subject: {{ event.subject }}</p>
-                        <p class="card-subtitle mb-2">Author: {{event.author}}</p>
-                        <p class="card-subtitle mb-2 text-muted">Added: {{event.add_time}}</p>
+                        <div>Subject: {{ event.subject }}</div>
+                        <div class="mb-2 mt-2 card-divider"></div>
+                        <div class="mb-2 mt-2">Author: {{event.author}}</div>
+                        <div class="mb-2">Added: {{event.add_time}}</div>
                     </div>
-
-                    {% if event.visited == False %}
-                    <i class="fa-solid fa-circle-exclamation fa-lg d-flex justify-content-center" style="color: #ff0000;"></i>
-                    {% endif %}
+                    <div class="exclamation">
+                        {% if event.visited == False %}
+                        <i class="fa-solid fa-circle-exclamation d-flex justify-content-center p-2"
+                            style="color: #a51212;"></i>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
-            {% endfor %}
+            </a>
         </div>
-
-
-        <!-- paginacja -->
-        {% if pages %}
-        <nav aria-label="...">
-            <ul class="pagination d-flex justify-content-center">
-                {% if pages.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ pages.previous_page_number }}">Poprzednia</a>
-                </li>
-                <li class="page-item"><a class="page-link" href="?page=1">1</a></li>
-                {% endif %}
-                <li class="page-item active" aria-current="page">
-                    <span class="page-link">{{ pages.number }}</span>
-                </li>
-                {% if pages.has_next %}
-                <li class="page-item"><a class="page-link"
-                        href="?page={{ pages.paginator.num_pages }}">{{pages.paginator.num_pages }}</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ pages.next_page_number }}">Następna</a>
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
-        {% endif %}
+        {% endfor %}
     </div>
-<p>nawigacja</p>
-<br>
-<p>nawigacja</p>
-{% endblock content %}
 
+    <!-- paginacja -->
+    {% if pages  %}
+    <nav aria-label="...">
+        <ul class="pagination d-flex justify-content-center">
+            {% if pages.has_previous %}
+            <li class="">
+                <a class="page-link" href="?page={{ pages.previous_page_number }}">Prevoius</a>
+            </li>
+            <li class="">
+                <a class="page-link" href="?page=1">1</a>
+            </li>
+            {% endif %}
+            <li class="" aria-current="page">
+                <span class="page-item-active">{{ pages.number }}</span>
+            </li>
+            {% if pages.has_next %}
+            <li class="">
+                <a class="page-link" href="?page={{ pages.paginator.num_pages }}">{{pages.paginator.num_pages }}</a>
+            </li>
+            <li class="">
+                <a class="page-link" href="?page={{ pages.next_page_number }}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+{% endblock content %}
 </html>

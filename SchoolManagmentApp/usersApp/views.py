@@ -94,6 +94,7 @@ class StudentRegisterView(FormView):
         password1 = form.cleaned_data['password1']
         phone_number = form.cleaned_data['phone_number']
         photo = form.cleaned_data['photo']
+        class_unit = form.cleaned_data['class_unit']
 
         with transaction.atomic():
             # Create a new user account
@@ -103,7 +104,7 @@ class StudentRegisterView(FormView):
             profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Student')
 
             # Create a new student account
-            student = Student.objects.create(user=profile)
+            student = Student.objects.create(user=profile, class_unit=class_unit)
 
         return super().form_valid(form)
 
@@ -138,14 +139,14 @@ class TeacherRegisterView(FormView):
         teacher_registration_form = TeacherRegistrationForm(self.request.POST, self.request.FILES)
 
         if  registration_form.is_valid() and teacher_registration_form.is_valid():
-            username = form.cleaned_data['username']
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
-            password1 = form.cleaned_data['password1']
-            phone_number = form.cleaned_data['phone_number']
-            photo = form.cleaned_data['photo']
-            subject = form.cleaned_data['name']
+            username = registration_form.cleaned_data['username']
+            first_name = registration_form.cleaned_data['first_name']
+            last_name = registration_form.cleaned_data['last_name']
+            email = registration_form.cleaned_data['email']
+            password1 = registration_form.cleaned_data['password1']
+            phone_number = registration_form.cleaned_data['phone_number']
+            photo = registration_form.cleaned_data['photo']
+            subject = teacher_registration_form.cleaned_data['name']
 
         
             with transaction.atomic():

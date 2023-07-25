@@ -25,12 +25,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}\'s profile'
         
-class Student(models.Model):
-    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='student', limit_choices_to={'account_type': 'Student'})
-    
-
-    def __str__(self):
-        return f'{self.user.user.first_name} {self.user.user.last_name} - student'
     
 class ClassUnit(models.Model):
     start_year = models.IntegerField(
@@ -46,12 +40,18 @@ class ClassUnit(models.Model):
         null=False,
         blank=False
     )
-    student = models.ForeignKey(Student, models.DO_NOTHING, related_name='students_in_class')
 
     def __str__(self):
-        return f"Class {self.study_year}{self.letter_mark}"
+        return f"Class {self.study_year}{self.letter_mark} - start {self.start_year}"
+    
+    class Meta:
+        unique_together = ['start_year', 'study_year', 'letter_mark']
 
-
+class Student(models.Model):
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='student', limit_choices_to={'account_type': 'Student'})
+    class_unit = models.ForeignKey(ClassUnit, models.DO_NOTHING, related_name='students_in_class')
+    def __str__(self):
+        return f'{self.user.user.first_name} {self.user.user.last_name} - student'
 
 class Parent(models.Model):
     user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='parent', limit_choices_to={'account_type': 'Parent'})

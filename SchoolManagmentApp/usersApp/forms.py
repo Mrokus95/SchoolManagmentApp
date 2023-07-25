@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from eventApp.models import Subject
 from django.core.validators import validate_email
-from .models import Student, Parent
+from .models import Student, Parent, ClassUnit
 import re
 
 
@@ -12,10 +12,11 @@ class RegistrationForm(forms.ModelForm):
     photo = forms.ImageField(required=False)
     password1 = forms.CharField(widget=forms.PasswordInput(), label='Password')
     password2 = forms.CharField(widget=forms.PasswordInput(), label='Confirm password')
+    class_unit = forms.ModelChoiceField(queryset=ClassUnit.objects.all(), label='Class:')
 
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone_number','photo']
+        fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone_number','class_unit', 'photo']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -72,7 +73,7 @@ class TeacherRegistrationForm(forms.ModelForm):
         cleaned_data = super().clean()
         subject = cleaned_data['name']
 
-        subject_exists = Subject.objects.get(name=subject).exists()
+        subject_exists = Subject.objects.filter(name=subject).exists()
 
         if not subject_exists:
             self.add_error('name', "Subject does not exist.")

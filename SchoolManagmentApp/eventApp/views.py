@@ -31,6 +31,13 @@ def events_filter(request, queryset):
 
     return queryset
 
+def event_status_changer(events_to_change):
+    for record in events_to_change:
+        if record.realisation_time < date.today():
+            record.finished = True
+            record.save()
+
+
 def show_events(request):
 
     current_profile = Profile.objects.get(user=request.user)
@@ -43,15 +50,13 @@ def show_events(request):
         if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
             events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
 
-            for event in events:
-                if event.realisation_time < date.today():
-                        event.finished = True
-                        event.save()
-                filter_form = EventFilterForm()
-                if request.method == 'GET':
-                    paginator = Paginator(events, 6)
-                    page_number = request.GET.get('page')
-                    pages = paginator.get_page(page_number)
+            event_status_changer(events)
+
+            filter_form = EventFilterForm()
+            if request.method == 'GET':
+                paginator = Paginator(events, 6)
+                page_number = request.GET.get('page')
+                pages = paginator.get_page(page_number)
                 context = {
                 'pages': pages,
                 'filter': filter_form
@@ -95,23 +100,19 @@ def show_events(request):
 
             events = CalendarEvents.objects.filter(author=current_teacher)
 
-            for event in events:
-                if event.realisation_time < date.today():
-                        event.finished = True
-                        event.save()
+            event_status_changer(events)
 
                 #tutaj musi być nowy filtr dla nauczyciela i rozwinięcie filtra
 
-                if request.method == 'GET':
-                    paginator = Paginator(events, 6)
-                    page_number = request.GET.get('page')
-                    pages = paginator.get_page(page_number)
-                context = {
-                'pages': pages,
+            if request.method == 'GET':
+                paginator = Paginator(events, 6)
+                page_number = request.GET.get('page')
+                pages = paginator.get_page(page_number)
+            context = {
+            'pages': pages,
                 
-                }
-                return render(request, 'events.html', context)
-
+            }
+            return render(request, 'events.html', context)
 
         else:
             messages.error(request, 'No events!')

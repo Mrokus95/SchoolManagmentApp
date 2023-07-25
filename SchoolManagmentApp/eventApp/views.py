@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
-from eventApp.models import CalendarEvents
+from eventApp.models import CalendarEvents, Teacher
 from eventApp.forms import EventFilterForm
-from usersApp.forms import Profile
+from usersApp.models import Profile
 
 
 from datetime import date
@@ -12,13 +12,11 @@ from datetime import date
 
 def events_filter(request, queryset):
 
-   
     subject_condition = request.POST.get('subject')
     type_condition = request.POST.get('event_type')
     start_date_condition=request.POST.get('start_date')
     end_date_condition=request.POST.get('end_date')
 
-  
     if subject_condition != 'empty':
         queryset = queryset.filter(subject__name=subject_condition)
          
@@ -33,18 +31,18 @@ def events_filter(request, queryset):
 
     return queryset
 
-
-
-
 def show_events(request):
 
-    current_profile=Profile.objects.get(user=request.user)
+    current_profile = Profile.objects.get(user=request.user)
+    account_type = current_profile.account_type
 
-    if current_profile.profile.student.student.class_unit:
-        current_class = current_profile.profile.student.student.class_unit
+    if account_type == Profile.STUDENT or account_type == Profile.PARENT:
+        current_student = current_profile.student
+        current_class = current_student.class_unit
 
         if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
-            events = CalendarEvents.objects.get(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
+            events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
+
             for event in events:
                 if event.realisation_time < date.today():
                         event.finished = True
@@ -58,10 +56,12 @@ def show_events(request):
                 'pages': pages,
                 'filter': filter_form
                 }
-                return render(request, 'events.html', context)           
+                return render(request, 'events.html', context) 
+                      
             else:
                 start_date_condition=request.POST.get('start_date')
                 end_date_condition=request.POST.get('end_date')
+
                 if start_date_condition > end_date_condition:
                     messages.error(request,"End date must be after start date!")                
                     paginator = Paginator(events, 6)
@@ -71,7 +71,8 @@ def show_events(request):
                     'pages': pages,
                     'filter': filter_form
                         }
-                    return render(request, 'events.html', context)           
+                    return render(request, 'events.html', context)
+                           
                 else:
                     filtred=events_filter(request, events)
                     paginator = Paginator(filtred, 6)
@@ -82,12 +83,39 @@ def show_events(request):
                         'filter': filter
                         }
                 return render(request, 'events.html', context)
+            
         else:
             messages.error(request, 'No events!')
             return render(request, 'events.html')
+        
     else:
-        pass 
-#dopisz
+        current_teacher = Teacher.objects.get(user=current_profile)
+
+        if CalendarEvents.objects.filter(author=current_teacher).exists():
+
+            events = CalendarEvents.objects.filter(author=current_teacher)
+
+            for event in events:
+                if event.realisation_time < date.today():
+                        event.finished = True
+                        event.save()
+
+                #tutaj musi być nowy filtr dla nauczyciela i rozwinięcie filtra
+
+                if request.method == 'GET':
+                    paginator = Paginator(events, 6)
+                    page_number = request.GET.get('page')
+                    pages = paginator.get_page(page_number)
+                context = {
+                'pages': pages,
+                
+                }
+                return render(request, 'events.html', context)
+
+
+        else:
+            messages.error(request, 'No events!')
+            return render(request, 'events.html')
 
 
 def event_detail(request, eventId):

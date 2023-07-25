@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from eventApp.models import CalendarEvents
 from eventApp.forms import EventFilterForm
+from usersApp.forms import Profile
 
 
 from datetime import date
@@ -34,49 +35,61 @@ def events_filter(request, queryset):
 
 
 
+
 def show_events(request):
 
-    if CalendarEvents.objects.all().exists():
-        events = CalendarEvents.objects.all().order_by('realisation_time')
-        
-        for event in events:
-            if event.realisation_time < date.today():
-                    event.finished = True
-                    event.save()
+    current_profile=Profile.objects.get(user=request.user)
 
+    if current_profile.profile.student.student.class_unit:
+        current_class = current_profile.profile.student.student.class_unit
 
-        filter_form = EventFilterForm()
-
-
-        if request.method == 'GET':
-            paginator = Paginator(events, 6)
-            page_number = request.GET.get('page')
-            pages = paginator.get_page(page_number)
-
-            context = {
-            'pages': pages,
-            'filter': filter_form
-                }
-            return render(request, 'events.html', context)
-            
-        else:
-            filtred=events_filter(request, events)
-
-            # print('to jest po funkcji filtred:', events_filter(request, events))
-
-            paginator = Paginator(filtred, 6)
-            page_number = request.GET.get('page')
-            pages = paginator.get_page(page_number)
-                
-            context = {
+        if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
+            events = CalendarEvents.objects.get(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
+            for event in events:
+                if event.realisation_time < date.today():
+                        event.finished = True
+                        event.save()
+                filter_form = EventFilterForm()
+                if request.method == 'GET':
+                    paginator = Paginator(events, 6)
+                    page_number = request.GET.get('page')
+                    pages = paginator.get_page(page_number)
+                context = {
                 'pages': pages,
-                'filter': filter
+                'filter': filter_form
                 }
-            return render(request, 'events.html', context)
+                return render(request, 'events.html', context)           
+            else:
+                start_date_condition=request.POST.get('start_date')
+                end_date_condition=request.POST.get('end_date')
+                if start_date_condition > end_date_condition:
+                    messages.error(request,"End date must be after start date!")                
+                    paginator = Paginator(events, 6)
+                    page_number = request.GET.get('page')
+                    pages = paginator.get_page(page_number)
+                    context = {
+                    'pages': pages,
+                    'filter': filter_form
+                        }
+                    return render(request, 'events.html', context)           
+                else:
+                    filtred=events_filter(request, events)
+                    paginator = Paginator(filtred, 6)
+                    page_number = request.GET.get('page')
+                    pages = paginator.get_page(page_number)               
+                    context = {
+                        'pages': pages,
+                        'filter': filter
+                        }
+                return render(request, 'events.html', context)
+        else:
+            messages.error(request, 'No events!')
+            return render(request, 'events.html')
     else:
-        messages.error(request, 'No events!')
-        return render(request, 'events.html')
-    
+        pass 
+#dopisz
+
+
 def event_detail(request, eventId):
 
     if CalendarEvents.objects.filter(id=eventId).exists():

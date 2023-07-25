@@ -11,6 +11,11 @@ body {
   overflow-x: hidden;
 }
 
+.pics{
+  height: 950px;
+  width: 760px;
+}
+
 .main-width {
   width: 1580px;
   max-width: 95%;

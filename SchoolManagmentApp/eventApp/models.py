@@ -34,8 +34,6 @@ class Subject(models.Model):
     def __str__(self):
         return self.name
 
-
-
 class Day(models.Model):
     DAYS_OF_WEEK = [
     ('Mon', 'Monday'),
@@ -110,9 +108,6 @@ class CalendarEvents(models.Model):
 
     def __str__(self):
         return f'{self.event_type} added by: {self.author} on: {self.subject}'
-       
-
- 
 
 class Attendance(models.Model):
     lesson_report = models.OneToOneField(LessonReport, on_delete=models.CASCADE)

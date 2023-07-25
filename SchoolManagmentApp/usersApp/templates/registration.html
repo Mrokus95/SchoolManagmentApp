@@ -1,52 +1,69 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title%}
     GameCave
 {% endblock title %}
 {% block content%}
-
 <section class="first-section">
     <div class="container-fluid ">
         <div class="row d-flex justify-content-center align-items-center">
             <div class="col-md-9 col-lg-6 col-xl-7 empty-class">
                 <div class="text-center">
-                    <img src="" class="img-fluid" alt="Sample image">
+                    {% if view_name == 'register_student' %}<img src="{% static 'img/students.png' %}" {% endif %}
+                    {% if view_name == 'register_teacher' %}<img src="{% static 'img/teacher.png' %}" {% endif %}
+                    {% if view_name == 'register_parent' %}<img src="{% static 'img/parents.png' %}" {% endif %}
+                    class="img-fluid pics" alt="Sample image">
                 </div>
             </div>
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+            <div class="mt-5 col-12 col-md-8 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
                 <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                    <form action="{% url 'register_user' %}" method="POST" class="card-body p-5 text-center" enctype="multipart/form-data">
-                        <!-- <div class=" mt-md-4 pb-5">
-                            <h2 class="fw-bold mb-2 text-uppercase">Sign up</h2>
-                            <p class="text-white-50 mb-5">Please enter your login, password, and email!</p>
-                            <div class="form-outline mb-4">
-                                <input type="text" name="username" id="username" class="form-control form-control-lg" />
-                                <label class="form-label" for="username">Username</label>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <input type="password" name="password1" id="typePasswordX" class="form-control form-control-lg" />
-                                <label class="form-label" for="typePasswordX">Password</label>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <input type="password" name="password2" id="typePasswordX" class="form-control form-control-lg" />
-                                <label class="form-label" for="typePasswordX">Repeat password</label>
-                            </div>
-                            <div class="form-outline mb-4">
-                                <input type="email" name="email" id="typeEmailX" class="form-control form-control-lg" />
-                                <label class="form-label" for="typeEmailX">Email</label>
-                            </div> -->
+                    <form 
+                    {% if view_name == 'register_student' %}action="{% url 'register_student' %}"{% endif %}
+                    {% if view_name == 'register_teacher' %}action="{% url 'register_teacher' %}"{% endif %}
+                    {% if view_name == 'register_parent' %}action="{% url 'register_parent' %}"{% endif %}
+                    method="POST" class="card-body p-5 text-center" enctype="multipart/form-data">
+                        <div class=" mt-md-4 pb-5">
+
+                    {% if view_name == 'register_student' %}<h2 class="fw-bold mb-2 text-uppercase">Sign up student</h2>{% endif %}
+                    {% if view_name == 'register_teacher' %}<h2 class="fw-bold mb-2 text-uppercase">Sign up teacher</h2>{% endif %}
+                    {% if view_name == 'register_parent' %}<h2 class="fw-bold mb-2 text-uppercase">Sign up parent</h2>{% endif %}
+
+                            <p class="text-white-50 mb-5">Please enter data!</p>
+
+                            {% for field in registration_form %}
+                            {% if field.name != 'class_unit' or view_name == 'register_student' %}
+                                {{ field|add_class:"form-control form-control-md" }}
+                                {{ field|add_label_class:"form-label" }}
+                            {% endif %}
+                            {% endfor %}
 
 
-                            {{form}}
+
+                            {% if view_name == 'register_teacher' %}
+
+                            {%for field in teacher_registration_form %}
+                                {{field|add_class:"form-control form-control-md"}}
+                                {{field|add_label_class:"form-label"}}
+                            {%endfor%}
+
+                            {% endif %}
+
+                            
+                            {% if view_name == 'register_parent' %}
+
+                            {%for field in parent_registration_form %}
+                                {{field|add_class:"form-control form-control-md"}}
+                                {{field|add_label_class:"form-label"}}
+                            {%endfor%}
+
+                            
+                            {% endif %}
+
                             {% csrf_token %}
-                            <button class="btn btn-outline-light btn-lg px-5 mb-5" type="submit">Sign up</button>
-							<div>
-								{%if message %}
-									{%for msg in message%}
-										<p>{{msg}}</p>
-									{%endfor%}
-								{%endif%}
-							</div>
+                            <div class="form-outline mt-2">
+                            <button class="btn btn-outline-light btn-lg px-5" type="submit">Sign up</button>      
+                        </div>           
                         </div>
                     </form>
                 </div>

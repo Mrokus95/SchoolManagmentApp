@@ -25,6 +25,7 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}\'s profile'
         
+    
 class ClassUnit(models.Model):
     start_year = models.IntegerField(
         validators=[MinValueValidator(2023), ], default=2023
@@ -54,11 +55,16 @@ class Student(models.Model):
         return f"Class {self.study_year}{self.letter_mark} - start {self.start_year}"
 
 
+class Student(models.Model):
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='student', limit_choices_to={'account_type': 'Student'})
+    class_unit = models.ForeignKey(ClassUnit, models.DO_NOTHING, related_name='students_in_class')
+    def __str__(self):
+        return f'{self.user.user.first_name} {self.user.user.last_name} - student'
 
 class Parent(models.Model):
     user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='parent', limit_choices_to={'account_type': 'Parent'})
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='children')
 
 
-    def str(self):
-        return f'Parent: {self.user.user.first_name} {self.user.user.last_name}"s profile'
+    def __str__(self):
+        return f'Parent: {self.user.user.first_name} {self.user.user.last_name}\'s profile'

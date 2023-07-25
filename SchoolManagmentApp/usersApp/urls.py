@@ -15,7 +15,9 @@ urlpatterns = [
     path('account/reset_password/complete/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 
     #Register new user
-    path('account/register/', views.MyRegisterView.as_view(), name='register_user'),
+    path('account/register/student', views.StudentRegisterView.as_view(), name='register_student'),
+    path('account/register/teacher', views.TeacherRegisterView.as_view(), name='register_teacher'),
+    path('account/register/parent', views.ParentRegisterView.as_view(), name='register_parent'),
     path('account/register/complete/', views.RegistrationComplete.as_view(), name='registration_complete'),
 
 

@@ -9,8 +9,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.views import PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetView
 from django.contrib.auth.models import User
 from django.views.generic import FormView
-from .forms import MyRegistrationForm
-from .models import Profile, ClassUnit, Student
+from .forms import RegistrationForm, TeacherRegistrationForm, ParentRegistrationForm
+from .models import Profile, ClassUnit, Student, Parent
+from eventApp.models import Teacher
+from django.db import transaction
 
 class HomeView(View):
     template_name = 'index.html'
@@ -72,51 +74,168 @@ class RegistrationComplete(View):
     def get(self, request):
         return render(request, self.template_name)
 
-class MyRegisterView(FormView):
+class StudentRegisterView(FormView):
     template_name = 'registration.html'
-    form_class = MyRegistrationForm
+    form_class = RegistrationForm
     success_url = reverse_lazy('registration_complete')
+    context_object_name = 'registration_form'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['registration_form'] = context['form']
+        context['view_name'] = 'register_student'
+        return context
 
     def form_valid(self, form):
-        print(form.cleaned_data)
         username = form.cleaned_data['username']
         first_name = form.cleaned_data['first_name']
         last_name = form.cleaned_data['last_name']
         email = form.cleaned_data['email']
         password1 = form.cleaned_data['password1']
-        password2 = form.cleaned_data['password2']
         phone_number = form.cleaned_data['phone_number']
-        account_type = form.cleaned_data['account_type']
-        class_id = form.cleaned_data['class_id']
-        photo= form.cleaned_data['photo']
+        photo = form.cleaned_data['photo']
+        class_unit = form.cleaned_data['class_unit']
 
-        emailIsTaken = User.objects.filter(email=email).exists()
-        usernameIsTaken = User.objects.filter(username=username).exists()
+        with transaction.atomic():
+            # Create a new user account
+            user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
 
-        if emailIsTaken and usernameIsTaken:
-            form.add_error(None, 'Email and username already taken')
-            return self.form_invalid(form)
-        elif emailIsTaken:
-            form.add_error('email', 'Email already taken')
-            return self.form_invalid(form)
-        elif usernameIsTaken:
-            form.add_error('username', 'Username already taken')
-            return self.form_invalid(form)
+            # Create a new profile
+            profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Student')
 
-        # Tworzenie użytkownika
-        user = User.objects.create_user(username=username, first_name = first_name, last_name=last_name, email=email, password=password1)
-
-        # Dodanie profilu użytkownika
-        profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type=account_type)
-
-        # Tworzenie użytkowanika typu Student
-        # class_unit = ClassUnit.objects.get(id=class_id)
-        student = Student.objects.create(user=profile, klasa=class_id) 
+            # Create a new student account
+            student = Student.objects.create(user=profile, class_unit=class_unit)
 
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        # Obsługa błędów walidacji formularza
+        for field_errors in form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
         return self.render_to_response(self.get_context_data(form=form))
     
     
+class TeacherRegisterView(FormView):
+    template_name = 'registration.html'
+    success_url = reverse_lazy('registration_complete')
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['registration_form'] = RegistrationForm()
+        context['teacher_registration_form'] = TeacherRegistrationForm()
+        context['view_name'] = 'register_teacher'
+        return context
+    
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return TeacherRegistrationForm(self.request.POST, self.request.FILES)
+
+
+    def form_valid(self, form):
+
+        registration_form = RegistrationForm(self.request.POST, self.request.FILES)
+        teacher_registration_form = TeacherRegistrationForm(self.request.POST, self.request.FILES)
+
+        if  registration_form.is_valid() and teacher_registration_form.is_valid():
+            username = registration_form.cleaned_data['username']
+            first_name = registration_form.cleaned_data['first_name']
+            last_name = registration_form.cleaned_data['last_name']
+            email = registration_form.cleaned_data['email']
+            password1 = registration_form.cleaned_data['password1']
+            phone_number = registration_form.cleaned_data['phone_number']
+            photo = registration_form.cleaned_data['photo']
+            subject = teacher_registration_form.cleaned_data['name']
+
+        
+            with transaction.atomic():
+                # Create a new user account
+                user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
+
+                # Create a new profile
+                profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Teacher')
+
+                # Create a new teacher account
+                teacher = Teacher.objects.create(user=profile, lesson_type=subject)
+
+            return super().form_valid(form)
+        
+        else:
+            
+            for field_errors in form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
+
+            return self.render_to_response(self.get_context_data(registration_form=registration_form, teacher_registration_form=teacher_registration_form))
+
+
+    def form_invalid(self, form):
+        registration_form = RegistrationForm(self.request.POST, self.request.FILES)
+        teacher_registration_form = TeacherRegistrationForm(self.request.POST, self.request.FILES)
+
+        for field_errors in form.errors.values():
+            for error in field_errors:
+                messages.error(self.request, error)
+
+        return self.render_to_response(self.get_context_data(registration_form=registration_form, teacher_registration_form=teacher_registration_form))
+    
+
+class ParentRegisterView(FormView):
+    template_name = 'registration.html'
+    success_url = reverse_lazy('registration_complete')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['registration_form'] = RegistrationForm()
+        context['parent_registration_form'] = ParentRegistrationForm()
+        context['view_name'] = 'register_parent'
+        return context
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return ParentRegistrationForm(self.request.POST, self.request.FILES)
+
+    def form_valid(self, form):
+        registration_form = RegistrationForm(self.request.POST, self.request.FILES)
+        parent_registration_form = ParentRegistrationForm(self.request.POST, self.request.FILES)
+
+        if registration_form.is_valid() and parent_registration_form.is_valid():
+            username = registration_form.cleaned_data['username']
+            first_name = registration_form.cleaned_data['first_name']
+            last_name = registration_form.cleaned_data['last_name']
+            email = registration_form.cleaned_data['email']
+            password1 = registration_form.cleaned_data['password1']
+            phone_number = registration_form.cleaned_data['phone_number']
+            photo = registration_form.cleaned_data['photo']
+            student = parent_registration_form.cleaned_data['student']
+
+            with transaction.atomic():
+                # Create a new user account
+                user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
+
+                # Create a new profile
+                profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Parent')
+
+                # Create a new parent account
+                parent = Parent.objects.create(user=profile, student=student)
+            return super().form_valid(form)
+        
+        else:
+            
+            for field_errors in form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
+
+            return self.render_to_response(self.get_context_data(registration_form=registration_form, parent_registration_form=parent_registration_form))
+
+    def form_invalid(self, form):
+        registration_form = RegistrationForm(self.request.POST, self.request.FILES)
+        parent_registration_form = ParentRegistrationForm(self.request.POST, self.request.FILES)
+
+        for field_errors in form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
+
+        return self.render_to_response(self.get_context_data(registration_form=registration_form, parent_registration_form=parent_registration_form))

@@ -34,9 +34,14 @@ def events_filter(request, queryset):
 def event_status_changer(events_to_change):
     for record in events_to_change:
         if record.realisation_time < date.today():
-            record.finished = True
+            record.finished= True
             record.save()
 
+def event_paginator(request, events_to_paginate, events_per_site):
+    paginator = Paginator(events_to_paginate, events_per_site)
+    page_number = request.GET.get('page')
+    pages = paginator.get_page(page_number)
+    return pages
 
 def show_events(request):
 
@@ -54,9 +59,9 @@ def show_events(request):
 
             filter_form = EventFilterForm()
             if request.method == 'GET':
-                paginator = Paginator(events, 6)
-                page_number = request.GET.get('page')
-                pages = paginator.get_page(page_number)
+
+                pages = event_paginator(request, events, 6)
+
                 context = {
                 'pages': pages,
                 'filter': filter_form
@@ -68,10 +73,10 @@ def show_events(request):
                 end_date_condition=request.POST.get('end_date')
 
                 if start_date_condition > end_date_condition:
-                    messages.error(request,"End date must be after start date!")                
-                    paginator = Paginator(events, 6)
-                    page_number = request.GET.get('page')
-                    pages = paginator.get_page(page_number)
+                    messages.error(request,"End date must be after start date!")
+
+                    pages = event_paginator(request, events, 6)
+
                     context = {
                     'pages': pages,
                     'filter': filter_form
@@ -80,9 +85,7 @@ def show_events(request):
                            
                 else:
                     filtred=events_filter(request, events)
-                    paginator = Paginator(filtred, 6)
-                    page_number = request.GET.get('page')
-                    pages = paginator.get_page(page_number)               
+                    pages = event_paginator(request, events, 6)               
                     context = {
                         'pages': pages,
                         'filter': filter
@@ -105,9 +108,8 @@ def show_events(request):
                 #tutaj musi być nowy filtr dla nauczyciela i rozwinięcie filtra
 
             if request.method == 'GET':
-                paginator = Paginator(events, 6)
-                page_number = request.GET.get('page')
-                pages = paginator.get_page(page_number)
+                pages = event_paginator(request, events, 6)
+
             context = {
             'pages': pages,
                 

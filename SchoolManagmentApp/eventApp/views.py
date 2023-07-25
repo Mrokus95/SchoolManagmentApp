@@ -10,30 +10,25 @@ from datetime import date
 # Create your views here.
 
 def events_filter(request, queryset):
+
    
     subject_condition = request.POST.get('subject')
     type_condition = request.POST.get('event_type')
-    print(type_condition)
     start_date_condition=request.POST.get('start_date')
     end_date_condition=request.POST.get('end_date')
 
-
+  
     if subject_condition != 'empty':
         queryset = queryset.filter(subject__name=subject_condition)
-        print(queryset)
-        print(queryset.filter(subject__name='english'))
-
-
+         
     if type_condition != 'empty':
         queryset = queryset.filter(event_type=type_condition)
-  
-
+       
     if start_date_condition:
         queryset = queryset.filter(realisation_time__gte=start_date_condition)
 
     if end_date_condition:
         queryset = queryset.filter(realisation_time__lt=end_date_condition)
-
 
     return queryset
 
@@ -66,6 +61,8 @@ def show_events(request):
             
         else:
             filtred=events_filter(request, events)
+
+            # print('to jest po funkcji filtred:', events_filter(request, events))
 
             paginator = Paginator(filtred, 6)
             page_number = request.GET.get('page')

@@ -299,7 +299,6 @@ nav .nav-list li:not(:last-child) a:hover {
 
 /* filter */
 
-
 .filter-button {
   height: 1.8rem;
   width: 10rem;
@@ -311,7 +310,7 @@ nav .nav-list li:not(:last-child) a:hover {
   margin-top: 0.5rem;
   border: 0.15rem solid #000000;
 }
-.filter-button:hover{
+.filter-button:hover {
   background-color: #08852d;
 }
 
@@ -338,7 +337,6 @@ nav .nav-list li:not(:last-child) a:hover {
   border: 0.15rem solid #000000;
 }
 
-
 .filter-close {
   position: absolute;
   top: 1rem;
@@ -348,7 +346,7 @@ nav .nav-list li:not(:last-child) a:hover {
   cursor: pointer;
 }
 
-.apply-button{
+.apply-button {
   height: 1.8rem;
   width: 10rem;
   position: absolute;
@@ -362,7 +360,7 @@ nav .nav-list li:not(:last-child) a:hover {
   border: 0.15rem solid #000000;
 }
 
-.apply-button:hover{
+.apply-button:hover {
   background-color: #08852d;
 }
 
@@ -370,11 +368,9 @@ nav .nav-list li:not(:last-child) a:hover {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
- 
 }
 
 .form-field {
-
   font-size: 1.1rem;
   margin-right: 0.5rem;
   border-radius: 5px;
@@ -382,7 +378,11 @@ nav .nav-list li:not(:last-child) a:hover {
   color: #000000;
 }
 
-.filter-form-control{
- margin-left: 0.5rem;
- background-color: #08852d;
+.filter-form-control {
+  margin-left: 0.5rem;
+  background-color: #08852d;
+}
+
+.filter-form-control:hover {
+  cursor: pointer;
 }

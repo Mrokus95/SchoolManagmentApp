@@ -10,14 +10,26 @@ class PlanOfLesson(models.Model):
                                        related_name='plan_of_lesson')
 
 class Subject(models.Model):
-    MATH = "math"
-    ENGLISH = "english"
+    MATHEMATIC = "Mathematic"
+    ENGLISH = "English"
+    HISTORY = "History"
+    BIOLOGY = "Biology"
+    PHYSICS = "Physics"
+    CHEMISTRY = "Chemistry"
+    PHILOSOPHY = "Philosophy"
+
+
     SUBJECT_CHOICES = [
-    (MATH, "Mathematic"),
+    (MATHEMATIC, "Mathematic"),
     (ENGLISH, "English"),
-    ('','')
+    (HISTORY, "History"),
+    (BIOLOGY, "Biology"),
+    (PHYSICS, "Physics"),
+    (CHEMISTRY, "Chemisty"),
+    (PHILOSOPHY, "Philosophy"),
+    ('',''),
         ]
-    name = models.CharField(max_length=100, choices=SUBJECT_CHOICES, default='')
+    name=models.CharField(max_length=100, choices=SUBJECT_CHOICES, unique=True, default='')
 
     def __str__(self):
         return self.name
@@ -73,11 +85,11 @@ class LessonReport(models.Model):
 
 class CalendarEvents(models.Model):
 
-    OTHER = 'other'
-    SMALL_TEST = 'small_Test'
-    TEST = 'test'
-    ESSAY = 'essay'
-    PROJECT = 'project'
+    OTHER = 'Other'
+    SMALL_TEST = 'Small Test'
+    TEST = 'Test'
+    ESSAY = 'Essay'
+    PROJECT = 'Project'
 
     EVENT_TYPES=[
     (OTHER,'Other'),
@@ -92,7 +104,7 @@ class CalendarEvents(models.Model):
     realisation_time = models.DateField()
     add_time = models.DateTimeField(auto_now_add=True)
     subject = models.ForeignKey(Subject, related_name='subject', on_delete=models.DO_NOTHING)
-    connected_to_lesson = models.OneToOneField(LessonReport, related_name='related_lesson', on_delete=models.DO_NOTHING, null=True, blank=True)
+    connected_to_lesson = models.ForeignKey(LessonReport, related_name='related_lesson', on_delete=models.DO_NOTHING, null=True, blank=True)
     author = models.ForeignKey(Teacher, related_name='author', on_delete=models.DO_NOTHING)
     visited = models.BooleanField(default=False)
 

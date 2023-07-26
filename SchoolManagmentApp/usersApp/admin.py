@@ -11,7 +11,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Parent)
 class ParentAdmin(admin.ModelAdmin):
-    list_display = ['user', 'student']
+    pass
 
 @admin.register(ClassUnit)
 class ClassUnitAdmin(admin.ModelAdmin):

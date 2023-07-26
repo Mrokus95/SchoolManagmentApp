@@ -3,6 +3,8 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+
+{% if not parent_kids %}
 <!-- filtering  -->
 
 <div id="filterButton" class="filter-button">Filtering</div>
@@ -54,12 +56,12 @@
 
 
 <!--title -->
-<br>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12 text-center">
             <div class="lc-block">
-                <h2 editable="inline" class="display-4 mb-2 text-white"><b>Your events:</b></h2>
+                <h2 editable="inline" class="display-4 mb-2 text-white"><b> {{current_class}} events:</b></h2>
             </div>
         </div>
     </div>
@@ -121,7 +123,35 @@
  
         </nav>
     {% endif %}
+{% else %}
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="lc-block">
+                <h2 editable="inline" class="display-4 mb-2 text-white"><b> Chose student:</b></h2>
+            </div>
+        </div>
+    </div>
+    </div>
+{% for kid in parent_kids %}
+<a href="{% url 'student_events' kid.id %}" class="text-decoration-none text-white">
+<div class="row pt-4 justify-content-center mt-4">
+    <div class="col-md-4 mb-4">
+        <div class="card-one">
+            <div class="text-center text-white">
+
+                <h4 class="my-3" editable="inline">{{kid}}
+                </h4>
+
+            </div>
+        </div>
+    </div>
+</div>
+</a>
+    {% endfor %}
+
+{% endif %}
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

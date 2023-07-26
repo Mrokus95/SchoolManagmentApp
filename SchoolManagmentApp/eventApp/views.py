@@ -45,17 +45,12 @@ def event_paginator(request, events_to_paginate, events_per_site):
 def date_filter_validation(request):
     return request.POST.get('start_date') > request.POST.get('end_date')
 
-def chosen_profile(request, kid_id):
-    print(kid_id)
-    student = Student.objects.get(pk=kid_id)
-    kid_profile = student.user
 
-    return student_events(request, kid_profile)
+def student_events(request):
 
-def student_events(request, current_profile):
-    current_student = Student.objects.get(user=current_profile)
+    current_student = Student.objects.get(user=request.user.profile)
     current_class = current_student.class_unit
-
+    
     if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
         events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
         event_status_changer(events)
@@ -85,7 +80,8 @@ def student_events(request, current_profile):
                 pages = event_paginator(request, filtred, 6)               
                 context = {
                     'pages': pages,
-                    'filter': filter_form
+                    'filter': filter_form,
+                    'current_class': current_class
                         }
             return render(request, 'events.html', context)
             
@@ -93,8 +89,8 @@ def student_events(request, current_profile):
         messages.error(request, 'No events!')
         return render(request, 'events.html')
 
-def teacher_events(request, current_profile):
-    current_teacher = Teacher.objects.get(user=current_profile)
+def teacher_events(request):
+    current_teacher = Teacher.objects.get(user=request.user.profile)
 
     if CalendarEvents.objects.filter(author=current_teacher).exists():
         events = CalendarEvents.objects.filter(author=current_teacher)
@@ -115,30 +111,80 @@ def teacher_events(request, current_profile):
         messages.error(request, 'No events!')
         return render(request, 'events.html')
 
-def parent_events(request, current_profile):
-    current_parent = Parent.objects.get(user=current_profile)
-    parent_kids = Student.objects.filter(parent=current_parent)
-   
+def chosen_profile(request, kid_id):
+    student = Student.objects.get(pk=kid_id)
+    kid_profile = student.user
 
-    if len(parent_kids) > 1:
-        return render(request, 'events.html',{'parent_kids': parent_kids})
+    print(kid_profile, 'przed returnem z chosen')
+    return parent_events(request, kid_profile)
+
+def parent_events(request, *args):
+    current_parent = Parent.objects.get(user=request.user.profile)
+
+    if args:
+        kid_profile = args[0]
+        
+    else:       
+        parent_kids = Student.objects.filter(parent=current_parent)
+        if len(parent_kids) > 1:
+            return render(request, 'events.html',{'parent_kids': parent_kids})
     
+        else:
+            kid_profile = Profile.objects.get(user=parent_kids.first().user.user)
+            
+    current_class = kid_profile.student.class_unit
+
+    if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
+        events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
+        event_status_changer(events)
+        filter_form = EventFilterForm()
+
+        if request.method == 'GET':
+            pages = event_paginator(request, events, 6)
+            context = {
+            'pages': pages,
+            'filter': filter_form,
+            'current_class': current_class
+            }
+            print('chujdupacyce')
+            return render(request, 'events.html', context) 
+                      
+        else:
+            print('jestem postem')+6
+            if date_filter_validation(request):
+                messages.error(request,"End date must be set after start date!")
+                pages = event_paginator(request, events, 6)
+                context = {
+                'pages': pages,
+                'filter': filter_form
+                    }
+                return render(request, 'events.html', context)
+                           
+            else:
+                filtred=events_filter(request, events)
+                pages = event_paginator(request, filtred, 6)               
+                context = {
+                'pages': pages,
+                'filter': filter_form,
+                'current_class': current_class
+                    }
+                return render(request, 'events.html', context)
     else:
-        kid_profile = Profile.objects.get(user=parent_kids.first().user.user)
-        return student_events(request, kid_profile)
+        messages.error(request, 'No events!')
+        return render(request, 'events.html')   
 
 def show_events(request):
     current_profile = Profile.objects.get(user=request.user)
     account_type = current_profile.account_type
 
     if account_type == Profile.STUDENT:
-        return student_events(request, current_profile)
+        return student_events(request)
        
     elif account_type == Profile.PARENT:
-        return parent_events(request, current_profile)
+        return parent_events(request)
 
     else:
-        return teacher_events(request, current_profile)
+        return teacher_events(request)
 
 
 def event_detail(request, eventId):

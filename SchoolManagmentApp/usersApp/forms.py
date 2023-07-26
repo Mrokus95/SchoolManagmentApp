@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from eventApp.models import Subject
+from eventApp.models import Subject, Teacher
 from django.core.validators import validate_email
 from .models import Student, Parent, ClassUnit
 import re
@@ -61,24 +61,23 @@ class RegistrationForm(forms.ModelForm):
 
 
 class TeacherRegistrationForm(forms.ModelForm):
-
     name = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), label='Subject:')
 
     class Meta:
-        model = Subject
+        model = Teacher
         fields = ['name']
-
 
     def clean(self):
         cleaned_data = super().clean()
-        subject = cleaned_data['name']
+        selected_subjects = cleaned_data.get('name')
 
-        subject_exists = Subject.objects.filter(name=subject).exists()
+        if selected_subjects:
+            available_subjects = Subject.objects.filter(pk__in=[subject.pk for subject in selected_subjects])
+            if len(selected_subjects) != len(available_subjects):
+                raise forms.ValidationError("Some selected subjects are not valid.")
 
-        if not subject_exists:
-            self.add_error('name', "Please select at least one subject.")
-        
         return cleaned_data
+
 
 
 class StudentRegistrationForm(forms.ModelForm):

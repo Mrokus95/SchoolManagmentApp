@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.views.generic import FormView
 from .forms import RegistrationForm, TeacherRegistrationForm, StudentRegistrationForm
 from .models import Profile, ClassUnit, Student, Parent
-from eventApp.models import Teacher
+from eventApp.models import Teacher, Subject
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 
@@ -120,7 +120,6 @@ class TeacherRegisterView(FormView):
     template_name = 'registration.html'
     success_url = reverse_lazy('registration_complete')
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['registration_form'] = RegistrationForm()
@@ -133,13 +132,11 @@ class TeacherRegisterView(FormView):
             form_class = self.get_form_class()
         return TeacherRegistrationForm(self.request.POST, self.request.FILES)
 
-
     def form_valid(self, form):
-
         registration_form = RegistrationForm(self.request.POST, self.request.FILES)
         teacher_registration_form = TeacherRegistrationForm(self.request.POST, self.request.FILES)
 
-        if  registration_form.is_valid() and teacher_registration_form.is_valid():
+        if registration_form.is_valid() and teacher_registration_form.is_valid():
             username = registration_form.cleaned_data['username']
             first_name = registration_form.cleaned_data['first_name']
             last_name = registration_form.cleaned_data['last_name']
@@ -147,9 +144,8 @@ class TeacherRegisterView(FormView):
             password1 = registration_form.cleaned_data['password1']
             phone_number = registration_form.cleaned_data['phone_number']
             photo = registration_form.cleaned_data['photo']
-            subject = teacher_registration_form.cleaned_data['name']
+            selected_subjects = teacher_registration_form.cleaned_data['name']
 
-        
             with transaction.atomic():
                 # Create a new user account
                 user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
@@ -159,18 +155,15 @@ class TeacherRegisterView(FormView):
 
                 # Create a new teacher account
                 teacher = Teacher.objects.create(user=profile)
-                teacher.lesson_type.set(subject)
+                teacher.lesson_type.set(selected_subjects)
 
             return super().form_valid(form)
-        
         else:
-            
             for field_errors in form.errors.values():
                 for error in field_errors:
                     messages.error(self.request, error)
 
             return self.render_to_response(self.get_context_data(registration_form=registration_form, teacher_registration_form=teacher_registration_form))
-
 
     def form_invalid(self, form):
         registration_form = RegistrationForm(self.request.POST, self.request.FILES)

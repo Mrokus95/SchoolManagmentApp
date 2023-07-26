@@ -241,6 +241,7 @@ nav .nav-list li:not(:last-child) a:hover {
   border: 0.15rem solid #000000;
 }
 
+
 .card-events:hover {
   background-color: #2d8b40;
 }
@@ -259,6 +260,20 @@ nav .nav-list li:not(:last-child) a:hover {
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
 }
 
+.card-chose-child{
+  border: 2px solid #103a15;
+  border-radius: 2rem;
+  padding: 1rem;
+  background-color: #186428;
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.card-chose-child:hover {
+  background-color: #2d8b40;
+}
+
+
 .exclamation {
   font-size: 2rem;
 }
@@ -271,6 +286,7 @@ nav .nav-list li:not(:last-child) a:hover {
   font-size: 1.05rem;
   color: #9bb49b;
 }
+
 
 /* pagination */
 

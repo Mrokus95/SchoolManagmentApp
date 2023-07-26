@@ -44,8 +44,8 @@ class ClassUnit(models.Model):
         unique_together = ['start_year', 'study_year', 'letter_mark']
 
 
-        def __str__(self):
-            return f' Class {self.study_year} - {self.letter_mark}'
+    def __str__(self):
+        return f' Class {self.study_year} - {self.letter_mark}'
    
 
 class Parent(models.Model):

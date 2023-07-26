@@ -63,7 +63,7 @@ class Lesson(models.Model):
 class Teacher(models.Model):
     user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='teacher_student', limit_choices_to={'account_type': 'Teacher'})
 
-    lesson_type = models.ForeignKey(Subject, on_delete=models.DO_NOTHING, blank=False, null=False, related_name='subject_teachers')
+    lesson_type = models.ManyToManyField(Subject, related_name='subject_teachers')
 
     def __str__(self):
         return f'{self.user.user.first_name} {self.user.user.last_name}'

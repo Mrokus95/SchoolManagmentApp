@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
+{% load my_tags %}
 {% block title%}
     GameCave
 {% endblock title %}
@@ -32,10 +33,8 @@
                             <p class="text-white-50 mb-5">Please enter data!</p>
 
                             {% for field in registration_form %}
-                            {% if field.name != 'class_unit' or view_name == 'register_student' %}
                                 {{ field|add_class:"form-control form-control-md" }}
                                 {{ field|add_label_class:"form-label" }}
-                            {% endif %}
                             {% endfor %}
 
 
@@ -49,16 +48,15 @@
 
                             {% endif %}
 
-                            
-                            {% if view_name == 'register_parent' %}
+                            {% if view_name == 'register_student' %}
 
-                            {%for field in parent_registration_form %}
+                            {%for field in student_registration_form %}
                                 {{field|add_class:"form-control form-control-md"}}
                                 {{field|add_label_class:"form-label"}}
                             {%endfor%}
 
-                            
                             {% endif %}
+                        
 
                             {% csrf_token %}
                             <div class="form-outline mt-2">

@@ -12,11 +12,11 @@ class RegistrationForm(forms.ModelForm):
     photo = forms.ImageField(required=False)
     password1 = forms.CharField(widget=forms.PasswordInput(), label='Password')
     password2 = forms.CharField(widget=forms.PasswordInput(), label='Confirm password')
-    class_unit = forms.ModelChoiceField(queryset=ClassUnit.objects.all(), label='Class:')
+
 
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone_number','class_unit', 'photo']
+        fields = ['username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'phone_number', 'photo']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -62,7 +62,7 @@ class RegistrationForm(forms.ModelForm):
 
 class TeacherRegistrationForm(forms.ModelForm):
 
-    name = forms.ModelChoiceField(queryset=Subject.objects.all(), label='Subject:')
+    name = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), label='Subject:')
 
     class Meta:
         model = Subject
@@ -76,25 +76,32 @@ class TeacherRegistrationForm(forms.ModelForm):
         subject_exists = Subject.objects.filter(name=subject).exists()
 
         if not subject_exists:
-            self.add_error('name', "Subject does not exist.")
+            self.add_error('name', "Please select at least one subject.")
         
         return cleaned_data
 
 
-class ParentRegistrationForm(forms.ModelForm):
-    student = forms.ModelChoiceField(queryset=Student.objects.all(), label='Child\'s name:')
+class StudentRegistrationForm(forms.ModelForm):
+    class_unit = forms.ModelChoiceField(queryset=ClassUnit.objects.all(), label='Class:')
+    parent = forms.ModelChoiceField(queryset=Parent.objects.all(), label='Parent:')
 
     class Meta:
-        model = Parent
-        fields = ['student']
+        model = Student
+        fields = ['class_unit', 'parent']
 
     def clean(self):
         cleaned_data = super().clean()
 
-        student_id = self.cleaned_data['student'].id
-        student_exists = Student.objects.filter(id=student_id).exists()
+        parent = cleaned_data.get('parent')
+        if parent:
+            parent_exists = Parent.objects.filter(id=parent.id).exists()
+            if not parent_exists:
+                self.add_error('parent', "Parent does not exist.")
 
-        if not student_exists:
-            self.add_error('student', "Student does not exist.")
-        
+        class_unit = cleaned_data.get('class_unit')
+        if class_unit:
+            class_exists = ClassUnit.objects.filter(id=class_unit.id).exists()
+            if not class_exists:
+                self.add_error('class_unit', "Class does not exist.")
+
         return cleaned_data

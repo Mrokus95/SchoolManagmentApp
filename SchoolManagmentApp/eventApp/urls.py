@@ -20,6 +20,9 @@ urlpatterns =[
 
     path('parent/filter_events/', views.parent_events, name='parent_filter_events'),
 
+    #delete event
+    path('delete_event/<int:eventId>', views.delete_event, name='delete_event')
+
 
 
 ]

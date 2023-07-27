@@ -405,3 +405,8 @@ nav .nav-list li:not(:last-child) a:hover {
 .filter-form-control:hover {
   cursor: pointer;
 }
+
+.back-button-image{
+  font-size: 3rem;
+  margin-right: 1rem;
+}

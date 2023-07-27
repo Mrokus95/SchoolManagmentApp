@@ -228,3 +228,16 @@ def event_detail(request, eventId):
             messages.error(
             request, 'Event cannot be viewd, please contact the author!')
             return redirect('events')
+        
+def delete_event(request, eventId):
+    if CalendarEvents.objects.get(id=eventId):
+
+        event = CalendarEvents.objects.get(id=eventId)
+        event.delete()
+        messages.success(request, 'Event deleted!')
+        return redirect('teacher_events')
+
+    else:
+        messages.error(request, 'Problem with deleting!')
+        return redirect('teacher_events')
+                 

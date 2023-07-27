@@ -1,169 +1,151 @@
 {% extends "base.html" %}
 {% block content %}
-
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> -->
-
-
-{% if not parent_kids %}
-<!-- filtering  -->
-
-<div id="filterButton" class="filter-button">Filtering</div>
-
-<div id="filterWindow" class="filter-window">
-    <div class="filter-content">
-        <span class="filter-close" id="filterButtonClose">&times;</span>
-        <div class="filter-form">
-            <div class="form-field">
-                {% if not current_parent %}
-                <form action="{% url 'filter_events_student_parent' %}" method="post">
-                    <p>jestem w dobrym filtrze</p>
-
-                    {% else %}
-                <form action="{% url 'filter_events_student' %}" method="post">
-                    <p>jestem w zlym filtrze</p>
-                    {% endif %}
-
-                    {% csrf_token %}
-                <label for="subject">Subject:</label>
-                <select name="subject" id="subject" class="filter-form-control">
-                    <option value="empty">Empty</option>
-                    <option value="Mathematic">Mathematic</option>
-                    <option value="History">History</option>
-                    <option value="Biology">Biology</option>
-                    <option value="Physics">Physics</option>
-                    <option value="Chemistry">Chemistry</option>
-                    <option value="Philosphy">Philosophy</option>
-                  </select>
+    {% if not parent_kids %}
+        <!-- filtering  -->
+        {% if kid_id %}
+            <div class="d-flex">
+                <div id="filterButton" class="filter-button">Filtering</div>
+                <a href="{% url 'parent_filter_events' %}" class="text-decoration-none">
+                    <div id="filterButton2" class="filter-button">Back</div>
+                </a>
             </div>
-            <div class="form-field">
-                <label for="event_type">Event Type:</label>
-                <select name="event_type" id="event_type" class="filter-form-control">
-                    <option value="empty">Empty</option>
-                    <option value="Other">Other</option>
-                    <option value="Small Test">Small Test</option>
-                    <option value="Test">Test</option>
-                    <option value="Essay">Essay</option>
-                    <option value="Project">Project</option>
-                </select>
-            </div>
-            <div class="form-field">
-                <label for="start_date">Start Date:</label>
-                <input type="date" name="start_date" class="filter-form-control">
-            </div>
-            <div class="form-field" typ="date">
-                <label for="end_date">End Date:</label>
-                <input type="date" name="end_date" class="filter-form-control">
-            </div>
-        </div>
-        <button type="submit" class="apply-button">Apply</button>
-    </form>
-    </div>
-</div>
+        {% else %}   
+            <div id="filterButton" class="filter-button">Filtering</div>
+        {% endif %}
 
-
-
-
-<!--title -->
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="lc-block">
-                <h2 editable="inline" class="display-4 mb-2 text-white"><b> {{current_class}} events:</b></h2>
-            </div>
-        </div>
-    </div>
-
-    <!-- posts -->
-    <div class="row pt-4 mb-1">
-        {% for event in pages %}
-        <div class="col-md-4 mb-4">
-            <a href="{% url 'event_detail' event.id %}" class="text-decoration-none text-white">
-                <div class="card-events">
-                    <div class="text-center text-white">
-                        <h4 class="my-1">
-                            {{ event.event_type }}
-                        </h4>
-                        <h5 class="my-3 text-white" editable="inline">Realisation: {{ event.realisation_time }}</h5>
-                        <div>Subject: {{ event.subject }}</div>
-                        <div class="mb-2 mt-2 card-divider"></div>
-                        <div class="mb-2 mt-2">Author: {{event.author}}</div>
-                        <div class="mb-2">Added: {{event.add_time}}</div>
-                    </div>
-                    <div class="exclamation">
-                        {% if event.visited == False %}
-                        <i class="fa-solid fa-circle-exclamation d-flex justify-content-center p-2"
-                            style="color: #a51212;"></i>
+        <div id="filterWindow" class="filter-window">
+            <div class="filter-content">
+                <span class="filter-close" id="filterButtonClose">&times;</span>
+                <div class="filter-form">
+                    <div class="form-field">
+                        {% if kid_id %}
+                        <form action="{% url 'filter_events_student_parent' kid_id %}" method="post">
+                        {% else %}
+                        <form action="{% url 'filter_events_student' %}" method="post">
                         {% endif %}
+                            {% csrf_token %}
+                            <label for="subject">Subject:</label>
+                            <select name="subject" id="subject" class="filter-form-control">
+                                <option value="empty">Empty</option>
+                                <option value="Mathematic">Mathematic</option>
+                                <option value="History">History</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Philosphy">Philosophy</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="event_type">Event Type:</label>
+                            <select name="event_type" id="event_type" class="filter-form-control">
+                                <option value="empty">Empty</option>
+                                <option value="Other">Other</option>
+                                <option value="Small Test">Small Test</option>
+                                <option value="Test">Test</option>
+                                <option value="Essay">Essay</option>
+                                <option value="Project">Project</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="start_date">Start Date:</label>
+                            <input type="date" name="start_date" class="filter-form-control">
+                        </div>
+                        <div class="form-field" typ="date">
+                            <label for="end_date">End Date:</label>
+                            <input type="date" name="end_date" class="filter-form-control">
+                        </div>
+                        <button type="submit" class="apply-button">Apply</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!--title -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="lc-block">
+                        <h2 editable="inline" class="display-4 mb-2 text-white"><b> {{current_class}} events:</b></h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- posts -->
+            <div class="row pt-4 mb-1">
+                {% for event in pages %}
+                    <div class="col-md-4 mb-4">
+                        <a href="{% url 'event_detail' event.id %}" class="text-decoration-none text-white">
+                            <div class="card-events">
+                                <div class="text-center text-white">
+                                    <h4 class="my-1">
+                                        {{ event.event_type }}
+                                    </h4>
+                                    <h5 class="my-3 text-white" editable="inline">Realisation: {{ event.realisation_time }}</h5>
+                                    <div>Subject: {{ event.subject }}</div>
+                                    <div class="mb-2 mt-2 card-divider"></div>
+                                    <div class="mb-2 mt-2">Author: {{event.author}}</div>
+                                    <div class="mb-2">Added: {{event.add_time}}</div>
+                                </div>
+                                <div class="exclamation">
+                                    {% if event.visited == False %}
+                                    <i class="fa-solid fa-circle-exclamation d-flex justify-content-center p-2"
+                                        style="color: #a51212;"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- pagination -->
+            {% if pages.paginator.num_pages > 1 %}
+                <nav aria-label="..." >
+                    <ul class="pagination d-flex justify-content-center">
+                        {% if pages.has_previous %}
+                            <li class="">
+                                <a class="page-link" href="?page={{ pages.previous_page_number }}">Prevoius</a>
+                            </li>
+                            <li class="">
+                                <a class="page-link" href="?page=1">1</a>
+                            </li>
+                        {% endif %}
+                        <li class="" aria-current="page">
+                            <span class="page-item-active">{{ pages.number }}</span>
+                        </li>
+                        {% if pages.has_next %}
+                            <li class="">
+                                <a class="page-link" href="?page={{ pages.paginator.num_pages }}">{{pages.paginator.num_pages }}</a>
+                            </li>
+                            <li class="">
+                                <a class="page-link" href="?page={{ pages.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="lc-block">
+                        <h2 editable="inline" class="display-4 mb-2 text-white"><b> Chose student:</b></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for kid in parent_kids %}
+            <a href="{% url 'filter_events_student_parent' kid.id %}" class="text-decoration-none text-white">
+                <div class="row pt-4 justify-content-center mt-4 ">
+                    <div class="col-md-4 mb-4">
+                        <div class="card-one card-chose-child">
+                            <div class="text-center text-white">
+                                <h4 class="my-3" editable="inline">{{kid}}</h4>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </a>
-        </div>
         {% endfor %}
-    </div>
-
-    <!-- pagination -->
-    
-    {% if pages.paginator.num_pages > 1 %}
-    <nav aria-label="..." >
-       
-        <ul class="pagination d-flex justify-content-center">
-            {% if pages.has_previous %}
-            <li class="">
-                <a class="page-link" href="?page={{ pages.previous_page_number }}">Prevoius</a>
-            </li>
-            <li class="">
-                <a class="page-link" href="?page=1">1</a>
-            </li>
-            {% endif %}
-            <li class="" aria-current="page">
-                <span class="page-item-active">{{ pages.number }}</span>
-            </li>
-            {% if pages.has_next %}
-            <li class="">
-                <a class="page-link" href="?page={{ pages.paginator.num_pages }}">{{pages.paginator.num_pages }}</a>
-            </li>
-            <li class="">
-                <a class="page-link" href="?page={{ pages.next_page_number }}">Next</a>
-            </li>
-            {% endif %}
-        </ul>
- 
-        </nav>
     {% endif %}
-{% else %}
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="lc-block">
-                <h2 editable="inline" class="display-4 mb-2 text-white"><b> Chose student:</b></h2>
-            </div>
-        </div>
-    </div>
-    </div>
-{% for kid in parent_kids %}
-<a href="{% url 'student_events' kid.id %}" class="text-decoration-none text-white">
-<div class="row pt-4 justify-content-center mt-4 ">
-    <div class="col-md-4 mb-4">
-        <div class="card-one card-chose-child">
-            <div class="text-center text-white">
-
-                <h4 class="my-3" editable="inline">{{kid}}
-                </h4>
-
-            </div>
-        </div>
-    </div>
-</div>
-</a>
-    {% endfor %}
-
-{% endif %}
-</div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% endblock content %}
-</html>

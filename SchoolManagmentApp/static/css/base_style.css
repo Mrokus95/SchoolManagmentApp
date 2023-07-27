@@ -11,7 +11,7 @@ body {
   overflow-x: hidden;
 }
 
-.pics{
+.pics {
   height: 950px;
   width: 760px;
 }
@@ -241,7 +241,6 @@ nav .nav-list li:not(:last-child) a:hover {
   border: 0.15rem solid #000000;
 }
 
-
 .card-events:hover {
   background-color: #2d8b40;
 }
@@ -260,7 +259,7 @@ nav .nav-list li:not(:last-child) a:hover {
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
 }
 
-.card-chose-child{
+.card-chose-child {
   border: 2px solid #103a15;
   border-radius: 2rem;
   padding: 1rem;
@@ -272,7 +271,6 @@ nav .nav-list li:not(:last-child) a:hover {
 .card-chose-child:hover {
   background-color: #2d8b40;
 }
-
 
 .exclamation {
   font-size: 2rem;
@@ -286,7 +284,6 @@ nav .nav-list li:not(:last-child) a:hover {
   font-size: 1.05rem;
   color: #9bb49b;
 }
-
 
 /* pagination */
 
@@ -372,12 +369,13 @@ nav .nav-list li:not(:last-child) a:hover {
   width: 10rem;
   position: absolute;
   bottom: 4rem;
+  left: 50%;
+  transform: translateX(-50%);
   cursor: pointer;
   background-color: #07491b;
   color: #fff;
   border-radius: 2rem;
   text-align: center;
-  margin-top: 0.5rem;
   border: 0.15rem solid #000000;
 }
 

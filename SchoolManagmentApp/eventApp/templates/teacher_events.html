@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+
+       <!-- filtering  -->
+       <div id="filterButton" class="filter-button">Filtering</div>
+
+   <div id="filterWindow" class="filter-window">
+       <div class="filter-content">
+           <span class="filter-close" id="filterButtonClose">&times;</span>
+           <div class="filter-form">
+               <div class="form-field">
+
+                   <form action="{% url 'teacher_events' %}" method="post">
+
+                       {% csrf_token %}
+                       <label for="subject">Subject:</label>
+                       <select name="subject" id="subject" class="filter-form-control">
+                           <option value="empty">Empty</option>
+                           <option value="Mathematic">Mathematic</option>
+                           <option value="History">History</option>
+                           <option value="Biology">Biology</option>
+                           <option value="Physics">Physics</option>
+                           <option value="Chemistry">Chemistry</option>
+                           <option value="Philosphy">Philosophy</option>
+                       </select>
+                   </div>
+                   <div class="form-field">
+                       <label for="event_type">Event Type:</label>
+                       <select name="event_type" id="event_type" class="filter-form-control">
+                           <option value="empty">Empty</option>
+                           <option value="Other">Other</option>
+                           <option value="Small Test">Small Test</option>
+                           <option value="Test">Test</option>
+                           <option value="Essay">Essay</option>
+                           <option value="Project">Project</option>
+                       </select>
+                   </div>
+                   <div class="form-field">
+                       <label for="start_date">Start Date:</label>
+                       <input type="date" name="start_date" class="filter-form-control">
+                   </div>
+                   <div class="form-field" typ="date">
+                       <label for="end_date">End Date:</label>
+                       <input type="date" name="end_date" class="filter-form-control">
+                   </div>
+                   <button type="submit" class="apply-button">Apply</button>
+               </form>
+           </div>
+       </div>
+   </div>
+
+   <!--title -->
+   <div class="container">
+       <div class="row">
+           <div class="col-md-12 text-center">
+               <div class="lc-block">
+                   <h2 editable="inline" class="display-4 mb-2 text-white"><b>Events u submitted:</b></h2>
+               </div>
+           </div>
+       </div>
+
+       <!-- posts -->
+       <div class="row pt-4 mb-1">
+           {% for event in pages %}
+               <div class="col-md-4 mb-4">
+                   <a href="{% url 'teacher_event_detail' event.id %}" class="text-decoration-none text-white">
+                       <div class="card-events">
+                           <div class="text-center text-white">
+                               <h4 class="my-1">
+                                   {{ event.event_type }}
+                               </h4>
+                               <h5 class="my-3 text-white" editable="inline">Realisation: {{ event.realisation_time }}</h5>
+                               <div>Subject: {{ event.subject }}</div>
+                               <div class="mb-2 mt-2 card-divider"></div>
+                               <div class="mb-2 mt-2">Author: {{event.author}}</div>
+                               <div class="mb-2">Added: {{event.add_time}}</div>
+                           </div>
+
+                       </div>
+                   </a>
+               </div>
+           {% endfor %}
+       </div>
+
+       <!-- pagination -->
+       {% if pages.paginator.num_pages > 1 %}
+           <nav aria-label="..." >
+               <ul class="pagination d-flex justify-content-center">
+                   {% if pages.has_previous %}
+                       <li class="">
+                           <a class="page-link" href="?page={{ pages.previous_page_number }}">Prevoius</a>
+                       </li>
+                       <li class="">
+                           <a class="page-link" href="?page=1">1</a>
+                       </li>
+                   {% endif %}
+                   <li class="" aria-current="page">
+                       <span class="page-item-active">{{ pages.number }}</span>
+                   </li>
+                   {% if pages.has_next %}
+                       <li class="">
+                           <a class="page-link" href="?page={{ pages.paginator.num_pages }}">{{pages.paginator.num_pages }}</a>
+                       </li>
+                       <li class="">
+                           <a class="page-link" href="?page={{ pages.next_page_number }}">Next</a>
+                       </li>
+                   {% endif %}
+               </ul>
+           </nav>
+       {% endif %}
+
+
+{% endblock content %}

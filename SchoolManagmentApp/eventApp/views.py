@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from eventApp.models import CalendarEvents, Teacher
-from eventApp.forms import EventFilterStudentForm
+from eventApp.forms import EventFilterStudentForm, AddEvent
 from usersApp.models import Profile, Student, Parent
 
 
@@ -217,8 +217,10 @@ def event_detail(request, eventId):
         if CalendarEvents.objects.filter(author=current_teacher).exists():
             event = CalendarEvents.objects.get(id=eventId)
             return render(request, 'teacher_event_details.html', {'event': event})
+        else:    
+            messages.error(request, 'No cannot be viewd!')
+            return render(request, 'teacher_event_details.html')
     else:
-
         if CalendarEvents.objects.filter(id=eventId).exists():
             event = CalendarEvents.objects.get(id=eventId)
             event.visited = True
@@ -240,4 +242,33 @@ def delete_event(request, eventId):
     else:
         messages.error(request, 'Problem with deleting!')
         return redirect('teacher_events')
-                 
+    
+# def edit_event(request, eventId):
+#     edit_form = 
+#     context=['dit_fomr': edit_form]
+#     return render(request, 'teacher_event_details.html', context)
+
+def add_event(request):
+    add_event_form = AddEvent()    
+
+    if request.method == 'GET':
+        return render(request, 'add_event.html', {'add_event_form': add_event_form})
+
+    else:
+        print(request.user)
+        adding_form = AddEvent(request.POST)
+        if adding_form.is_valid():
+            print('nie jestem inwalida')
+            form = adding_form.save(commit=False)
+            form.author = request.user
+            form.save()
+            messages.error(request, "dodałem to gówno")
+
+            return redirect ('teacher_events')
+        else:
+
+            errors = adding_form.errors
+            return render(request, 'add_event.html', {'errors': errors})
+
+
+       

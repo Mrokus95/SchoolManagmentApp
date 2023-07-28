@@ -1,0 +1,27 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+{% if errors %}
+{% for error in errors %}
+<div class="alert alert-danger pt-3" role="alert">
+    {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+
+<form method="post">
+
+    {% csrf_token %}
+    {{ add_event_form.as_p }}
+    
+    <button type="submit">jebnij batona</button>
+</form>
+
+
+
+
+{% endblock content %}

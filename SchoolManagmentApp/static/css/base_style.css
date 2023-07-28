@@ -447,18 +447,3 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 
-@keyframes slideOutUp {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-}
-
-.animate__slideOutUp {
-  animation-name: slideOutUp;
-  animation-duration: 0.5s;
-}

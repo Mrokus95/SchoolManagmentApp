@@ -39,9 +39,5 @@ function showDialog() {
 }
 
 function hideDialog() {
-  myDeleteConfirmer.classList.add("animate__slideOutUp");
-  myDeleteConfirmer.addEventListener("animationend", function () {
     myDeleteConfirmer.classList.add("hidden");
-    myDeleteConfirmer.classList.remove("animate__slideOutUp");
-  });
 }

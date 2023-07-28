@@ -255,6 +255,7 @@ nav .nav-list li:not(:last-child) a:hover {
   border: 2px solid #103a15;
   border-radius: 2rem;
   padding: 1rem;
+  
   background-color: #186428;
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
 }
@@ -406,7 +407,58 @@ nav .nav-list li:not(:last-child) a:hover {
   cursor: pointer;
 }
 
-.back-button-image{
+.back-button-image {
   font-size: 3rem;
   margin-right: 1rem;
+}
+
+/* delete post confirmer */
+
+.delete-post-window{
+  background-color: #07491b;
+  border: 0.15rem solid #000000;
+  border-radius: 2rem;
+  padding: 2rem;
+  width: 15rem;
+  text-align: center;
+}
+.dialog-message {
+  margin-bottom: 20px;
+  color: #fff;
+}
+.hidden {
+  display: none;
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate__slideInDown {
+  animation-name: slideInDown;
+  animation-duration: 0.5s;
+}
+
+
+@keyframes slideOutUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.animate__slideOutUp {
+  animation-name: slideOutUp;
+  animation-duration: 0.5s;
 }

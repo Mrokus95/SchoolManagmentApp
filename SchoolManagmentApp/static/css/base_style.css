@@ -391,3 +391,75 @@ nav .nav-list li:not(:last-child) a:hover {
 .filter-form-control:hover {
   cursor: pointer;
 }
+
+.avatar-pic{
+  max-height: 60px;
+  max-width: 60px;
+}
+
+/* Messages */
+/* Custom styles for the menu sidebar */
+.email-box{
+  border-radius: 10px;
+  border-color: 2px solid #21824a;
+  overflow: hidden;
+
+}
+.height60{
+  min-height: 300px;
+}
+.color-border{
+ border: #21824a 3px solid;
+ overflow: hidden;
+ border-radius: 10px;
+}
+.gray-bg{
+  background-color: rgba(118, 135, 152, 0.464);
+}
+
+.one-border{
+  border-right: #21824a 3px solid;
+}
+.dark-bg{
+  background-color: #212529;
+}
+.green-bg{
+  background-color: #21824a;
+}
+
+tr{
+ border-color: #07491b;
+
+}
+td a{
+  text-decoration: none;
+  color: white;
+
+}
+
+tr:hover{
+  background-color: #21824a;
+}
+
+.new-email-button{
+  width: 75%;
+  height: 50px;
+  font-size: 20px;
+}
+
+.email-nav {
+  color: white;
+  text-decoration: none;
+  background-color: transparent;
+  font-size: 16px;
+  width: 100%;}
+
+.email-nav:hover {
+    color: #2ecc71;
+    border-bottom: #2ecc71 solid;
+    font-size: 18px;
+    transition: 0.4s;}
+
+.marked{
+  background-color: #08852d;
+}

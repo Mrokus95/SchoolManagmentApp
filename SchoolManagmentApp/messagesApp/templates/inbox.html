@@ -1,0 +1,84 @@
+{% extends 'base.html' %} {% load static %} {% load widget_tweaks %} {% load
+my_tags %} {% block title%} SchoolManagmentApp {% endblock title %} 
+{% block content%}
+
+<div class="container-fluid mt-5 gray-bg email-box">
+	<div class="row color-border">
+		<!-- Left Sidebar with Menu -->
+		<div class="menu-list col-md-3 email-box one-border dark-bg">
+			<div class="list-group bg-dark">
+				<div class="text-center mt-5 mb-5">
+					<button type="button" class="login-nav-btn new-email-button">
+						New Message
+					</button>
+				</div>
+				<a href="#" class="email-nav"
+					><button
+						type="button"
+						class="list-group-item px-3 border-0 email-nav"
+					>
+						Inbox
+					</button></a
+				>
+				<a href="#" class="email-nav"
+					><button
+						type="button"
+						class="list-group-item px-3 border-0 email-nav"
+					>
+						Send
+					</button></a
+				>
+				<a href="#" class="email-nav"
+					><button
+						type="button"
+						class="list-group-item px-3 border-0 email-nav"
+					>
+						Important
+					</button></a
+				>
+				<a href="#" class="email-nav"
+					><button
+						type="button"
+						class="list-group-item px-3 border-0 email-nav"
+					>
+						Trash
+					</button></a
+				>
+			</div>
+		</div>
+
+		<!-- Right Content with List of Emails -->
+		<div class="col-md-9 menu-list email-box">
+			<h3 class="my-3 text-white">Inbox</h3>
+			<div class="list-group">
+				<!-- Sample Email Items -->
+				<a href="#" class="list-group-item bg-transparent border-0 height60">
+					<table class="table table-responsive-md">
+						<tbody class="">
+							{% for email in inbox_messages%}
+							<tr>
+								<td class="text-center text-white text-decoration-none">
+									<i class="fa fa-star-o"></i>
+								</td>
+								<td class="text-white text-decoration-none">
+									<a class="text-reset text-white" href="#">{{email.sender}}</a>
+								</td>
+								<td class="text-white text-decoration-none">
+									<a class="text-reset text-white" href="#">{{email.title}}</a>
+								</td>
+								<td class="text-center text-white text-decoration-none">
+									{{email.date}}
+								</td>
+								<td class="text-center text-white text-decoration-none">
+									<i class="fa-solid fa-trash" style="color: #ae0000"></i>
+								</td>
+							</tr>
+							{%endfor%}
+						</tbody>
+					</table>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

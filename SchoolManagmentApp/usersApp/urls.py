@@ -6,13 +6,13 @@ from django.views.defaults import permission_denied
 handler403 = permission_denied
 urlpatterns = [
     # Home and Login&Logout
-    path('', views.HomeView.as_view(), name="home"),
+    path('home/', views.HomeView.as_view(), name="home"),
     path('account/logout/', views.LogoutView.as_view(template_name='index.html'), name='logout'),
 
 
     #Reset password
-    path('account/reset_password/', views.CustomPasswordResetView.as_view(), name='password_reset'),
-    path('account/reset_password/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset_password/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+    path('reset_password/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('account/reset_password/confirm/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),    
     path('account/reset_password/complete/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
 

@@ -30,8 +30,6 @@ class HomeView(View):
     def get(self, request):
         form = AuthenticationForm()
         next_url = request.GET.get('next', '')
-        if not next_url:
-            return redirect('events')
         context = {'form': form, 'next': next_url}
         return render(request, self.template_name, context)
 
@@ -46,7 +44,7 @@ class HomeView(View):
                 redirect_to = request.POST.get('next', '')
                 if redirect_to and url_has_allowed_host_and_scheme(redirect_to, allowed_hosts=None):
                     return redirect(redirect_to)
-                return redirect('home')
+                return redirect('events')
         else:
             for field_errors in form.errors.values():
                 for error in field_errors:

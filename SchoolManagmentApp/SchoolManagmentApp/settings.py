@@ -28,7 +28,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -139,7 +139,7 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 # Login redirecting
 LOGIN_URL = 'home'
 LOGOUT_URL = 'home'
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'events'
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 

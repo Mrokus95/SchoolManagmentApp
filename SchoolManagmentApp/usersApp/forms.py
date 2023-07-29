@@ -2,9 +2,9 @@ from django import forms
 from django.contrib.auth.models import User
 from eventApp.models import Subject, Teacher
 from django.core.validators import validate_email
-from .models import Student, Parent, ClassUnit
+from .models import Student, Parent, ClassUnit, Profile
 import re
-
+from django.contrib.auth import get_user_model
 
 
 class RegistrationForm(forms.ModelForm):
@@ -61,7 +61,10 @@ class RegistrationForm(forms.ModelForm):
 
 
 class TeacherRegistrationForm(forms.ModelForm):
-    name = forms.ModelMultipleChoiceField(queryset=Subject.objects.all(), label='Subject:')
+    name = forms.ModelMultipleChoiceField(
+                        queryset=Subject.objects.all().order_by('name'),
+                        label="Subjects",
+                        widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model = Teacher
@@ -103,4 +106,42 @@ class StudentRegistrationForm(forms.ModelForm):
             if not class_exists:
                 self.add_error('class_unit', "Class does not exist.")
 
+        return cleaned_data
+    
+class UserEditForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+
+            # Check if email is in a valid format
+        if email:
+            regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+            if not re.fullmatch(regex, email):
+                self.add_error('email', "Invalid email address.")
+            
+        return cleaned_data
+
+
+
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['phone_number']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        phone_number = cleaned_data.get('phone_number')
+
+            # Check if phone number has 9 digits and all signs are digits
+        if phone_number and len(phone_number) != 9:
+            raise forms.ValidationError("Phone number has to be 9 digits.")
+            
+        if phone_number and not phone_number.isdigit():
+            raise forms.ValidationError("Phone number can only contain digits.")
+            
         return cleaned_data

@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.urls import path
 from . import views 
+from django.views.defaults import permission_denied
 
+handler403 = permission_denied
 urlpatterns = [
     # Home and Login&Logout
     path('', views.HomeView.as_view(), name="home"),
@@ -20,5 +22,8 @@ urlpatterns = [
     path('account/register/parent', views.ParentRegisterView.as_view(), name='register_parent'),
     path('account/register/complete/', views.RegistrationComplete.as_view(), name='registration_complete'),
 
+    path('account/edit/', views.EditUserDataView.as_view(),name='update_user_profile'),
 
-]
+    #Changing password
+    path('account/password_change/', views.CustomPaswordChangeView.as_view(), name = 'passwordChange'),
+    path('account/password_change/done/', views.CustomPaswordChangeDoneView.as_view(), name = 'passwordChangeDone')]

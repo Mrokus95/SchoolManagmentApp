@@ -316,7 +316,7 @@ nav .nav-list li:not(:last-child) a:hover {
   border: 1px solid #195304;
 }
 
-/* filter */
+/* filtring */
 
 .filter-button {
   height: 1.8rem;
@@ -339,8 +339,8 @@ nav .nav-list li:not(:last-child) a:hover {
   top: 15rem;
   left: 0;
   width: 20rem;
-  height: 22rem;
-  padding: 20px;
+  height: 28rem;
+  padding: 15px;
   box-sizing: border-box;
 }
 
@@ -368,15 +368,13 @@ nav .nav-list li:not(:last-child) a:hover {
 .apply-button {
   height: 1.8rem;
   width: 10rem;
-  position: absolute;
-  bottom: 4rem;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 1rem;
   cursor: pointer;
   background-color: #07491b;
   color: #fff;
   border-radius: 2rem;
   text-align: center;
+  margin: 0.5rem;
   border: 0.15rem solid #000000;
 }
 
@@ -405,11 +403,6 @@ nav .nav-list li:not(:last-child) a:hover {
 
 .filter-form-control:hover {
   cursor: pointer;
-}
-
-.back-button-image {
-  font-size: 3rem;
-  margin-right: 1rem;
 }
 
 /* delete post confirmer */
@@ -487,4 +480,9 @@ nav .nav-list li:not(:last-child) a:hover {
   margin-bottom: 0.5rem;
   color: white;
 
+}
+
+.back-button-image{
+  font-size: 3rem;
+  margin-right: 1rem;
 }

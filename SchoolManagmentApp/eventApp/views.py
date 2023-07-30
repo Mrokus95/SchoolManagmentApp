@@ -204,6 +204,17 @@ def show_events(request):
         return teacher_events(request)
 
 def event_detail(request, eventId):
+    if CalendarEvents.objects.filter(id=eventId).exists():
+        event = CalendarEvents.objects.get(id=eventId)
+        event.visited = True
+        event.save()
+        return render(request, 'event_detail.html', {'event': event})
+    else:
+        messages.error(
+        request, 'Event cannot be viewd, please contact the author!')
+        return redirect('events')
+    
+def teacher_event_detail(request, eventId):
     curret_profile = Profile.objects.get(user=request.user)
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
@@ -214,7 +225,7 @@ def event_detail(request, eventId):
             return render(request, 'teacher_event_details.html', {'event': event})
         
         else:    
-            messages.error(request, 'No cannot be viewd!')
+            messages.error(request, 'Event cannot be viewd!')
             return render(request, 'teacher_event_details.html')
     else:
 

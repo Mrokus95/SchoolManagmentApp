@@ -9,7 +9,7 @@ urlpatterns =[
 
     #details events
     path('event_detail/<int:eventId>/', views.event_detail, name='event_detail'),
-    path('teacher_event_details/<int:eventId>/', views.event_detail, name='teacher_event_detail'),
+    path('teacher_event_details/<int:eventId>/', views.teacher_event_detail, name='teacher_event_detail'),
 
     # filter events
     path('filter_events_student/', views.student_events, name='filter_events_student'),

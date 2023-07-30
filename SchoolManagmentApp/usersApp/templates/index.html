@@ -44,13 +44,15 @@
 							<span></span>
 						</div>
 						<ul class="nav-list">
-							<li><a href="#">Home</a></li>
-							<li><a href="#">About project</a></li>
-							<li><a href="#">Authors</a></li>
-							{% if not user.is_authenticated %}
-								<li><a href=""><button id="login-nav-btn" class="login-nav-btn">Login</button></a></li>
-							{% else %}
+							{% if user.is_authenticated %}
+								<li><a href="{%url 'events'%}">Events</a></li>
+								<li><a href="{%url 'inbox'%}">Messages</a></li>
+								<li><a href="{% url 'update_user_profile'%}"><img class='avatar-pic' src="{{ user.profile.photo.url }}" alt=""></a></li>
 								<li><a href="{% url 'logout' %}"><button id="login-nav" class="login-nav-btn" >Logout</button></a></li>
+							{% else %}
+								<li><a href="#">About project</a></li>
+								<li><a href="#">Authors</a></li>
+								<li><a href=""><button id="login-nav-btn" class="login-nav-btn">Login</button></a></li>
 							{%endif%}
 						</ul>
 					</nav>
@@ -93,6 +95,7 @@
 							<input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username" placeholder="Username">
 							<label for="id_password">Password:</label>
 							<input type="password" name="password" autocomplete="current-password" required="" id="id_password" placeholder="Password">
+							<input type="hidden" name="next" value="{{ next }}">
 							{% csrf_token %}
 							<button  type="submit">Log In</button>
 						</form>

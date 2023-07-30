@@ -8,8 +8,6 @@ hamburger.addEventListener('click', function(){
 });
 
 
-
-
 var typed = new Typed(".input", {
     strings:["Szkołą Prywatną.", "Wsparciem Ucznia.", "Przyjaciółmi Rodziców.", "5 LO w Zabrzu!"],
     typeSpeed: 70,
@@ -26,4 +24,3 @@ commentButtons.addEventListener("click", (event) => {
   event.preventDefault();
   commentSections[0].classList.toggle("login-form-hide");
 });
-

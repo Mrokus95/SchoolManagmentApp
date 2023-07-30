@@ -2,25 +2,35 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 from django.contrib import messages
-from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.shortcuts import render, redirect
-from django.contrib.auth.views import PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetView
+from django.contrib.auth.views import PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView, PasswordResetView,PasswordChangeView, PasswordChangeDoneView
 from django.contrib.auth.models import User
 from django.views.generic import FormView
-from .forms import RegistrationForm, TeacherRegistrationForm, StudentRegistrationForm
-from .models import Profile, ClassUnit, Student, Parent
+from .forms import RegistrationForm, TeacherRegistrationForm, StudentRegistrationForm, UserEditForm, ProfileEditForm
+from django.utils.http import url_has_allowed_host_and_scheme
+from .models import Profile, Student, Parent
 from eventApp.models import Teacher
 from django.db import transaction
-from django.shortcuts import get_object_or_404
+from django.views.generic import FormView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
+
+
+
+def staff_check(user):
+    return user.is_authenticated and user.is_staff
+
+
 
 class HomeView(View):
     template_name = 'index.html'
 
     def get(self, request):
         form = AuthenticationForm()
-        context = {'form': form, 'next': request.GET.get('next', '')}
+        next_url = request.GET.get('next', '')
+        context = {'form': form, 'next': next_url}
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -32,9 +42,9 @@ class HomeView(View):
             if user is not None and user.is_active:
                 login(request, user)
                 redirect_to = request.POST.get('next', '')
-                if redirect_to and self._is_safe_redirect(redirect_to):
-                    return HttpResponseRedirect(redirect_to)
-                return HttpResponseRedirect(reverse_lazy('home'))
+                if redirect_to and url_has_allowed_host_and_scheme(redirect_to, allowed_hosts=None):
+                    return redirect(redirect_to)
+                return redirect('events')
         else:
             for field_errors in form.errors.values():
                 for error in field_errors:
@@ -69,13 +79,19 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
         return context
 
 
-class RegistrationComplete(View):
+class RegistrationComplete(UserPassesTestMixin, View):
     template_name = 'registration_complete.html'
 
     def get(self, request):
         return render(request, self.template_name)
+    
+    def test_func(self):
+        return staff_check(self.request.user)
 
-class ParentRegisterView(FormView):
+    def handle_no_permission(self):
+        raise PermissionDenied()
+
+class ParentRegisterView(UserPassesTestMixin, FormView):
     template_name = 'registration.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('registration_complete')
@@ -115,11 +131,15 @@ class ParentRegisterView(FormView):
                     messages.error(self.request, error)
         return self.render_to_response(self.get_context_data(form=form))
     
+    def test_func(self):
+        return staff_check(self.request.user)
+
+    def handle_no_permission(self):
+        raise PermissionDenied()
     
-class TeacherRegisterView(FormView):
+class TeacherRegisterView(UserPassesTestMixin, FormView):
     template_name = 'registration.html'
     success_url = reverse_lazy('registration_complete')
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -133,13 +153,11 @@ class TeacherRegisterView(FormView):
             form_class = self.get_form_class()
         return TeacherRegistrationForm(self.request.POST, self.request.FILES)
 
-
     def form_valid(self, form):
-
         registration_form = RegistrationForm(self.request.POST, self.request.FILES)
         teacher_registration_form = TeacherRegistrationForm(self.request.POST, self.request.FILES)
 
-        if  registration_form.is_valid() and teacher_registration_form.is_valid():
+        if registration_form.is_valid() and teacher_registration_form.is_valid():
             username = registration_form.cleaned_data['username']
             first_name = registration_form.cleaned_data['first_name']
             last_name = registration_form.cleaned_data['last_name']
@@ -147,9 +165,8 @@ class TeacherRegisterView(FormView):
             password1 = registration_form.cleaned_data['password1']
             phone_number = registration_form.cleaned_data['phone_number']
             photo = registration_form.cleaned_data['photo']
-            subject = teacher_registration_form.cleaned_data['name']
+            selected_subjects = teacher_registration_form.cleaned_data['name']
 
-        
             with transaction.atomic():
                 # Create a new user account
                 user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
@@ -159,18 +176,15 @@ class TeacherRegisterView(FormView):
 
                 # Create a new teacher account
                 teacher = Teacher.objects.create(user=profile)
-                teacher.lesson_type.set(subject)
+                teacher.lesson_type.set(selected_subjects)
 
             return super().form_valid(form)
-        
         else:
-            
             for field_errors in form.errors.values():
                 for error in field_errors:
                     messages.error(self.request, error)
 
             return self.render_to_response(self.get_context_data(registration_form=registration_form, teacher_registration_form=teacher_registration_form))
-
 
     def form_invalid(self, form):
         registration_form = RegistrationForm(self.request.POST, self.request.FILES)
@@ -182,8 +196,13 @@ class TeacherRegisterView(FormView):
 
         return self.render_to_response(self.get_context_data(registration_form=registration_form, teacher_registration_form=teacher_registration_form))
     
+    def test_func(self):
+        return staff_check(self.request.user)
 
-class StudentRegisterView(FormView):
+    def handle_no_permission(self):
+        raise PermissionDenied()
+
+class StudentRegisterView(UserPassesTestMixin, FormView):
     template_name = 'registration.html'
     success_url = reverse_lazy('registration_complete')
 
@@ -246,3 +265,67 @@ class StudentRegisterView(FormView):
 
         return self.render_to_response(self.get_context_data(registration_form=registration_form, student_registration_form=student_registration_form))
     
+    def test_func(self):
+        return staff_check(self.request.user)
+
+    def handle_no_permission(self):
+        raise PermissionDenied()
+
+class EditUserDataView(LoginRequiredMixin, View):
+    def get(self, request):
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+     
+        context = {
+            "profile_form": profile_form,
+            "user_form": user_form,
+        }
+        return render(request, 'edit_profile.html', context)
+
+    def post(self, request):
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Profile updated successfully.")
+        
+        else:
+
+            for field_errors in user_form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
+            
+            for field_errors in profile_form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
+        
+        context = {
+            "profile_form": profile_form,
+            "user_form": user_form,
+        }
+        return render(request, 'edit_profile.html', context)
+    
+    
+
+class CustomPaswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    template_name = "password_change_form.html"
+    success_url = reverse_lazy("passwordChangeDone")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"{field.capitalize()}: {error}")
+        return super().form_invalid(form)
+
+class CustomPaswordChangeDoneView(LoginRequiredMixin, PasswordChangeDoneView):
+    template_name = "password_change_done.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

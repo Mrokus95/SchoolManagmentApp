@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 {% load my_tags %}
 {% block title%}
-    GameCave
+    School Managment App
 {% endblock title %}
 {% block content%}
 <section class="first-section">
@@ -37,13 +37,13 @@
                                 {{ field|add_label_class:"form-label" }}
                             {% endfor %}
 
-
-
                             {% if view_name == 'register_teacher' %}
 
                             {%for field in teacher_registration_form %}
-                                {{field|add_class:"form-control form-control-md"}}
+                                <div>
                                 {{field|add_label_class:"form-label"}}
+                                {{field}}
+                                </div>      
                             {%endfor%}
 
                             {% endif %}

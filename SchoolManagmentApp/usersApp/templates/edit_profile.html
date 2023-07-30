@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load my_tags %}
+{% block title%}
+    GameCave
+{% endblock title %}
+{% block content%}
+<section class="first-section">
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-md-9 col-lg-6 col-xl-7 empty-class">
+                <div class="text-center">
+                    <img src="{% static 'img/students.png' %}"
+                    class="img-fluid pics" alt="Sample image">
+                </div>
+            </div>
+            <div class="mt-5 col-12 col-md-8 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <di class="card-body p-5 text-center">
+                    <form 
+                    action="{% url 'update_user_profile' %}"
+                    method="POST" enctype="multipart/form-data">
+                        <div class=" mt-md-4 pb-5">
+
+                    <h2 class="fw-bold mb-2 text-uppercase mb-5">Edit profil</h2>
+
+
+                        {%for field in user_form %}
+                        {{field|add_class:"form-control form-control-md"}}
+                        {{field|add_label_class:"form-label"}}
+                        {%endfor%}
+                        {%for field in profile_form %}
+                        {{field|add_class:"form-control form-control-md"}}
+                        {{field|add_label_class:"form-label"}}
+                        {%endfor%}
+
+                        {% csrf_token %}
+                        
+                        <div>
+                        <button class= "btn btn-outline-light btn-lg px-5 mt-3 mb-2" type="submit">Save changes</button>
+                        </div>
+
+                        </div>           
+                        
+                    </form>
+                    <div>
+                    <a href="{% url 'passwordChange' %}"><button class= "btn btn-outline-light btn-sm px-3">Change password</button></a>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+

@@ -1,0 +1,67 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% load widget_tweaks %} 
+{% load my_tags %} 
+{% block title%} 
+SchoolManagmentApp 
+{% endblock title %}
+{% block content%}
+
+<div class="container-fluid mt-5 gray-bg email-box height60">
+    <div class="row color-border">
+        <!-- Left Sidebar with Menu -->
+        <div class="menu-list col-md-3 email-box one-border dark-bg height60">
+            <div class="list-group bg-dark">
+                <div class="text-center mt-5 mb-5">
+					<a href="{% url 'create_email'%}">
+                        <button type="button" class="login-nav-btn new-email-button">
+                            New Message
+                        </button>
+                    </a>
+                </div>
+                <a href="{% url 'inbox'%}" class="email-nav"><button type="button"
+                        class="list-group-item px-3 border-0 email-nav">
+                        Inbox
+                        {%if not_read %}
+                        <div class="my-badge">{{not_read}}</d>
+                            {%endif%}
+                    </button></a>
+                <a href="{% url 'outbox'%}" class="email-nav"><button type="button"
+                        class="list-group-item px-3 border-0 email-nav">
+                        Outbox
+                    </button></a>
+                <a href="{% url 'important'%}" class="email-nav"><button type="button"
+                        class="list-group-item px-3 border-0 email-nav">
+                        Important
+                    </button></a>
+            </div>
+        </div>
+
+        <!-- Right Content with List of Emails -->
+        <div class="col-md-9 menu-list email-box">
+
+
+            <div class="card mt-5 mb-5">
+                <div class="card-header bg-success text-white" style="display: flex; justify-content: space-between;">
+                    <span>{{email.date}}</span>
+
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Subject: {{email.title}}</h5>
+                    <hr>
+                    <h6 class="card-subtitle mb-2 text-muted">From: {{email.sender}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">To: {{email.receiver}}</h6>
+                    <hr>
+                    <p class="card-text">{{email.body|linebreaksbr}}</p>
+                </div>
+                <div class="card-header bg-success text-white to-right">
+                    <a href="{%url 'delete_email' email.id%}"><button type="button"
+                            class="login-nav-btn delete-button text-white">
+                            Delete
+                        </button></a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    {% endblock %}

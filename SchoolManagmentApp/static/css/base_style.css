@@ -538,3 +538,83 @@ font-weight: bold;
 .hide-section{
 	display: none;
 }
+/* delete post */
+.delete-post-window{
+	background-color: #07491b;
+	border: 0.15rem solid #000000;
+	border-radius: 2rem;
+	padding: 2rem;
+	width: 15rem;
+	text-align: center;
+  }
+  .dialog-message {
+	margin-bottom: 20px;
+	color: #fff;
+  }
+  .hidden {
+	display: none;
+  }
+  
+  @keyframes slideInDown {
+	from {
+	  transform: translateY(-100%);
+	  opacity: 0;
+	}
+	to {
+	  transform: translateY(0);
+	  opacity: 1;
+	}
+  }
+  
+  .animate__slideInDown {
+	animation-name: slideInDown;
+	animation-duration: 0.5s;
+  }
+  
+  
+  /* adding post*/
+  
+  .adding-window {
+	display: inline-block;
+	position: fixed;
+	left: 50%;
+	width: 60rem;
+	height: 40rem;
+	padding: 20px;
+	box-sizing: border-box;
+	transform: translateX(-50%);
+  }
+  
+  .adding-content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	background-color: #186428;
+	border-radius: 2rem;
+	box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+	border: 0.15rem solid #000000;
+	padding: 1rem;
+  }
+  
+  .form-field {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-items: flex-start;
+  }
+  
+  .adding-field{
+	font-size: 1.1rem;
+	margin-right: 0.5rem;
+	border-radius: 5px;
+	margin-bottom: 0.5rem;
+	color: white;
+  
+  }
+  
+  .back-button-image{
+	font-size: 3rem;
+	margin-right: 1rem;
+  }

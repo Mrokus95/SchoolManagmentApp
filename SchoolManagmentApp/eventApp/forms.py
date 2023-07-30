@@ -20,6 +20,8 @@ class AddEvent(forms.ModelForm):
             'event_type',
             'realisation_time',
             'connected_to_lesson',
+            
+            
         )
 
     realisation_time = forms.DateField(widget=forms.SelectDateWidget)

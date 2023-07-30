@@ -447,3 +447,44 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 
+/* adding post*/
+
+.adding-window {
+  display: inline-block;
+  position: fixed;
+  left: 50%;
+  width: 60rem;
+  height: 40rem;
+  padding: 20px;
+  box-sizing: border-box;
+  transform: translateX(-50%);
+}
+
+.adding-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: #186428;
+  border-radius: 2rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+  border: 0.15rem solid #000000;
+  padding: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.adding-field{
+  font-size: 1.1rem;
+  margin-right: 0.5rem;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  color: white;
+
+}

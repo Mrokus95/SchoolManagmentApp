@@ -18,15 +18,15 @@ confirmButton.addEventListener('click', function() {
     proceedToDelete();
 });
 
-// schowanie okna potwierdzenia w przypadku kliknięcia anuluj
+
 cancelButton.addEventListener("click", function () {
   hideDialog();
 });
 
-// funkcja do wyjebania zasobu
+
 function proceedToDelete() {
   const deleteLink = document.getElementById("deleteEvent");
-  const url = deleteLink.getAttribute("href");  // Pobranie adresu URL z atrybutu "href"
+  const url = deleteLink.getAttribute("href");  
   window.location.href = url
 }
 
@@ -39,17 +39,18 @@ function hideDialog() {
     myDeleteConfirmer.classList.add("hidden");
 }
 
+// filtering
 
 const filterButton = document.getElementById("filterButton");
 const filterWindow = document.getElementById("filterWindow");
 const filterButtonClose = document.getElementById("filterButtonClose");
 
-// Dodajemy obsługę kliknięcia guzika
+
 filterButton.addEventListener("click", function() {
   filterWindow.style.display = "block";
 });
 
-// Dodajemy obsługę kliknięcia przycisku zamykania
+
 filterButtonClose.addEventListener("click", function() {
   filterWindow.style.display = "none";
 });

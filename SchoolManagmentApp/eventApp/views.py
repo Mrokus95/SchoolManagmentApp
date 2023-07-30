@@ -123,6 +123,7 @@ def teacher_events(request):
                     'filter': filter_form,
                         }
             return render(request, 'teacher_events.html', context)
+        
     else:
         messages.error(request, 'No events!')
         return render(request, 'events.html')
@@ -132,17 +133,14 @@ def parent_events_viewing(request, kid_id):
     kid_profile = Student.objects.get(id=kid_id)
     current_class = kid_profile.class_unit
 
-    print(kid_id, kid_profile, current_class)
     if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
         events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
-        event_status_changer(events)
-    
+        event_status_changer(events)  
         filter_form = EventFilterStudentForm()
-        print(request.method)
 
         if request.method == 'GET':
             pages = event_paginator(request, events, 6)
-            print('jestem w get')
+    
             context = {
             'pages': pages,
             'kid_id': kid_id,
@@ -153,7 +151,6 @@ def parent_events_viewing(request, kid_id):
             return render(request, 'events.html', context) 
                       
         else:
-            print('jestem w post')
             if date_filter_validation(request):
                 messages.error(request,"End date must be set after start date!")
                 pages = event_paginator(request, events, 6)
@@ -174,17 +171,17 @@ def parent_events_viewing(request, kid_id):
                 'current_class': current_class
                     }
                 return render(request, 'events.html', context)
+            
     else:
         messages.error(request, 'No events!')
         return render(request, 'events.html')   
 
 def parent_events(request, kid_profile=None):
-    print('jesem w parent event')
     current_parent = Parent.objects.get(user=request.user.profile)
 
-    if not kid_profile:
-          
+    if not kid_profile:        
         parent_kids = Student.objects.filter(parent=current_parent)
+
         if len(parent_kids) > 1:
             return render(request, 'events.html',{'parent_kids': parent_kids})
     
@@ -208,32 +205,33 @@ def show_events(request):
 
 def event_detail(request, eventId):
     curret_profile = Profile.objects.get(user=request.user)
-    print(curret_profile)
     current_teacher = Teacher.objects.get(user=request.user.profile)
-    print(current_teacher)
 
     if curret_profile.account_type == Profile.TEACHER:
 
         if CalendarEvents.objects.filter(author=current_teacher).exists():
             event = CalendarEvents.objects.get(id=eventId)
             return render(request, 'teacher_event_details.html', {'event': event})
+        
         else:    
             messages.error(request, 'No cannot be viewd!')
             return render(request, 'teacher_event_details.html')
     else:
+
         if CalendarEvents.objects.filter(id=eventId).exists():
             event = CalendarEvents.objects.get(id=eventId)
             event.visited = True
             event.save()
             return render(request, 'event_detail.html', {'event': event})
+        
         else:
             messages.error(
             request, 'Event cannot be viewd, please contact the author!')
             return redirect('events')
         
 def delete_event(request, eventId):
-    if CalendarEvents.objects.get(id=eventId):
 
+    if CalendarEvents.objects.get(id=eventId):
         event = CalendarEvents.objects.get(id=eventId)
         event.delete()
         messages.success(request, 'Event deleted!')
@@ -243,30 +241,49 @@ def delete_event(request, eventId):
         messages.error(request, 'Problem with deleting!')
         return redirect('teacher_events')
     
-# def edit_event(request, eventId):
-#     edit_form = 
-#     context=['dit_fomr': edit_form]
-#     return render(request, 'teacher_event_details.html', context)
+def edit_event(request, eventId):
+    edited_event = CalendarEvents.objects.get(id=eventId)
+    connected_to_lesson = edited_event.connected_to_lesson
+
+    if request.method == 'GET':
+        edit_form = AddEvent(instance=edited_event)    
+        context={'edit_form': edit_form,
+                 'connected_to_lesson' : connected_to_lesson}
+        return render(request, 'edit_event.html', context)
+    
+    else:
+        edited_form = AddEvent(request.POST, instance=edited_event)
+
+        if edited_form.is_valid():
+            edited_form.save()
+            edited_event.visited = False
+            edited_event.save()
+            messages.success(request, "Event changed!")
+            return redirect ('teacher_events')
+        
+        else:
+            errors = edited_form.errors
+            return render(request, 'add_event.html', {'errors': errors})
 
 def add_event(request):
-    add_event_form = AddEvent()    
+    add_event_form = AddEvent()
+    curret_teacher = Teacher.objects.get(user=request.user.profile)
 
     if request.method == 'GET':
         return render(request, 'add_event.html', {'add_event_form': add_event_form})
 
     else:
-        print(request.user)
         adding_form = AddEvent(request.POST)
+
         if adding_form.is_valid():
-            print('nie jestem inwalida')
             form = adding_form.save(commit=False)
-            form.author = request.user
+            form.author = curret_teacher
+            form.subject = form.connected_to_lesson.subject
             form.save()
-            messages.error(request, "dodałem to gówno")
-
+            messages.success(request, "Event added successfully!")
             return redirect ('teacher_events')
+        
         else:
-
             errors = adding_form.errors
             return render(request, 'add_event.html', {'errors': errors})
 

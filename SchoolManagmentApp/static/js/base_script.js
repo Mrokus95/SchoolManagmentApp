@@ -1,7 +1,4 @@
-//  variables
-const filterButton = document.getElementById("filterButton");
-const filterWindow = document.getElementById("filterWindow");
-const filterButtonClose = document.getElementById("filterButtonClose");
+
 const myDeleteConfirmer = document.getElementById("myDeleteConfirmer");
 const confirmButton = document.getElementById("deleteConfirmButton");
 const cancelButton = document.getElementById("deleteCancelButton");
@@ -41,3 +38,18 @@ function showDialog() {
 function hideDialog() {
     myDeleteConfirmer.classList.add("hidden");
 }
+
+
+const filterButton = document.getElementById("filterButton");
+const filterWindow = document.getElementById("filterWindow");
+const filterButtonClose = document.getElementById("filterButtonClose");
+
+// Dodajemy obsługę kliknięcia guzika
+filterButton.addEventListener("click", function() {
+  filterWindow.style.display = "block";
+});
+
+// Dodajemy obsługę kliknięcia przycisku zamykania
+filterButtonClose.addEventListener("click", function() {
+  filterWindow.style.display = "none";
+});

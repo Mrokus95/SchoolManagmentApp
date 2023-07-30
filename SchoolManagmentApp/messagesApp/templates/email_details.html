@@ -1,0 +1,94 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% load widget_tweaks %} 
+{% load my_tags %} 
+{% block title%} 
+SchoolManagmentApp 
+{% endblock title %}
+{% block content%}
+
+<div class="container-fluid mt-5 gray-bg email-box height60">
+    <div class="row color-border">
+        <!-- Left Sidebar with Menu -->
+        <div class="menu-list col-md-3 email-box one-border dark-bg height60">
+            <div class="list-group bg-dark">
+                <div class="text-center mt-5 mb-5">
+                    <button type="button" class="login-nav-btn new-email-button">
+                        New Message
+                    </button>
+                </div>
+                <a href="{% url 'inbox'%}" class="email-nav"><button type="button"
+                        class="list-group-item px-3 border-0 email-nav">
+                        Inbox
+                        {%if not_read %}
+                        <div class="my-badge">{{not_read}}</d>
+                            {%endif%}
+                    </button></a>
+                <a href="{% url 'outbox'%}" class="email-nav"><button type="button"
+                        class="list-group-item px-3 border-0 email-nav">
+                        Outbox
+                    </button></a>
+                <a href="{% url 'important'%}" class="email-nav"><button type="button"
+                        class="list-group-item px-3 border-0 email-nav">
+                        Important
+                    </button></a>
+            </div>
+        </div>
+
+        <!-- Right Content with List of Emails -->
+        <div class="col-md-9 menu-list email-box">
+
+
+            <div class="card mt-5 mb-5">
+                <div class="card-header bg-success text-white" style="display: flex; justify-content: space-between;">
+                    <span>{{email.date}}</span>
+                    <span>Mark as important: <a
+                            href="{%url 'email_is_important' email.id %}?source=email_detail&id={{ email.id }}">
+                            {%if email.is_important%}
+                            <i class="icon fa-solid fa-star" style="color: #ffff00;"></i>
+                            {%else%}
+                            <i class="icon fa fa-star-o text-white"></i>
+                            {%endif%}
+                        </a></span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Subject: {{email.title}}</h5>
+                    <hr>
+                    <h6 class="card-subtitle mb-2 text-muted">From: {{email.sender}}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">To: {{email.receiver}}</h6>
+                    <hr>
+                    <p class="card-text">{{email.body|linebreaksbr}}</p>
+                </div>
+                <div class="card-header bg-success text-white to-right">
+                    <button id="reply_button" type="button" class="login-nav-btn text-white">
+                        Reply
+                    </button>
+                    <a href="{%url 'delete_email' email.id%}"><button type="button"
+                            class="login-nav-btn delete-button text-white">
+                            Delete
+                        </button></a>
+                </div>
+            </div>
+            
+            <div id = "reply-section" class="card mt-5 mb-5 hide-section">
+                <h4 class="card-header bg-success text-white">Your reply:</h4>
+                    <form method="post" class="new-email-form">
+                        <div class="form-group">
+                            {{ form.body }}
+                        </div>
+                        <div class="card-header bg-success text-white to-right">
+                            {% csrf_token %}
+                            <button type="submit" class="login-nav-btn text-white">
+                                Send
+                            </button>
+                        </div>
+                    </form>
+
+            </div>
+            
+
+
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'js/reply.js' %}"></script>
+    {% endblock %}

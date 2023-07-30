@@ -5,6 +5,6 @@ from .models import Message
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
 
-    list_display = ['sender', 'receiver', 'title', 'date']
-    list_filter = ['sender', 'receiver', 'is_trash']
-    ordering = ['sender', 'date']
+    list_display = ['id', 'sender', 'receiver', 'title', 'date']
+    list_filter = ['sender', 'receiver']
+    ordering = [ '-id','sender']

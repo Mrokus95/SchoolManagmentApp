@@ -9,10 +9,10 @@ my_tags %} {% block title%} SchoolManagmentApp {% endblock title %}
 			<div class="list-group bg-dark">
 				<div class="text-center mt-5 mb-5">
 					<a href="{% url 'create_email'%}">
-						<button type="button" class="login-nav-btn new-email-button">
-							New Message
-						</button>
-					</a>
+					<button type="button" class="login-nav-btn new-email-button">
+						New Message
+					</button>
+				</a>
 				</div>
 				<a href="{% url 'inbox'%}" class="email-nav"
 					><button
@@ -49,19 +49,15 @@ my_tags %} {% block title%} SchoolManagmentApp {% endblock title %}
 			<h3 class="my-3 text-white">{{view_name}}</h3>
 			<div class="list-group">
 				<!-- Sample Email Items -->
-				<div class="list-group-item bg-transparent border-0 height60">
+				<a href="#" class="list-group-item bg-transparent border-0 height60">
 					<table class="table table-responsive-md">
 						<tbody class="">
 							{% for email in page_obj%}
 							{%if email.is_read_receiver%}
 								<tr class="">
 									<td class="text-center text-white text-decoration-none">
-										<a href="{%url 'email_is_important' email.id %}?source=inbox">
-											{%if email.is_important%}
+										<a href="{%url 'email_is_important' email.id  %}?source=important">
 											<i class="icon fa-solid fa-star" style="color: #ffff00;"></i>
-											{%else%}
-											<i class="icon fa fa-star-o"></i>
-											{%endif%}
 										</a>
 									</td>
 									<td class="text-white text-decoration-none">
@@ -69,30 +65,22 @@ my_tags %} {% block title%} SchoolManagmentApp {% endblock title %}
 											{{email.sender}}
 										</a>
 									</td>
-
 									<td class="text-white text-decoration-none">
 										<a class="text-reset text-white" href="{{ email.get_absolute_url}}">
-										{{email.title}}</a>
+											{{email.title}}
+										</a>
 									</td>
-									
 									<td class="text-center text-white text-decoration-none">
-										<a class="text-reset text-white" href="{{ email.get_absolute_url}}">{{email.date}}</a>
+										<a class="text-reset text-white" href="{{ email.get_absolute_url}}">
+											{{email.date}}
+										</a>
 									</td>
-									{%if not email.is_important %}
-									<td class="text-center text-white text-decoration-none">
-										<a href="{%url 'delete_email' email.id%}">										<i class="icon fa-solid fa-trash" style="color: #ae0000"></i></a>
-									</td>
-									{%endif%}
 								</tr>
 								{%else%}
 								<tr class="bolded">
 									<td class="text-center text-white text-decoration-none">
-										<a href="{%url 'email_is_important' email.id %}?source=inbox">
-										{%if email.is_important%}
+										<a href="{%url 'email_is_important' email.id  %}?source=important">
 										<i class="icon fa-solid fa-star" style="color: #ffff00;"></i>
-										{%else%}
-										<i class="icon fa fa-star-o"></i>
-										{%endif%}
 									</a>
 									</td>
 									<td class="text-white text-decoration-none">
@@ -102,22 +90,20 @@ my_tags %} {% block title%} SchoolManagmentApp {% endblock title %}
 									</td>
 									<td class="text-white text-decoration-none">
 										<a class="text-reset text-white" href="{{ email.get_absolute_url}}">
-										{{email.title}}</a>
+											{{email.title}}
+										</a>
 									</td>
 									<td class="text-center text-white text-decoration-none">
-										<a class="text-reset text-white" href="{{ email.get_absolute_url}}">{{email.date}}</a>
+										<a class="text-reset text-white" href="{{ email.get_absolute_url}}">
+											{{email.date}}
+										</a>
 									</td>
-									{%if not email.is_important %}
-									<td class="text-center text-white text-decoration-none">
-										<a href="{%url 'delete_email' email.id%}">										<i class="icon fa-solid fa-trash" style="color: #ae0000"></i></a>
-									</td>
-									{%endif%}
 								</tr>
-								{%endif%}
+							{%endif%}
 							{%endfor%}
 						</tbody>
 					</table>
-				</div>
+				</a>
 				<ul class="pagination justify-content-end">
 					<li class="page-item">
 						{% if page_obj.has_previous %}

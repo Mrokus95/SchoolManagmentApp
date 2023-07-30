@@ -12,8 +12,8 @@ body {
 }
 
 .pics {
-	height: 950px;
-	width: 760px;
+  height: 950px;
+  width: 760px;
 }
 
 .main-width {
@@ -272,11 +272,25 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .card-one {
-	border: 2px solid #103a15;
-	border-radius: 2rem;
-	padding: 1rem;
-	background-color: #186428;
-	box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  border: 2px solid #103a15;
+  border-radius: 2rem;
+  padding: 1rem;
+  
+  background-color: #186428;
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+}
+
+.card-chose-child {
+  border: 2px solid #103a15;
+  border-radius: 2rem;
+  padding: 1rem;
+  background-color: #186428;
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.card-chose-child:hover {
+  background-color: #2d8b40;
 }
 
 .exclamation {
@@ -322,7 +336,7 @@ nav .nav-list li:not(:last-child) a:hover {
 	border: 1px solid #195304;
 }
 
-/* filter */
+/* filtring */
 
 .filter-button {
 	height: 1.8rem;
@@ -340,14 +354,14 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .filter-window {
-	display: none;
-	position: fixed;
-	top: 15rem;
-	left: 0;
-	width: 20rem;
-	height: 22rem;
-	padding: 20px;
-	box-sizing: border-box;
+  display: none;
+  position: fixed;
+  top: 15rem;
+  left: 0;
+  width: 20rem;
+  height: 28rem;
+  padding: 15px;
+  box-sizing: border-box;
 }
 
 .filter-content {
@@ -372,17 +386,16 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .apply-button {
-	height: 1.8rem;
-	width: 10rem;
-	position: absolute;
-	bottom: 4rem;
-	cursor: pointer;
-	background-color: #07491b;
-	color: #fff;
-	border-radius: 2rem;
-	text-align: center;
-	margin-top: 0.5rem;
-	border: 0.15rem solid #000000;
+  height: 1.8rem;
+  width: 10rem;
+  bottom: 1rem;
+  cursor: pointer;
+  background-color: #07491b;
+  color: #fff;
+  border-radius: 2rem;
+  text-align: center;
+  margin: 0.5rem;
+  border: 0.15rem solid #000000;
 }
 
 .apply-button:hover {

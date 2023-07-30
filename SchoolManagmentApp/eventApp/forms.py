@@ -1,24 +1,27 @@
 from django import forms
 from django.forms.widgets import SelectDateWidget
+from django.forms.widgets import SelectDateWidget
+from .models import CalendarEvents
 
+class EventFilterStudentForm(forms.Form):
 
-class EventFilterForm(forms.Form):
+    subject = forms.ChoiceField()
 
-    subject = forms.ChoiceField(choices=[
-        ('empty', 'Empty'),
-        ('math', 'Mathematic'),
-        ('english', 'English')
-    ], label='subject')
+    event_type = forms.ChoiceField()
+    start_date = forms.DateField()
+    end_date = forms.DateField()
 
-    event_type = forms.ChoiceField(choices=[
-        ('empty', 'Empty'),
-        ('other', 'Other'),
-        ('small_test', 'Small Test'),
-        ('test', 'Test'),
-        ('essay', 'Essay'),
-        ('project', 'Project')
+    
+class AddEvent(forms.ModelForm):
+    class Meta:
+        model = CalendarEvents
+        fields = (
+            'description',
+            'event_type',
+            'realisation_time',
+            'connected_to_lesson',
+            
+            
+        )
 
-    ], label='Event Type')
-
-    start_date = forms.DateField(label='Start Date')
-    end_date = forms.DateField(label='End Date')
+    realisation_time = forms.DateField(widget=forms.SelectDateWidget)

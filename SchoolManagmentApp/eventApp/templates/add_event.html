@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+{% if errors %}
+{% for error in errors %}
+<div class="alert alert-danger pt-3" role="alert">
+    {{ error }}
+</div>
+{% endfor %}
+{% endif %}
+
+
+
+
+<div class="adding-window">
+    <div class="adding-content">
+        <h2 class="text-white">Fill in the event</h2>
+      
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="adding-field">{{ add_event_form.description }}</div>
+                <div class="adding-field "> Event type: {{ add_event_form.event_type }}</div>
+                <div class="adding-field"> Realisation Date: {{ add_event_form.realisation_time }}</div>
+                <div class="adding-field">Connected to lesson: {{ add_event_form.connected_to_lesson }}</div>
+                <button class="apply-button" type="submit">Add Event</button>
+            </form>
+            <a class = "container-fluid" href="{% url 'teacher_events' %}">
+                <i class="fa-solid fa-backward back-button-image " style="color: #023602;"></i>
+            </a>
+        
+    </div>
+
+
+</div>
+
+
+{% endblock content %}

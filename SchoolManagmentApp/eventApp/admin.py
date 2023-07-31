@@ -1,14 +1,11 @@
 from django.contrib import admin
-from eventApp.models import  Teacher, Subject, Lesson, Day, LessonReport
+from eventApp.models import  Teacher, Subject, LessonReport
 from eventApp.models import CalendarEvents
 
 
 admin.site.register(CalendarEvents)
 admin.site.register(Subject)
-admin.site.register(Lesson)
-admin.site.register(Day)
 admin.site.register(LessonReport)
-
 
 
 @admin.register(Teacher)

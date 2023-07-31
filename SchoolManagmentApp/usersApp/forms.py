@@ -126,8 +126,6 @@ class UserEditForm(forms.ModelForm):
         return cleaned_data
 
 
-
-
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile

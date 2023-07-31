@@ -117,3 +117,4 @@ class Attendance(models.Model):
     def __str__(self):
         return f"{self.student_name} - {self.lesson.day} - {self.lesson_report.create_date} - {'Obecny' if self.is_present else 'Nieobecny'}"
     
+    

@@ -667,6 +667,21 @@ tr:hover {
 	margin: 0.5rem;
 	transition: background-color 0.3s ease, transform 0.3s ease;
 	border: 0.15rem solid #000000;
-  
+	
+
   }
 
+.report-box-detail{
+	position: absolute;
+	margin-top: 1rem;
+	display: inline-block;
+	justify-content: center;
+	align-items: center;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.events-under-report{
+	display: flex;
+	justify-content: center;
+}

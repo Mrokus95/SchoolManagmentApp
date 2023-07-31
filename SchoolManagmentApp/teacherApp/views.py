@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from usersApp.models import Profile
 from eventApp.models import Teacher
-from eventApp.models import LessonReport
+from eventApp.models import LessonReport, CalendarEvents
 from django.contrib import messages
 from eventApp.views import event_paginator
 # Create your views here.
@@ -12,9 +12,8 @@ def teacher_app_teacher(request):
 
     if LessonReport.objects.filter(teacher=current_teacher.id).exists():
         current_reports = LessonReport.objects.filter(teacher=current_teacher.id)
-        pages = event_paginator(request, current_reports, 1)
+        pages = event_paginator(request, current_reports, 7)
 
-        print(current_reports[0].id)
         context = {
             'pages': pages,
             'current_teacher': current_teacher,
@@ -28,9 +27,13 @@ def teacher_app_teacher(request):
 
 
 def report_detail(request, reportId):
-    print('jestem w detalach')
+
     current_report = LessonReport.objects.get(id=reportId)
-    context={'current_report': current_report}
+    connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
+    context={
+        'current_report': current_report,
+        'connected_events': connected_events,
+        }
 
     return render(request, 'report_detail.html', context)
 

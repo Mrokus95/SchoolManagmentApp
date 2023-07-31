@@ -4,31 +4,61 @@
 
 
 
-<div class="report-box">
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <div class="lc-block">
-                    <h2 editable="inline" class="display-8 mb-3 text-white"><b> {{current_report}} </b></h2>
-                </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="lc-block">
+                <h2 editable="inline" class="display-8 mb-3 text-white"><b> {{current_report}} </b></h2>
             </div>
         </div>
-    <div class="report-card-detail text-white">
+    </div>
 
-            <div class="report-text"><h3>Author: {{current_report.teacher}}</h3></div>
-            <div class="report-text"><h2></h2>Title: {{current_report.lesson_title}}</h3></div>
+    <!-- report detail -->
+    <div class="report-box-detail">
+        <div class="report-card-detail text-white">
+
+            <div class="report-text">
+                <h3>Author: {{current_report.teacher}}</h3>
+            </div>
+            <div class="report-text">
+                <h2></h2>Title: {{current_report.lesson_title}}</h3>
+            </div>
             <div class="mb-2 mt-2 card-divider"></div>
-            <div class="report-text"><h4>{{current_report.lesson_description}}</h4></div>
+            <div class="report-text">
+                <h4>{{current_report.lesson_description}}</h4>
+            </div>
             <a href="{% url 'teacher_reports' %}">
                 <i class="fa-solid fa-backward back-button-image" style="color: #023602;"></i>
             </a>
+        </div>
+
+        <!-- eventes connected to raport -->
+        
+        <div class="events_under_report">
+            {% for event in connected_events %}
+            <div class="col-md-4 mb-4">
+                <a href="{% url 'event_detail' event.id %}" class="text-decoration-none text-white">
+                    <div class="card-events">
+                        <div class="text-center text-white">
+                            <h4 class="my-1">
+                                {{ event.event_type }}
+                            </h4>
+                            <h5 class="my-3 text-white" editable="inline">Realisation: {{ event.realisation_time }}</h5>
+                            <div>Subject: {{ event.subject }}</div>
+                            <div class="mb-2 mt-2 card-divider"></div>
+                            <div class="mb-2">Added: {{event.add_time}}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        
     </div>
-
-
 </div>
 
 
 
 
 
-{%endblock content%}
+    {%endblock content%}

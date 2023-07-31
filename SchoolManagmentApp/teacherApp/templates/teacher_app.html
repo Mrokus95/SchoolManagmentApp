@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<!-- reports -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="lc-block">
+                <h2 editable="inline" class="display-4 mb-2 text-white"><b> {{current_teacher}} reports: </b></h2>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="report-box">
+        {% for report in pages %}
+        <div class="report-card">
+            <a class="text-decoration-none text-white" href="{% url 'report_detail' report.id %}">
+                <div class="report-text">{{ report }} </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- pagination -->
+{% if pages.paginator.num_pages > 1 %}
+                <nav aria-label="..." >
+                    <ul class="pagination d-flex justify-content-center">
+                        {% if pages.has_previous %}
+                            <li class="">
+                                <a class="page-link" href="?page={{ pages.previous_page_number }}">Prevoius</a>
+                            </li>
+                            <li class="">
+                                <a class="page-link" href="?page=1">1</a>
+                            </li>
+                        {% endif %}
+                        <li class="" aria-current="page">
+                            <span class="page-item-active">{{ pages.number }}</span>
+                        </li>
+                        {% if pages.has_next %}
+                            <li class="">
+                                <a class="page-link" href="?page={{ pages.paginator.num_pages }}">{{pages.paginator.num_pages }}</a>
+                            </li>
+                            <li class="">
+                                <a class="page-link" href="?page={{ pages.next_page_number }}">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+
+
+
+    {% endblock content %}

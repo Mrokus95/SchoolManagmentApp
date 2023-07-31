@@ -12,7 +12,6 @@ from datetime import date
 
 def events_student_filter(request, queryset):
 
-
     subject_condition = request.POST.get('subject')
     type_condition = request.POST.get('event_type')
     start_date_condition=request.POST.get('start_date')

@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'eventApp',
     'usersApp',
     'messagesApp',
-    'calendarApp'
+    'calendarApp',
+    'teacherApp',
 ]
 
 MIDDLEWARE = [

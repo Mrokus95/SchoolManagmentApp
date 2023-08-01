@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from usersApp.models import Profile
 from eventApp.models import Teacher
 from eventApp.models import LessonReport, CalendarEvents, Subject
@@ -8,9 +8,15 @@ from .forms import LessonRportFilter
 from usersApp.models import ClassUnit
 # Create your views here.
 
+def teacher_required(func):
+    def _wrapped_func(request, *args, **kwargs):
+        if request.user.profile.account_type != 'Teacher':
+            messages.error(request, "Only for teachers!")
+            return redirect('home')         
+        return func(request, *args, **kwargs)  
+    return _wrapped_func
 
 def reports_student_filter(request, queryset):
-
     subject_condition = request.POST.get('subject')
     start_date_condition = request.POST.get('start_date')
     class_condition = request.POST.get('class_unit')
@@ -26,7 +32,6 @@ def reports_student_filter(request, queryset):
         condition_letter_mark = class_condition[1]
         queryset = queryset.filter(class_unit__study_year=condition_year)
         queryset = queryset.filter(class_unit__letter_mark=condition_letter_mark)
-
     return queryset
 
 def teacher_app_teacher(request):
@@ -37,7 +42,6 @@ def teacher_app_teacher(request):
         subject_choices =[('All', 'All')] + [(subject.name, subject.name) for subject in Subject.objects.all()]
 
         class_choices = [('All', 'All')] + [(str(unit.study_year) + unit.letter_mark, str(unit.study_year) + unit.letter_mark) for unit in ClassUnit.objects.all()]
-
         filter_form = LessonRportFilter(request.POST)
 
         if request.method == 'POST':
@@ -59,10 +63,7 @@ def teacher_app_teacher(request):
         messages.error(request, "You have no reports")
         return render(request, 'teacher_app')
 
-
-
 def report_detail(request, reportId, requested=False):
-
     current_report = LessonReport.objects.get(id=reportId)
     connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
     if requested:
@@ -72,7 +73,6 @@ def report_detail(request, reportId, requested=False):
         'connected_events': connected_events,
         'requested' : requested,
         }
-
         return render(request, 'report_detail.html', context)
 
     else:
@@ -80,7 +80,6 @@ def report_detail(request, reportId, requested=False):
             'current_report': current_report,
             'connected_events': connected_events,
          }
-
         return render(request, 'report_detail.html', context)
 
 def teacher_app_start(request):
@@ -92,7 +91,6 @@ def teacher_app_start(request):
     
     else:
         return student_events(request)
-
 
 def from_event_to_raport(request, eventId):
     event = CalendarEvents.objects.get(id=eventId)
@@ -110,7 +108,14 @@ def from_event_to_raport(request, eventId):
             'connected_evens': connected_events,
             'current_report': current_report,
         }
-
         return render(request, 'pure_report.html', context)      
 
-   
+
+@teacher_required
+def lesson_delivery_start(request):
+
+    context={
+        'user': request.user
+    }
+    return render(request, 'lesson_delivery_start.html')
+

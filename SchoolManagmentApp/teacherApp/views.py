@@ -3,9 +3,9 @@ from usersApp.models import Profile
 from eventApp.models import Teacher
 from eventApp.models import LessonReport, CalendarEvents, Subject
 from django.contrib import messages
-from eventApp.views import event_paginator
+from eventApp.views import event_paginator, student_events
 from .forms import LessonRportFilter
-from usersApp.models import ClassUnit 
+from usersApp.models import ClassUnit
 # Create your views here.
 
 
@@ -21,7 +21,7 @@ def reports_student_filter(request, queryset):
     if start_date_condition:
         queryset = queryset.filter(create_date__gte=start_date_condition)
 
-    if class_condition:
+    if class_condition != 'All':
         condition_year = int(class_condition[0])
         condition_letter_mark = class_condition[1]
         queryset = queryset.filter(class_unit__study_year=condition_year)
@@ -61,22 +61,27 @@ def teacher_app_teacher(request):
 
 
 
-def report_detail(request, reportId):
+def report_detail(request, reportId, requested=False):
 
     current_report = LessonReport.objects.get(id=reportId)
     connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
-    context={
+    if requested:
+        
+        context={
         'current_report': current_report,
         'connected_events': connected_events,
+        'requested' : requested,
         }
 
-    return render(request, 'report_detail.html', context)
+        return render(request, 'report_detail.html', context)
 
-def teacher_app_stuent(request):
-    pass
+    else:
+        context={
+            'current_report': current_report,
+            'connected_events': connected_events,
+         }
 
-
-
+        return render(request, 'report_detail.html', context)
 
 def teacher_app_start(request):
     current_profile = Profile.objects.get(user=request.user)
@@ -84,8 +89,28 @@ def teacher_app_start(request):
 
     if account_type == "Teacher":
         return teacher_app_teacher(request)
-    else:
-        return teacher_app_stuent(request)
-
     
+    else:
+        return student_events(request)
 
+
+def from_event_to_raport(request, eventId):
+    event = CalendarEvents.objects.get(id=eventId)
+    reportId = event.connected_to_lesson.id
+    curret_profile = Profile.objects.get(user=request.user)
+    account_type = curret_profile.account_type
+
+    if account_type == "Teacher":        
+        return report_detail(request, reportId, True)
+        
+    else:
+        current_report = LessonReport.objects.get(id=reportId)
+        connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
+        context={
+            'connected_evens': connected_events,
+            'current_report': current_report,
+        }
+
+        return render(request, 'pure_report.html', context)      
+
+   

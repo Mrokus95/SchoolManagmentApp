@@ -24,6 +24,8 @@
                             {% endif %}
                             <div class="form-field">
                             {% csrf_token %}
+
+
                             <label for="subject">Subject:</label>
                             <select name="subject" id="subject" class="filter-form-control">
                                 <option value="empty">Empty</option>
@@ -34,6 +36,8 @@
                                 <option value="Chemistry">Chemistry</option>
                                 <option value="Philosphy">Philosophy</option>
                             </select>
+
+                            
                         </div>
                         <div class="form-field">
                             <label for="event_type">Event Type:</label>

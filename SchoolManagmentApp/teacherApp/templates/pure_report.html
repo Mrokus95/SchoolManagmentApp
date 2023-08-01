@@ -1,38 +1,26 @@
 {% extends "base.html" %}
-<!-- filtering -->
+{% block content %}
 
-
-{%block content%}
-
-    <div class="row pt-2">
-        <div class="col-md-12 text-center pt-2">
-            <div class="lc-block">
-                <h2 editable="inline" class="display-8 text-white"><b> {{current_report}} </b></h2>
-            </div>
-        </div>
-    </div>
-
-                    <!-- report detail -->
 <div class="example">           
     <div class="report-box-detail">
         <div class="report-card-detail text-white">
 
             <div class="report-text">
-                <h3>Author: {{current_report.teacher}}</h3>
+                <h3>Author: {{current_report.teacher}}, Subject: {{current_report.subject}}</h3>
             </div>
             <div class="report-text">
-                <h2></h2>Title: {{current_report.lesson_title}}</h3>
+                <h3>Title: {{current_report.lesson_title}}</h3>
             </div>
             <div class="mb-2 mt-2 card-divider"></div>
             <div class="report-text">
-                <h4>{{current_report.lesson_description}}</h4>
+                <p>{{current_report.lesson_description}}</p>
             </div>
-
-            {% if not requested%}            
-            <a href="{% url 'teacher_reports' %}">
+            <div class="mb-2 mt-2 card-divider"></div>
+                <div class="report-text"> {{current_report.create_date}}</div>
+            <a href="{% url 'events' %}">
                 <i class="fa-solid fa-backward back-button-image" style="color: #023602;"></i>
             </a>           
-            {% endif %}
+ 
         </div>
     </div>
  
@@ -56,6 +44,4 @@
         {% endfor %}
     </div>
 </div> 
-
-
 {% endblock content %}

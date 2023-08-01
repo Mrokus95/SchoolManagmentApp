@@ -28,4 +28,6 @@ urlpatterns =[
 
     # add event
     path('add_event/', views.add_event, name='add_event'),
+
+
 ]

@@ -297,5 +297,3 @@ def add_event(request):
             errors = adding_form.errors
             return render(request, 'add_event.html', {'errors': errors})
 
-
-       

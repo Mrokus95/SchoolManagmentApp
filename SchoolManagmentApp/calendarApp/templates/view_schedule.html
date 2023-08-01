@@ -1,158 +1,61 @@
-{% extends 'base.html' %}
-{%load static%}
-
-{% block title %} Schedule
-{% endblock title %}
-
-
-{%block content %}
-{{monday_lessons}}
-{{monday_lessons.1}}
+{% extends 'base.html' %} {%load static%} {% block title %} Schedule 
+{% endblock title %} {%block content %} {{monday_lessons}} {{monday_lessons.1}}
 
 <div class="d-flex justify-content-around mt-5 bolded text-white">
-
-    <div class="login-nav-btn">Previous week</div>
-    <div>
-        <h3>Current week schedule for class {{class_id}}</h3>
-    </div>
-    <div class="login-nav-btn">Next week</div>
+	<div class="login-nav-btn">Previous week</div>
+	<div>
+		<h3>Current week schedule for class {{class_id}}</h3>
+	</div>
+	<div class="login-nav-btn">Next week</div>
 </div>
 <div>
-
-
-<div class="d-flex justify-content-center flex-column">
-    <div class="d-flex justify-content-end mt-5  search">
-        <div>
-    
-            <span class="text-white">Select class: </span><Select class="max-width"></Select>
-    </div>
-    </div>
-    <table class=" mt-1 rounded schedule">
-        <thead>
-            <tr class="">
-                <th></th>
-                <th>Monday</th>
-                <th>Thusday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-            </tr>
-        </thead>
-        <tbody>
-                <tr>
-                    <!-- First lessons -->
-                    <th>1</th>
-                    <div>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{monday_lessons.0.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{monday_lessons.0.teacher}}</p>
-                            <p class="text-class">Classroom: {{monday_lessons.0.classroom}}</p>
-                            {%if monday_lessons.0%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{thusday_lessons.0.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{thusday_lessons.0.teacher}}</p>
-                            <p class="text-class">Classroom: {{thusday_lessons.0.classroom}}</p>
-                            {%if thusday_lessons.0%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{wednesday_lessons.0.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{wednesday_lessons.0.teacher}}</p>
-                            <p class="text-class">Classroom: {{wednesday_lessons.0.classroom}}</p>
-                            {%if wednesday_lessons.0%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{thursday_lessons.0.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{thursday_lessons.0.teacher}}</p>
-                            <p class="text-class">Classroom: {{thursday_lessons.0.classroom}}</p>
-                            {%if thursday_lessons.0%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{friday_lessons.0.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{friday_lessons.0.teacher}}</p>
-                            <p class="text-class">Classroom: {{friday_lessons.0.classroom}}</p>
-                            {%if friday_lessons.0%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                    </div>
-                </tr>
-                <tr>
-                    <!-- First lessons -->
-                    <th>2</th>
-                    <div>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{monday_lessons.1.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{monday_lessons.1.teacher}}</p>
-                            <p class="text-class">Classroom: {{monday_lessons.1.classroom}}</p>
-                            {%if monday_lessons.1%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{thusday_lessons.1.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{thusday_lessons.1.teacher}}</p>
-                            <p class="text-class">Classroom: {{thusday_lessons.1.classroom}}</p>
-                            {%if thusday_lessons.1%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{wednesday_lessons.1.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{wednesday_lessons.1.teacher}}</p>
-                            <p class="text-class">Classroom: {{wednesday_lessons.1.classroom}}</p>
-                            {%if wednesday_lessons.1%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{thursday_lessons.1.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{thursday_lessons.1.teacher}}</p>
-                            <p class="text-class">Classroom: {{thursday_lessons.1.classroom}}</p>
-                            {%if thursday_lessons.1%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                        <td class="max-width">
-                            <h5 class="text-subject">{{friday_lessons.1.subject}}</h5>
-                            <p class="text-teacher">Teacher: {{friday_lessons.1.teacher}}</p>
-                            <p class="text-class">Classroom: {{friday_lessons.1.classroom}}</p>
-                            {%if friday_lessons.1%}
-                                <a href="#" class="btn small-btn">Edit</a>
-                            {%else%}
-                            <a href="#" class="btn small-btn">Add</a>
-                            {%endif%}
-                        </td>
-                    </div>
-                </tr>
-        </tbody>
-    </table>
-</div>
+	<div class="d-flex justify-content-center flex-column">
+		<div class="d-flex justify-content-end mt-5 search">
+			<div>
+				<span class="text-white">Select class: </span
+				><select class="max-width"></select>
+			</div>
+		</div>
+		<table class="mt-1 rounded schedule">
+			<thead>
+				<tr class="">
+					<th></th>
+					<th>1</th>
+					<th>2</th>
+					<th>3</th>
+					<th>4</th>
+					<th>5</th>
+					<th>6</th>
+                    <th>7</th>
+                    <th>8</th>
+				</tr>
+			</thead>
+			<tbody>
+				{%for day_name, day in days%}
+				<tr>
+					<th>{{day_name|title}}</th>
+					<div>
+						{% for lesson in day%} {%if lesson.subject%}
+						<td class="max-width">
+							<h5 class="text-subject">{{lesson.subject}}</h5>
+							<p class="text-teacher">Teacher: {{lesson.teacher}}</p>
+							<p class="text-class">Classroom: {{lesson.classroom}}</p>
+							{%if lesson.subject%}
+							<a href="#" class="btn small-btn">Edit</a>
+							{%else%}
+							<a href="#" class="btn small-btn">Add</a>
+							{%endif%}
+						</td>
+						{%else%}
+						<td class="max-width">
+							<a href="#" class="btn small-btn">Add</a>
+						</td>
+						{%endif%} {%endfor%}
+					</div>
+				</tr>
+				{%endfor%}
+			</tbody>
+		</table>
+	</div>
 </div>
 {%endblock content %}

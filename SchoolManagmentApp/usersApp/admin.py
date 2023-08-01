@@ -15,7 +15,7 @@ class ParentAdmin(admin.ModelAdmin):
 
 @admin.register(ClassUnit)
 class ClassUnitAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', '__str__' ]
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):

@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import LessonCreateView
+from .views import view_schedule
 
 urlpatterns = [
-    path('lesson/create/', LessonCreateView.as_view(), name='lesson_create'),
+    path('', view_schedule, name='view_schedule_default'),
+    path('<int:class_id>/<int:week_offset>', view_schedule, name='view_schedule'),
+ 
 ]

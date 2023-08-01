@@ -54,7 +54,7 @@ my_tags %} {% block title%} SchoolManagmentApp {% endblock title %}
 						<tbody class="">
 							{% for email in page_obj%}
 							{%if email.is_read_sender%}
-								<tr class="">
+								<tr class="email-list">
 									<td class="text-white text-decoration-none">
 										<a class="text-reset text-white" href="{{ email.get_absolute_url }}">
 											{{email.receiver}}
@@ -77,7 +77,7 @@ my_tags %} {% block title%} SchoolManagmentApp {% endblock title %}
 									{%endif%}
 								</tr>
 								{%else%}
-								<tr class="bolded">
+								<tr class="email-list bolded">
 									<td class="text-white text-decoration-none">
 										<a class="text-reset text-white" href="{{ email.get_absolute_url}}">
 											{{email.receiver}}

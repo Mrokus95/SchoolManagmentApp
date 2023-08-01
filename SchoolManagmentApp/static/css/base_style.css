@@ -12,8 +12,8 @@ body {
 }
 
 .pics {
-  height: 950px;
-  width: 760px;
+	height: 950px;
+	width: 760px;
 }
 
 .main-width {
@@ -272,25 +272,25 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .card-one {
-  border: 2px solid #103a15;
-  border-radius: 2rem;
-  padding: 1rem;
-  
-  background-color: #186428;
-  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+	border: 2px solid #103a15;
+	border-radius: 2rem;
+	padding: 1rem;
+
+	background-color: #186428;
+	box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
 }
 
 .card-chose-child {
-  border: 2px solid #103a15;
-  border-radius: 2rem;
-  padding: 1rem;
-  background-color: #186428;
-  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+	border: 2px solid #103a15;
+	border-radius: 2rem;
+	padding: 1rem;
+	background-color: #186428;
+	box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+	transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .card-chose-child:hover {
-  background-color: #2d8b40;
+	background-color: #2d8b40;
 }
 
 .exclamation {
@@ -354,14 +354,14 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .filter-window {
-  display: none;
-  position: fixed;
-  top: 15rem;
-  left: 0;
-  width: 20rem;
-  height: 28rem;
-  padding: 15px;
-  box-sizing: border-box;
+	display: none;
+	position: fixed;
+	top: 15rem;
+	left: 0;
+	width: 20rem;
+	height: 28rem;
+	padding: 15px;
+	box-sizing: border-box;
 }
 
 .filter-content {
@@ -386,16 +386,16 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .apply-button {
-  height: 1.8rem;
-  width: 10rem;
-  bottom: 1rem;
-  cursor: pointer;
-  background-color: #07491b;
-  color: #fff;
-  border-radius: 2rem;
-  text-align: center;
-  margin: 0.5rem;
-  border: 0.15rem solid #000000;
+	height: 1.8rem;
+	width: 10rem;
+	bottom: 1rem;
+	cursor: pointer;
+	background-color: #07491b;
+	color: #fff;
+	border-radius: 2rem;
+	text-align: center;
+	margin: 0.5rem;
+	border: 0.15rem solid #000000;
 }
 
 .apply-button:hover {
@@ -426,7 +426,7 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .avatar-pic {
-	margin-top: 5px ;
+	margin-top: 5px;
 	max-height: 60px;
 	max-width: 60px;
 }
@@ -460,7 +460,7 @@ nav .nav-list li:not(:last-child) a:hover {
 	background-color: #21824a;
 }
 
-tr {
+tr.email-list {
 	border-color: #07491b;
 }
 td a {
@@ -468,7 +468,7 @@ td a {
 	color: white;
 }
 
-tr:hover {
+tr.email-list:hover {
 	background-color: #21824a;
 }
 
@@ -503,78 +503,77 @@ tr:hover {
 	}
 }
 
-.bolded{
-font-weight: bold;
+.bolded {
+	font-weight: bold;
 }
 
-.my-badge{
-  display: inline-block;
-  bottom: 0;
-  height: 100%;
-  margin-left: 5px;
-  background:royalblue;
-  width: 25px;
-  border-radius: 25px;
+.my-badge {
+	display: inline-block;
+	bottom: 0;
+	height: 100%;
+	margin-left: 5px;
+	background: royalblue;
+	width: 25px;
+	border-radius: 25px;
 }
 
-.icon:hover{
-  font-size: 18px;
-  transition: font-size 0.4s;
+.icon:hover {
+	font-size: 18px;
+	transition: font-size 0.4s;
 }
 
-.to-right{
+.to-right {
 	text-align: right;
 	padding-right: 5%;
 }
-.delete-button:hover{
+.delete-button:hover {
 	background-color: red;
 	transition: background-color 0.4s;
 }
 
-.response{
+.response {
 	min-height: 70px;
 }
 
-.hide-section{
+.hide-section {
 	display: none;
 }
 /* delete post */
-.delete-post-window{
+.delete-post-window {
 	background-color: #07491b;
 	border: 0.15rem solid #000000;
 	border-radius: 2rem;
 	padding: 2rem;
 	width: 15rem;
 	text-align: center;
-  }
-  .dialog-message {
+}
+.dialog-message {
 	margin-bottom: 20px;
 	color: #fff;
-  }
-  .hidden {
+}
+.hidden {
 	display: none;
-  }
-  
-  @keyframes slideInDown {
+}
+
+@keyframes slideInDown {
 	from {
-	  transform: translateY(-100%);
-	  opacity: 0;
+		transform: translateY(-100%);
+		opacity: 0;
 	}
 	to {
-	  transform: translateY(0);
-	  opacity: 1;
+		transform: translateY(0);
+		opacity: 1;
 	}
-  }
-  
-  .animate__slideInDown {
+}
+
+.animate__slideInDown {
 	animation-name: slideInDown;
 	animation-duration: 0.5s;
-  }
-  
-  
-  /* adding post*/
-  
-  .adding-window {
+}
+
+/* adding post*/
+
+.adding-window {
 	display: inline-block;
 	position: fixed;
 	left: 50%;
@@ -583,9 +582,9 @@ font-weight: bold;
 	padding: 20px;
 	box-sizing: border-box;
 	transform: translateX(-50%);
-  }
-  
-  .adding-content {
+}
+
+.adding-content {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -596,25 +595,111 @@ font-weight: bold;
 	box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
 	border: 0.15rem solid #000000;
 	padding: 1rem;
-  }
-  
-  .form-field {
+}
+
+.form-field {
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
 	align-items: flex-start;
-  }
-  
-  .adding-field{
+}
+
+.adding-field {
 	font-size: 1.1rem;
 	margin-right: 0.5rem;
 	border-radius: 5px;
 	margin-bottom: 0.5rem;
 	color: white;
-  
-  }
-  
-  .back-button-image{
+}
+
+.back-button-image {
 	font-size: 3rem;
 	margin-right: 1rem;
-  }
+}
+
+.max-width {
+	width: 240px;
+	color: white;
+	text-align: center;
+}
+
+table.schedule {
+	border-collapse: collapse;
+	overflow: hidden;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+table.schedule th {
+	padding: 15px;
+	background-color: rgba(255, 255, 255, 0.2);
+	color: #fff;
+}
+
+table.schedule th {
+	text-align: center;
+}
+table.schedule tbody th,
+table.schedule thead th {
+	background-color: #415153;
+	margin: 10px;
+}
+table.schedule tbody th {
+	width: 41px;
+}
+
+table.schedule,
+table.schedule {
+	background-color: rgba(255, 255, 255, 0.127);
+	border-radius: 25px;
+	padding: 10px;
+	border: 5px solid transparent;
+}
+
+table.schedule tbody td {
+	padding: 4px;
+	transition: 0.6s;
+}
+
+table.schedule tbody td:hover {
+	scale: 1.04;
+}
+
+table.schedule tbody td:hover h5 {
+	background-color: #2ecc71;
+	transition: background-color 0.7s;
+}
+table.schedule thead {
+	border-radius: 25px;
+}
+.text-subject {
+	background-color: #053712;
+	border-radius: 20px;
+	font-size: 1em;
+	padding: 5px 0;
+}
+.text-teacher {
+	font-size: 0.7em;
+	margin-bottom: 8px;
+}
+.text-class {
+	font-size: 0.7em;
+	margin-bottom: 8px;
+}
+
+.small-btn {
+	height: 25px;
+	width: 50px;
+	color: white;
+	font-size: 10px;
+	padding: 4px 0px 0px 0px;
+	background-size: cover;
+	background-color: transparent;
+	border-color: #2ecc71;
+}
+
+.small-btn:hover {
+	scale: 1.1;
+	border-color: #2ecc71;
+	background-color: #2ecc71;
+	transition: 0.7s;
+}

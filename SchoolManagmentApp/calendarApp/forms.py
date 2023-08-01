@@ -1,28 +1,28 @@
 from django import forms
-from django.forms import formset_factory
 from .models import Lesson
 
 class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['subject','day_of_week', 'lesson_number', 'teacher', 'classroom', 'is_cancelled']
+        fields = ['subject', 'day_of_week', 'lesson_number', 'teacher', 'classroom', 'is_cancelled']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        day_of_week = cleaned_data.get('day_of_week')
+        lesson_number = cleaned_data.get('lesson_number')
 
 
-class WeeklyScheduleForm(forms.Form):
-    DAYS_OF_WEEK = [
-        (1, 'Poniedziałek'),
-        (2, 'Wtorek'),
-        (3, 'Środa'),
-        (4, 'Czwartek'),
-        (5, 'Piątek'),
-    ]
+        if day_of_week is not None and lesson_number is not None:
+            existing_lesson = Lesson.objects.filter(
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                weeklyschedule__isnull=False
+            ).first()
 
-    week_number = forms.IntegerField()
-    class_name = forms.CharField(max_length=100)
-    is_base_schedule = forms.BooleanField(required=False)
-    day_of_week = forms.ChoiceField(choices=DAYS_OF_WEEK)
+            if existing_lesson:
+                raise forms.ValidationError(
+                    f"A lesson already exists for Day {day_of_week} - Lesson Number {lesson_number}."
+                )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['day_of_week'].label = "Dzień tygodnia"
-        self.fields['lesson_formset'] = LessonFormFormSet()
+        return cleaned_data
+    

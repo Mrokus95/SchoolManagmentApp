@@ -13,16 +13,16 @@
             <div id="filterButton" class="filter-button">Filtering</div>
         {% endif %}
 
-        <div id="filterWindow" class="filter-window">
-            <div class="filter-content">
+        <div id="filterWindow" class="filter-window ">
+            <div class="filter-content ">
                 <span class="filter-close" id="filterButtonClose">&times;</span>
                 <div class="filter-form">
-                    <div class="form-field">
-                        {% if kid_id %}
-                        <form action="{% url 'filter_events_student_parent' kid_id %}" method="post">
+                    {% if kid_id %}
+                    <form action="{% url 'filter_events_student_parent' kid_id %}" method="post">
                         {% else %}
                         <form action="{% url 'filter_events_student' %}" method="post">
-                        {% endif %}
+                            {% endif %}
+                            <div class="form-field">
                             {% csrf_token %}
                             <label for="subject">Subject:</label>
                             <select name="subject" id="subject" class="filter-form-control">

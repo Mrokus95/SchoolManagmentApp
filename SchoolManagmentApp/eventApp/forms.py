@@ -1,6 +1,5 @@
 from django import forms
 from django.forms.widgets import SelectDateWidget
-from django.forms.widgets import SelectDateWidget
 from .models import CalendarEvents
 
 class EventFilterStudentForm(forms.Form):
@@ -25,3 +24,5 @@ class AddEvent(forms.ModelForm):
         )
 
     realisation_time = forms.DateField(widget=forms.SelectDateWidget)
+
+

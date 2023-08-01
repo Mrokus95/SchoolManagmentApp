@@ -356,12 +356,11 @@ nav .nav-list li:not(:last-child) a:hover {
 .filter-window {
   display: none;
   position: fixed;
-  top: 15rem;
-  left: 0;
-  width: 20rem;
-  height: 28rem;
-  padding: 15px;
-  box-sizing: border-box;
+  left: 0%;
+  top: 50%;
+  transform: translate(0%, -50%);
+  margin: 2rem;
+  box-sizing: content-box;
 }
 
 .filter-content {
@@ -369,31 +368,34 @@ nav .nav-list li:not(:last-child) a:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  box-sizing: content-box;
   background-color: #07491b;
-  border-radius: 2rem;
+  border-radius: 1rem;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
   border: 0.15rem solid #000000;
+  padding: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .filter-close {
-  position: absolute;
-  top: 1rem;
-  right: 2rem;
+  position: relative;
   font-size: 2.2rem;
+  top: 50%;
+  left: 50%;
   color: #a51212;
   cursor: pointer;
+  transform: translate(-50%, -30%);
 }
 
 .apply-button {
+  position: relative;
   height: 1.8rem;
   width: 10rem;
-  bottom: 1rem;
   cursor: pointer;
   background-color: #07491b;
   color: #fff;
   border-radius: 2rem;
-  text-align: center;
   margin: 0.5rem;
   border: 0.15rem solid #000000;
 }
@@ -627,6 +629,7 @@ tr:hover {
   align-items: center;
   left: 50%;
   transform: translate(-50%);
+
 }
 
 .report-card {
@@ -656,7 +659,7 @@ tr:hover {
 
 .report-card-detail {
 	height: auto;
-	width: 70rem;
+	width: auto;
 	max-width: 100%;
 	border: 2px solid #103a15;
 	border-radius: 2rem;
@@ -667,13 +670,11 @@ tr:hover {
 	margin: 0.5rem;
 	transition: background-color 0.3s ease, transform 0.3s ease;
 	border: 0.15rem solid #000000;
-	
 
   }
 
 .report-box-detail{
-	position: absolute;
-	margin-top: 1rem;
+	position: relative;
 	display: inline-block;
 	justify-content: center;
 	align-items: center;
@@ -681,7 +682,23 @@ tr:hover {
 	transform: translate(-50%);
 }
 
-.events-under-report{
-	display: flex;
-	justify-content: center;
+.report-events{
+  border: 2px solid #103a15;
+	border-radius: 2rem;
+	padding: 1rem;
+  max-width: 25rem;
+	background-color: #186428;
+	box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+	border: 0.15rem solid #000000;
+	margin: 0.5rem;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	border: 0.15rem solid #000000;
+}
+
+.report-events-display{
+  position: relative;
+}
+
+.example{
+  display: relative;
 }

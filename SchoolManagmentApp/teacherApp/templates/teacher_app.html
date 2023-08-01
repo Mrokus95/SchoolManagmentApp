@@ -1,6 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
 
+<!-- filtering -->
+<div class="d-flex">
+    <div id="filterButton" class="filter-button mx-2">Filtering</div>
+</div>
+
+<div id="filterWindow" class="filter-window ">
+    <div class="filter-content ">
+        <span class="filter-close" id="filterButtonClose">&times;</span>
+        <div class="filter-form">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-field">
+
+                    <label for="subject">Subject:</label>
+                    <select name="{{ filter_form.subject.name }}" class="filter-form-control">
+                        {% for choice_value, choice_label in subject_choices %}
+                            <option value="{{ choice_value }}">{{ choice_label }}</option>
+                        {% endfor %}
+                    </select>
+
+                <label for="class_unit">Class unit:</label>
+                <select name="{{filter_form.class_unit.name}}" class="filter-form-control" >
+                        {% for choice_value, choice_label in class_choices %}
+                 <option value="{{ choice_value }}">{{ choice_label }}</option> 
+                 {% endfor %}      
+                </select>
+
+                </div>
+
+                <div class="form-field">
+                    <label for="start_date">Older than:</label>
+                    <input type="date" name="start_date" class="filter-form-control">
+                </div>
+                <button type="submit" class="apply-button">Apply</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- reports -->
 <div class="container mt-4">

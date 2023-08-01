@@ -8,9 +8,9 @@
     <div class="filter-content">
         <span class="filter-close" id="filterButtonClose">&times;</span>
         <div class="filter-form">
-            <div class="form-field">
 
-                <form action="{% url 'teacher_events' %}" method="post">
+            <form action="{% url 'teacher_events' %}" method="post">
+                <div class="form-field">
 
                     {% csrf_token %}
                     <label for="subject">Subject:</label>
@@ -23,27 +23,27 @@
                         <option value="Chemistry">Chemistry</option>
                         <option value="Philosphy">Philosophy</option>
                     </select>
-            </div>
-            <div class="form-field">
-                <label for="event_type">Event Type:</label>
-                <select name="event_type" id="event_type" class="filter-form-control">
-                    <option value="empty">Empty</option>
-                    <option value="Other">Other</option>
-                    <option value="Small Test">Small Test</option>
-                    <option value="Test">Test</option>
-                    <option value="Essay">Essay</option>
-                    <option value="Project">Project</option>
-                </select>
-            </div>
-            <div class="form-field">
-                <label for="start_date">Start Date:</label>
-                <input type="date" name="start_date" class="filter-form-control">
-            </div>
-            <div class="form-field" typ="date">
-                <label for="end_date">End Date:</label>
-                <input type="date" name="end_date" class="filter-form-control">
-            </div>
-            <button type="submit" class="apply-button">Apply</button>
+                </div>
+                <div class="form-field">
+                    <label for="event_type">Event Type:</label>
+                    <select name="event_type" id="event_type" class="filter-form-control">
+                        <option value="empty">Empty</option>
+                        <option value="Other">Other</option>
+                        <option value="Small Test">Small Test</option>
+                        <option value="Test">Test</option>
+                        <option value="Essay">Essay</option>
+                        <option value="Project">Project</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="start_date">Start Date:</label>
+                    <input type="date" name="start_date" class="filter-form-control">
+                </div>
+                <div class="form-field" typ="date">
+                    <label for="end_date">End Date:</label>
+                    <input type="date" name="end_date" class="filter-form-control">
+                </div>
+                <button type="submit" class="apply-button">Apply</button>
             </form>
         </div>
     </div>

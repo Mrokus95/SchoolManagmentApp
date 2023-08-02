@@ -12,4 +12,7 @@ urlpatterns = [
 
     #lesson delivery
     path('lesson_delivery_start/', views.lesson_delivery_start, name='lesson_delivery_start'),
+    
+    path('lesson_class_initiation/<int:lesson_report_id>', views.lesson_class_initiation, name='lesson_class_initiation'),
+
 ]

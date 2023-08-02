@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="report-box-detail">
+    <div class="report-card-detail text-white">
+        <div class="report-text">
+            <h3>U are checking attendance for class: </h3>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {% for form in formset %}
+            <p>
+                {{form.student}}
+                {{form.is_present}}
+                <input type="checkbox" name="{{form.student}}" value="{{form.is_present}}">
+               
+            </p>
+            {% endfor %}
+            <input type="submit" value="Zapisz obecności">
+        </form>
+    </div>
+</div>
+{% endblock %}

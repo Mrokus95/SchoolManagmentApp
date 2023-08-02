@@ -1,12 +1,18 @@
-from django.shortcuts import render, redirect
-from usersApp.models import Profile
+from django.shortcuts import render, redirect, reverse
+from usersApp.models import Profile, Student
 from eventApp.models import Teacher
-from eventApp.models import LessonReport, CalendarEvents, Subject
+from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance
 from django.contrib import messages
 from eventApp.views import event_paginator, student_events
-from .forms import LessonRportFilter
+from .forms import LessonRportFilter, ClassSubjectChoiceForm, AttendanceForm
 from usersApp.models import ClassUnit
+from datetime import date
+from django.forms import formset_factory
+
+
 # Create your views here.
+
+
 
 def teacher_required(func):
     def _wrapped_func(request, *args, **kwargs):
@@ -25,7 +31,7 @@ def reports_student_filter(request, queryset):
         queryset = queryset.filter(subject__name=subject_condition)
                
     if start_date_condition:
-        queryset = queryset.filter(create_date__gte=start_date_condition)
+        queryset = queryset.filter(create_date=start_date_condition)
 
     if class_condition != 'All':
         condition_year = int(class_condition[0])
@@ -42,7 +48,7 @@ def teacher_app_teacher(request):
         subject_choices =[('All', 'All')] + [(subject.name, subject.name) for subject in Subject.objects.all()]
 
         class_choices = [('All', 'All')] + [(str(unit.study_year) + unit.letter_mark, str(unit.study_year) + unit.letter_mark) for unit in ClassUnit.objects.all()]
-        filter_form = LessonRportFilter(request.POST)
+        filter_form = LessonRportFilter
 
         if request.method == 'POST':
             current_reports = reports_student_filter(request, current_reports)
@@ -110,12 +116,65 @@ def from_event_to_raport(request, eventId):
         }
         return render(request, 'pure_report.html', context)      
 
+    
+def lesson_class_initiation(lesson_report):
+    current_lesson_report = lesson_report
+    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
+    for participant in students:
+        attendance_object = Attendance.objects.create(
+            lesson_report = current_lesson_report,
+            student = participant,
+            is_present = False
+            )
+
+  
 
 @teacher_required
 def lesson_delivery_start(request):
+    class_choices =[(str(unit.study_year) + unit.letter_mark, str(unit.study_year) + unit.letter_mark) for unit in ClassUnit.objects.all()]
 
-    context={
-        'user': request.user
-    }
-    return render(request, 'lesson_delivery_start.html')
+    subject_choices =[(subject.name, subject.name) for subject in Subject.objects.all()]
+
+    if request.method == 'POST':
+        form_subject = request.POST.get('subject')
+        selected_subject = Subject.objects.get(name=form_subject)
+
+        form_class = request.POST.get('class_unit')
+        class_year = int(form_class[0])
+        class_letter_mark = form_class[1]
+        selected_class = ClassUnit.objects.filter(study_year=class_year, letter_mark=class_letter_mark)
+        current_teacher = Teacher.objects.get(user=request.user.profile)
+       
+        lesson_report = LessonReport.objects.create(
+            create_date=date.today(),
+            subject=selected_subject,
+            teacher=current_teacher,
+            class_unit=selected_class.first(),
+            lesson_title='Initial Title',
+            lesson_description = 'Initial Description',
+        )
+
+        lesson_class_initiation(lesson_report)
+      
+        current_lesson_antendance = Attendance.objects.filter(lesson_report=lesson_report)
+
+        context={
+        'formset': current_lesson_antendance,
+                }
+        messages.success(request, "Lesson created!")
+        return render(request,'lesson_class_initiation.html', context )
+
+
+    else:
+        choice_class_subject_form = ClassSubjectChoiceForm()
+        context={
+            'user': request.user,
+            'class_choices': class_choices,
+            'subject_choces': subject_choices,
+            'choice_class_subject_form': choice_class_subject_form,
+     }      
+        return render(request, 'lesson_delivery_start.html', context)
+
+
+
 

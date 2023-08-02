@@ -78,8 +78,8 @@ class CalendarEvents(models.Model):
         return f'{self.event_type} added by: {self.author} on: {self.subject}'
 
 class Attendance(models.Model):
-    lesson_report = models.OneToOneField(LessonReport, on_delete=models.CASCADE)
-    student = models.OneToOneField(Student, on_delete=models.CASCADE)
+    lesson_report = models.ForeignKey(LessonReport, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     is_present = models.BooleanField(default=False)
 
     def __str__(self):

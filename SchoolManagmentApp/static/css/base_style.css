@@ -131,7 +131,7 @@ nav .nav-list li:not(:last-child) a:hover {
 	color: #2ecc71;
 	font-weight: 500;
 }
-
+.select-clas-btn:hover,
 .login-nav-btn:hover {
 	background: #2ecc71;
 	color: #fff;
@@ -618,6 +618,7 @@ tr.email-list:hover {
 }
 
 .max-width {
+	min-width: 165px;
 	width: 240px;
 	color: white;
 	text-align: center;
@@ -702,4 +703,33 @@ table.schedule thead {
 	border-color: #2ecc71;
 	background-color: #2ecc71;
 	transition: 0.7s;
+}
+
+.calendarApp-btn{
+	height: 42px;
+	font-size: 1rem;
+}
+
+.select-clas-btn{
+	font-size: 0.85em;
+	height: 30px;
+	width: 60px;
+	border-color: #2ecc71;
+	color:#2ecc71;
+	background-color: transparent;
+}
+
+.select-clas-btn-fields{
+	border-color: #2ecc71 ;
+	border-radius: 20px;
+	width: 170px;
+	padding: 0px 4px;
+}
+
+.cancelled{
+	background-color: rgba(235, 44, 60, 0.1);
+}
+
+.pics-height{
+	height: 600px;
 }

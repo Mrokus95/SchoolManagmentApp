@@ -5,4 +5,5 @@ from .models import Lesson
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['class_name', 'day_of_week','lesson_number','subject', 'date','is_base','id',]
+    ordering = ['class_name', 'day_of_week','lesson_number', 'date','is_base','id',]

@@ -118,7 +118,10 @@ class ParentRegisterView(UserPassesTestMixin, FormView):
             user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
 
             # Create a new profile
-            profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Parent')
+            if photo:
+                profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Parent')
+            else:
+                profile = Profile.objects.create(user=user, phone_number=phone_number, account_type='Parent')
 
             # Create a new student account
             parent = Parent.objects.create(user=profile)
@@ -172,7 +175,10 @@ class TeacherRegisterView(UserPassesTestMixin, FormView):
                 user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
 
                 # Create a new profile
-                profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Teacher')
+                if photo:
+                    profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Teacher')
+                else:
+                    profile = Profile.objects.create(user=user, phone_number=phone_number, account_type='Teacher')
 
                 # Create a new teacher account
                 teacher = Teacher.objects.create(user=profile)
@@ -240,7 +246,10 @@ class StudentRegisterView(UserPassesTestMixin, FormView):
                 user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
 
                 # Create a new profile
-                profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Student')
+                if photo:
+                    profile = Profile.objects.create(user=user, phone_number=phone_number, photo=photo, account_type='Student')
+                else:
+                    profile = Profile.objects.create(user=user, phone_number=phone_number,  account_type='Student')
 
                 # Create a new student account
                 student = Student.objects.create(user=profile, class_unit=class_unit, parent=parent )

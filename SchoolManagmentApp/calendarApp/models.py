@@ -1,7 +1,7 @@
 from django.db import models
 from eventApp.models import Subject, Teacher
-from usersApp.models import Profile, ClassUnit
-from django.core.validators import MinValueValidator, MaxValueValidator
+from usersApp.models import ClassUnit
+
 
 # Create your models here.
 

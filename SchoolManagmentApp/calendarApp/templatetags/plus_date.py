@@ -1,0 +1,13 @@
+import datetime
+
+from django import template
+
+register = template.Library()
+
+@register.filter
+def plus_days(value, days):
+    return value + datetime.timedelta(days=days)
+
+@register.filter
+def not_in_list(value, arg):
+    return value not in arg.split(',')

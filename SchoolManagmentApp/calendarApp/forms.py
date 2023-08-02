@@ -1,28 +1,32 @@
 from django import forms
 from .models import Lesson
+from usersApp.models import ClassUnit
 
 class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['subject', 'day_of_week', 'lesson_number', 'teacher', 'classroom', 'is_cancelled']
+        fields = ['subject', 'teacher', 'classroom', 'is_base']
+
+
+class EditLessonForm(forms.ModelForm):
+    class Meta:
+        model = Lesson
+        fields = ['subject', 'teacher', 'classroom', 'is_base', 'is_cancelled']
+
 
     def clean(self):
         cleaned_data = super().clean()
-        day_of_week = cleaned_data.get('day_of_week')
-        lesson_number = cleaned_data.get('lesson_number')
+        is_base = cleaned_data.get('is_base')
+        is_cancelled = cleaned_data.get('is_cancelled')
 
-
-        if day_of_week is not None and lesson_number is not None:
-            existing_lesson = Lesson.objects.filter(
-                day_of_week=day_of_week,
-                lesson_number=lesson_number,
-                weeklyschedule__isnull=False
-            ).first()
-
-            if existing_lesson:
-                raise forms.ValidationError(
-                    f"A lesson already exists for Day {day_of_week} - Lesson Number {lesson_number}."
-                )
-
+        if is_base and is_cancelled:
+            raise forms.ValidationError("Both 'is_base' and 'is_cancelled' cannot be selected at the same time.")
+        
         return cleaned_data
-    
+
+
+class ClassUnitForm(forms.ModelForm):
+    class_unit = forms.ModelChoiceField(queryset=ClassUnit.objects.all(), label='Class:')
+    class Meta:
+        model = ClassUnit
+        fields = ['class_unit']

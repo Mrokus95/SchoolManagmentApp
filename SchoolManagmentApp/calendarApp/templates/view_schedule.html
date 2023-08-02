@@ -1,20 +1,36 @@
-{% extends 'base.html' %} {%load static%} {% block title %} Schedule 
-{% endblock title %} {%block content %} {{monday_lessons}} {{monday_lessons.1}}
+{% extends 'base.html' %} {%load static%} {% load widget_tweaks %} {% block title %} Schedule 
+{% endblock title %} {%block content %}
+{% load plus_date %}
 
 <div class="d-flex justify-content-around mt-5 bolded text-white">
-	<div class="login-nav-btn">Previous week</div>
+	<div class="login-nav-btn calendarApp-btn"><a class="text-decoration-none text-reset" href="{% url 'view_schedule' class_id=class_id.id week_offset=week_offset|add:"-1" %}">Previous week</a></div>
 	<div>
+		{%if week_offset == 0%}
 		<h3>Current week schedule for class {{class_id}}</h3>
+		<div class="d-flex justify-content-around bolded text-white">{{start_date}} - {{end_date}}</div>
+		{%else%}
+		<h3> Schedule for class {{class_id}}</h3>
+		<div class="d-flex justify-content-around bolded text-white">{{start_date}} - {{end_date}}</div>
+		{%endif%}
 	</div>
-	<div class="login-nav-btn">Next week</div>
+	<div class="login-nav-btn calendarApp-btn">
+		<a class="text-decoration-none text-reset" href="{% url 'view_schedule' class_id=class_id.id week_offset=week_offset|add:"1" %}">Next week</a>
+	</div>
 </div>
 <div>
 	<div class="d-flex justify-content-center flex-column">
-		<div class="d-flex justify-content-end mt-5 search">
-			<div>
-				<span class="text-white">Select class: </span
-				><select class="max-width"></select>
-			</div>
+
+			<div class="d-flex justify-content-end mt-5 search mr-2">
+				<form method="POST" class="max-width" >
+					{% csrf_token %}
+
+					  {%for field in form %}
+					  {{field|add_class:"select-clas-btn-fields"}}
+					  {%endfor%}
+
+					<button type="submit" class="btn text-subject select-clas-btn ">Select</button>
+				</form>
+
 		</div>
 		<table class="mt-1 rounded schedule">
 			<thead>
@@ -31,29 +47,55 @@
 				</tr>
 			</thead>
 			<tbody>
-				{%for day_name, day in days%}
-				<tr>
-					<th>{{day_name|title}}</th>
-					<div>
-						{% for lesson in day%} {%if lesson.subject%}
-						<td class="max-width">
-							<h5 class="text-subject">{{lesson.subject}}</h5>
-							<p class="text-teacher">Teacher: {{lesson.teacher}}</p>
-							<p class="text-class">Classroom: {{lesson.classroom}}</p>
-							{%if lesson.subject%}
-							<a href="#" class="btn small-btn">Edit</a>
-							{%else%}
-							<a href="#" class="btn small-btn">Add</a>
-							{%endif%}
-						</td>
-						{%else%}
-						<td class="max-width">
-							<a href="#" class="btn small-btn">Add</a>
-						</td>
-						{%endif%} {%endfor%}
-					</div>
-				</tr>
-				{%endfor%}
+				{%if user.is_staff%}
+					{%for day_name, day in days%}
+						{% with day_date=start_date|plus_days:forloop.counter0 %}
+						<tr>
+							<th>{{day_name|title}}</th>
+							<div>
+								{% for lesson in day%}
+									{%if lesson.subject and lesson.is_cancelled %}
+										<td class="max-width cancelled">
+											<h5 class="text-subject">{{lesson.subject}}</h5>
+											<p class="text-teacher">Teacher: {{lesson.teacher}}</p>
+											<p class="text-class">Classroom: {{lesson.classroom}}</p>
+											
+											<p class="text-class red ">Lesson cancelled</p>	
+											<a href="{%url 'edit_lesson' lesson_id=lesson.id week_offset=week_offset %}" class="btn small-btn">Edit</a>
+									{%elif lesson.subject and not lesson.is_cancelled %}
+										<td class="max-width ">
+											<h5 class="text-subject">{{lesson.subject}}</h5>
+											<p class="text-teacher">Teacher: {{lesson.teacher}}</p>
+											<p class="text-class">Classroom: {{lesson.classroom}}<p>
+											<a href="{%url 'edit_lesson' lesson_id=lesson.id week_offset=week_offset %}" class="btn small-btn">Edit</a>
+									{%else%}
+										<td class="max-width">
+											<a href="{%url 'create_lesson' class_id=class_id.id date=day_date lesson_number=forloop.counter week_offset=week_offset %}" class="btn small-btn">Add</a>
+										</td>
+									{%endif%}
+								{%endfor%}
+							</div>
+						</tr>
+						{%endwith%}
+					{%endfor%}
+				{%else%}
+					{%for day_name, day in days%}
+						<tr>
+							<th>{{day_name|title}}</th>
+							<div>
+								{% for lesson in day%} 
+									{%if lesson.subject%}
+										<td class="max-width">
+											<h5 class="text-subject">{{lesson.subject}}</h5>
+											<p class="text-teacher">Teacher: {{lesson.teacher}}</p>
+											<p class="text-class">Classroom: {{lesson.classroom}}</p>						
+										</td>
+									{%endif%} 
+								{%endfor%}
+							</div>
+						</tr>
+					{%endfor%}	
+				{%endif%}
 			</tbody>
 		</table>
 	</div>

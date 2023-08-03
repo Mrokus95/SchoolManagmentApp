@@ -49,6 +49,38 @@ class ClassroomReservation(models.Model):
     def __str__(self):
         return f"Reservation of {self.classroom} - Day: {self.get_day_of_week_display()} - Lesson {self.lesson_number}"
 
+class TeacherReservation(models.Model):
+    DAY_CHOICES = (
+        (0, 'Monday'),
+        (1, 'Tuesday'),
+        (2, 'Wednesday'),
+        (3, 'Thursday'),
+        (4, 'Friday'),
+    )
+
+    LESSON_CHOICES = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+        (4, '4'),
+        (5, '5'),
+        (6, '6'),
+        (7, '7'),
+        (8, '8'),
+    )
+
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    day_of_week = models.IntegerField(choices=DAY_CHOICES)
+    lesson_number = models.IntegerField(choices=LESSON_CHOICES)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+    class_unit = models.ForeignKey(ClassUnit, on_delete=models.CASCADE)
+
+
+    def __str__(self):
+        return f"Reservation of {self.teacher} - Day: {self.get_day_of_week_display()} - Lesson {self.lesson_number}"
+
+
 
 class Lesson(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
@@ -61,6 +93,7 @@ class Lesson(models.Model):
     is_base = models.BooleanField(default=False)
     is_cancelled = models.BooleanField(default=False)
     classroom_reservation = models.OneToOneField(ClassroomReservation, on_delete=models.CASCADE)
+    teacher_reservation = models.OneToOneField(TeacherReservation, on_delete=models.CASCADE)
 
 
     def __str__(self):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lesson, Classroom, ClassroomReservation
+from .models import Lesson, Classroom, ClassroomReservation, TeacherReservation
 # Register your models here.
 
 
@@ -14,4 +14,8 @@ class ClassroomAdmin(admin.ModelAdmin):
 
 @admin.register(ClassroomReservation)
 class ClassroomReservationAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(TeacherReservation)
+class TeacherReservationAdmin(admin.ModelAdmin):
     pass

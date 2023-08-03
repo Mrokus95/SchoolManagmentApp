@@ -14,5 +14,7 @@ urlpatterns = [
     path('lesson_delivery_start/', views.lesson_delivery_start, name='lesson_delivery_start'),
     
     path('lesson_class_initiation/<int:lesson_report_id>', views.lesson_class_initiation, name='lesson_class_initiation'),
+    
+    path('lesson_conducting/<int:current_lesson_report_id>', views.lesson_conducting, name='lesson_conducting')
 
 ]

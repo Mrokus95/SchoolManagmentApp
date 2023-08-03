@@ -13,10 +13,9 @@ class ClassSubjectChoiceForm(forms.Form):
     subject = forms.ChoiceField()    
 
 
-class AttendanceForm(forms.ModelForm):
-    class Meta:
-        model = Attendance
-        fields = ['is_present']
+class AttendanceForm(forms.Form):
+    
+        fields = forms.BooleanField()
 
 
 

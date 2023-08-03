@@ -116,19 +116,6 @@ def from_event_to_raport(request, eventId):
         }
         return render(request, 'pure_report.html', context)      
 
-    
-def lesson_class_initiation(lesson_report):
-    current_lesson_report = lesson_report
-    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
-    for participant in students:
-        attendance_object = Attendance.objects.create(
-            lesson_report = current_lesson_report,
-            student = participant,
-            is_present = False
-            )
-
-  
-
 @teacher_required
 def lesson_delivery_start(request):
     class_choices =[(str(unit.study_year) + unit.letter_mark, str(unit.study_year) + unit.letter_mark) for unit in ClassUnit.objects.all()]
@@ -152,18 +139,9 @@ def lesson_delivery_start(request):
             class_unit=selected_class.first(),
             lesson_title='Initial Title',
             lesson_description = 'Initial Description',
-        )
-
-        lesson_class_initiation(lesson_report)
-      
-        current_lesson_antendance = Attendance.objects.filter(lesson_report=lesson_report)
-
-        context={
-        'formset': current_lesson_antendance,
-                }
+        )      
         messages.success(request, "Lesson created!")
-        return render(request,'lesson_class_initiation.html', context )
-
+        return redirect('lesson_class_initiation', lesson_report.id)
 
     else:
         choice_class_subject_form = ClassSubjectChoiceForm()
@@ -172,9 +150,37 @@ def lesson_delivery_start(request):
             'class_choices': class_choices,
             'subject_choces': subject_choices,
             'choice_class_subject_form': choice_class_subject_form,
-     }      
+                }      
         return render(request, 'lesson_delivery_start.html', context)
+    
+@teacher_required
+def lesson_class_initiation(request, lesson_report_id):
+    current_lesson_report = LessonReport.objects.get(id=lesson_report_id)
+    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
 
+    if request.method == 'POST':
 
+        for participant in students:
+            checkbox_key = str(participant.id)
+            attendance_object = Attendance.objects.create(
+                lesson_report = current_lesson_report,
+                student = participant,
+                is_present=request.POST.get(checkbox_key, False) == 'True'
+                )
+            messages.success(request, "Attendance checked!")
+            return redirect('lesson_conducting', current_lesson_report.id)
+        
+    else:
+        form = AttendanceForm()
+        context={
+            'students': students,
+            'form': form,
+            }
+        return render(request, 'lesson_class_initiation.html', context)
 
+@teacher_required
+def lesson_conducting(request, current_lesson_report_id):
+    context={
 
+    }
+    return render(request, 'lesson_conducting.html', context)

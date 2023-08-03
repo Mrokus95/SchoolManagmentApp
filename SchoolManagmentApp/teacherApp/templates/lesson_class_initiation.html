@@ -7,16 +7,25 @@
         </div>
         <form method="post">
             {% csrf_token %}
-            {% for form in formset %}
-            <p>
-                {{form.student}}
-                {{form.is_present}}
-                <input type="checkbox" name="{{form.student}}" value="{{form.is_present}}">
-               
-            </p>
-            {% endfor %}
-            <input type="submit" value="Zapisz obecności">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Present</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student }}</td>
+                            <td><input type="checkbox" name="{{ student.id }}" value="True"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button class="apply-button" type="submit">Apply</button>
         </form>
     </div>
 </div>
+
 {% endblock %}

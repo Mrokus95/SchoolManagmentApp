@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content%}
+
+<div class="report-box-detail">
+    <div class="report-card-detail text-white">
+        <div class="report-text">
+            <div>
+                <h2>Subject: {{current_lesson_report.subject}}</h2>
+            </div>
+            <div class="text-muted">
+                <h4>Date: {{current_lesson_report.create_date}}</h4>
+            </div>
+
+            <div class="text-muted">
+                <h4>Class: {{current_lesson_report.class_unit}}</h4>
+            </div>
+        </div>
+        <div class="mt-2 card-divider"></div>
+        <div class="filter-content mt-2">
+            <form method="post" class="">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center">
+                    {{ lesson_report_text.lesson_title}}
+                </div>
+                <div class="mt-3">
+                    {{ lesson_report_text.lesson_description }}
+                </div>
+                <div class="text-center mt-3">
+                    <button class="apply-button" type="submit">Apply</button>
+
+                </div>
+            </form>
+        
+        <a class="text-decoration-none" href="{% url 'add_event' current_lesson_report.id  %}"><button id="filterButton"
+            class="filter-button">Add Event</button></a>    
+  </div>
+</div>
+{% endblock content%}

@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, reverse
 from usersApp.models import Profile, Student
-from eventApp.models import Teacher
-from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance
+from eventApp.forms import AddEvent
+from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance, Teacher
 from django.contrib import messages
 from eventApp.views import event_paginator, student_events
-from .forms import LessonRportFilter, ClassSubjectChoiceForm, AttendanceForm
+from .forms import LessonRportFilter, ClassSubjectChoiceForm, AttendanceForm, LessonReportText
 from usersApp.models import ClassUnit
 from datetime import date
-from django.forms import formset_factory
+
 
 
 # Create your views here.
@@ -158,6 +158,7 @@ def lesson_delivery_start(request):
 def lesson_class_initiation(request, lesson_report_id):
     current_lesson_report = LessonReport.objects.get(id=lesson_report_id)
     students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
+    current_class = current_lesson_report.class_unit
 
     if request.method == 'POST':
 
@@ -181,12 +182,64 @@ def lesson_class_initiation(request, lesson_report_id):
         context={
             'students': students,
             'form': form,
+            'current_class': current_class
             }
         return render(request, 'lesson_class_initiation.html', context)
 
 @teacher_required
 def lesson_conducting(request, current_lesson_report_id):
-    context={
+    current_lesson_report = LessonReport.objects.get(id=current_lesson_report_id)
+    initial_data = {
+        'lesson_title' : current_lesson_report.lesson_title,
+        'lesson_description' : current_lesson_report.lesson_description,
+            }
+    lesson_report_text = LessonReportText(initial=initial_data)
 
-    }
-    return render(request, 'lesson_conducting.html', context)
+    if request.method=='POST':
+        updated_form = LessonReportText(request.POST, instance=current_lesson_report)
+
+        if updated_form.is_valid():
+            updated_form.save()
+            messages.success(request, "Raport finalized!")
+            return redirect ('teacher_events')
+
+        else:
+            errors = updated_form.errors
+            context={
+                'lesson_report_text': lesson_report_text,
+                'current_lesson_report': current_lesson_report,
+                'errors': errors
+                    }
+            return render(request, 'lesson_conducting.html', context)
+        
+    else:    
+        context={
+            'lesson_report_text': lesson_report_text,
+            'current_lesson_report': current_lesson_report,
+                }
+    
+        return render(request, 'lesson_conducting.html', context)
+
+@teacher_required    
+def add_event(request, current_lesson_report_id):
+    current_lesson_report = LessonReport.objects.get(id=current_lesson_report_id)
+    add_event_form = AddEvent()
+    curret_teacher = Teacher.objects.get(user=request.user.profile)
+
+    if request.method == 'GET':
+        return render(request, 'add_event.html', {'add_event_form': add_event_form})
+
+    else:
+        adding_form = AddEvent(request.POST)
+
+        if adding_form.is_valid():
+            form = adding_form.save(commit=False)
+            form.author = curret_teacher
+            form.subject = form.connected_to_lesson.subject
+            form.save()
+            messages.success(request, "Event added successfully!")
+            return redirect ('teacher_events')
+        
+        else:
+            errors = adding_form.errors
+            return render(request, 'add_event.html', {'errors': errors})

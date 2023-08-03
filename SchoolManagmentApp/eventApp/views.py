@@ -275,25 +275,25 @@ def edit_event(request, eventId):
             errors = edited_form.errors
             return render(request, 'add_event.html', {'errors': errors})
 
-def add_event(request):
-    add_event_form = AddEvent()
-    curret_teacher = Teacher.objects.get(user=request.user.profile)
+# def add_event(request):
+#     add_event_form = AddEvent()
+#     curret_teacher = Teacher.objects.get(user=request.user.profile)
 
-    if request.method == 'GET':
-        return render(request, 'add_event.html', {'add_event_form': add_event_form})
+#     if request.method == 'GET':
+#         return render(request, 'add_event.html', {'add_event_form': add_event_form})
 
-    else:
-        adding_form = AddEvent(request.POST)
+#     else:
+#         adding_form = AddEvent(request.POST)
 
-        if adding_form.is_valid():
-            form = adding_form.save(commit=False)
-            form.author = curret_teacher
-            form.subject = form.connected_to_lesson.subject
-            form.save()
-            messages.success(request, "Event added successfully!")
-            return redirect ('teacher_events')
+#         if adding_form.is_valid():
+#             form = adding_form.save(commit=False)
+#             form.author = curret_teacher
+#             form.subject = form.connected_to_lesson.subject
+#             form.save()
+#             messages.success(request, "Event added successfully!")
+#             return redirect ('teacher_events')
         
-        else:
-            errors = adding_form.errors
-            return render(request, 'add_event.html', {'errors': errors})
+#         else:
+#             errors = adding_form.errors
+#             return render(request, 'add_event.html', {'errors': errors})
 

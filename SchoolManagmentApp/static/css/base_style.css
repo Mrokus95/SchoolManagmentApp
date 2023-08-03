@@ -702,3 +702,11 @@ tr:hover {
 .example{
   display: relative;
 }
+
+.attendance-checkobox:hover{
+  cursor: pointer;
+}
+
+.attendance-checkobox:checked {
+  background-color: rgb(5, 75, 28) !important;
+}

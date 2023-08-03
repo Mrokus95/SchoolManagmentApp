@@ -23,7 +23,6 @@ def staff_check(user):
     return user.is_authenticated and user.is_staff
 
 
-
 class HomeView(View):
     template_name = 'index.html'
 

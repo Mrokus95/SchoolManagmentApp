@@ -5,7 +5,7 @@
     <div class="report-card-detail text-white">
         <div class="report-text">
             <div>
-                <h2>Subject: {{current_lesson_report.subject}}</h2>
+                <h3>Subject: {{current_lesson_report.subject}}</h3>
             </div>
             <div class="text-muted">
                 <h4>Date: {{current_lesson_report.create_date}}</h4>
@@ -16,6 +16,17 @@
             </div>
         </div>
         <div class="mt-2 card-divider"></div>
+        <div class="d-flex justify-content-center">
+        <a class="text-decoration-none mx-2" href="{% url 'add_event' current_lesson_report.id  %}"><button id="filterButton"
+            class="filter-button">Add Event</button></a>
+
+        <a class="text-decoration-none mx-2" href=""><button id="filterButton"
+            class="filter-button">Aattendance</button></a>
+
+        <a class="text-decoration-none mx-2" href=""><button id="filterButton"
+            class="filter-button">Enter grades</button></a>
+        </div>
+        
         <div class="filter-content mt-2">
             <form method="post" class="">
                 {% csrf_token %}
@@ -26,13 +37,11 @@
                     {{ lesson_report_text.lesson_description }}
                 </div>
                 <div class="text-center mt-3">
-                    <button class="apply-button" type="submit">Apply</button>
+                    <button class="apply-button" type="submit">Finalize raport</button>
 
                 </div>
-            </form>
-        
-        <a class="text-decoration-none" href="{% url 'add_event' current_lesson_report.id  %}"><button id="filterButton"
-            class="filter-button">Add Event</button></a>    
-  </div>
+            </form>           
+        </div>
+   
 </div>
 {% endblock content%}

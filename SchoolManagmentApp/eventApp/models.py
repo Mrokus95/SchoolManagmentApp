@@ -66,7 +66,7 @@ class CalendarEvents(models.Model):
     ]
 
     description = models.TextField()
-    event_type = models.CharField(choices=EVENT_TYPES)
+    event_type = models.CharField(choices=EVENT_TYPES, default=OTHER)
     realisation_time = models.DateField()
     add_time = models.DateTimeField(auto_now_add=True)
     subject = models.ForeignKey(Subject, related_name='subject', on_delete=models.CASCADE)

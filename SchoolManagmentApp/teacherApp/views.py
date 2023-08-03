@@ -227,18 +227,28 @@ def add_event(request, current_lesson_report_id):
     curret_teacher = Teacher.objects.get(user=request.user.profile)
 
     if request.method == 'GET':
-        return render(request, 'add_event.html', {'add_event_form': add_event_form})
+        context = {
+            'add_event_form': add_event_form,
+            'current_lesson_report': current_lesson_report,
+        }
+        return render(request, 'add_event.html', context)
 
     else:
         adding_form = AddEvent(request.POST)
 
         if adding_form.is_valid():
             form = adding_form.save(commit=False)
-            form.author = curret_teacher
-            form.subject = form.connected_to_lesson.subject
-            form.save()
-            messages.success(request, "Event added successfully!")
-            return redirect ('teacher_events')
+            if form.realisation_time <= date.today():
+                messages.error(request, 'Ralisation date must be past today')
+                return redirect('add_event', current_lesson_report.id )
+            
+            else:
+                form.author = curret_teacher
+                form.subject = current_lesson_report.subject
+                form.connected_to_lesson = current_lesson_report
+                form.save()
+                messages.success(request, "Event added successfully!")
+                return redirect ('lesson_conducting', current_lesson_report.id)
         
         else:
             errors = adding_form.errors

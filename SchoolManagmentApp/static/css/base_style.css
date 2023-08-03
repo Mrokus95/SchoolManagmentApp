@@ -361,7 +361,10 @@ nav .nav-list li:not(:last-child) a:hover {
   transform: translate(0%, -50%);
   margin: 2rem;
   box-sizing: content-box;
+  
 }
+
+
 
 .filter-content {
   display: flex;
@@ -670,7 +673,6 @@ tr:hover {
 	margin: 0.5rem;
 	transition: background-color 0.3s ease, transform 0.3s ease;
 	border: 0.15rem solid #000000;
-
   }
 
 .report-box-detail{
@@ -707,6 +709,3 @@ tr:hover {
   cursor: pointer;
 }
 
-.attendance-checkobox:checked {
-  background-color: rgb(5, 75, 28) !important;
-}

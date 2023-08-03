@@ -132,14 +132,15 @@ def lesson_delivery_start(request):
         selected_class = ClassUnit.objects.filter(study_year=class_year, letter_mark=class_letter_mark)
         current_teacher = Teacher.objects.get(user=request.user.profile)
        
-        lesson_report = LessonReport.objects.create(
+        lesson_report = LessonReport.objects.get_or_create(
             create_date=date.today(),
             subject=selected_subject,
             teacher=current_teacher,
             class_unit=selected_class.first(),
             lesson_title='Initial Title',
             lesson_description = 'Initial Description',
-        )      
+        )
+        lesson_report = lesson_report[0]
         messages.success(request, "Lesson created!")
         return redirect('lesson_class_initiation', lesson_report.id)
 
@@ -161,14 +162,19 @@ def lesson_class_initiation(request, lesson_report_id):
     if request.method == 'POST':
 
         for participant in students:
-            checkbox_key = str(participant.id)
-            attendance_object = Attendance.objects.create(
-                lesson_report = current_lesson_report,
-                student = participant,
-                is_present=request.POST.get(checkbox_key, False) == 'True'
-                )
-            messages.success(request, "Attendance checked!")
-            return redirect('lesson_conducting', current_lesson_report.id)
+
+            if not Attendance.objects.filter(
+                lesson_report=current_lesson_report,
+                student=participant.id,
+                is_present__in=[True, False]
+                ).exists():
+                attendance_object = Attendance.objects.create(
+                    lesson_report = current_lesson_report,
+                    student = participant,
+                    is_present=request.POST.get(str(participant.id), False) == 'True'
+                    )
+        messages.success(request, "Attendance checked!")
+        return redirect('lesson_conducting', current_lesson_report.id)
         
     else:
         form = AttendanceForm()

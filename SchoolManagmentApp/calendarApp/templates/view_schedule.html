@@ -61,13 +61,13 @@
 											<p class="text-class">Classroom: {{lesson.classroom}}</p>
 											
 											<p class="text-class red ">Lesson cancelled</p>	
-											<a href="{%url 'edit_lesson' lesson_id=lesson.id week_offset=week_offset %}" class="btn small-btn">Edit</a>
+											<a href="{%url 'edit_lesson' lesson_id=lesson.id date=day_date week_offset=week_offset %}" class="btn small-btn">Edit</a>
 									{%elif lesson.subject and not lesson.is_cancelled %}
 										<td class="max-width ">
 											<h5 class="text-subject">{{lesson.subject}}</h5>
 											<p class="text-teacher">Teacher: {{lesson.teacher}}</p>
-											<p class="text-class">Classroom: {{lesson.classroom}}<p>
-											<a href="{%url 'edit_lesson' lesson_id=lesson.id week_offset=week_offset %}" class="btn small-btn">Edit</a>
+											<p class="text-class">Classroom: {{lesson.classroom.room_number}} (Floor: {{lesson.classroom.floor}}) <p>
+											<a href="{%url 'edit_lesson' lesson_id=lesson.id date=day_date week_offset=week_offset %}" class="btn small-btn">Edit</a>
 									{%else%}
 										<td class="max-width">
 											<a href="{%url 'create_lesson' class_id=class_id.id date=day_date lesson_number=forloop.counter week_offset=week_offset %}" class="btn small-btn">Add</a>

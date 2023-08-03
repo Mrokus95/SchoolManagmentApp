@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Lesson
+from .models import Lesson, ClassroomReservation
 from usersApp.models import Student, ClassUnit
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
@@ -7,6 +7,7 @@ from .forms import ClassUnitForm, LessonForm, EditLessonForm
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
 def get_weekdays(date):
     today = date
@@ -20,11 +21,12 @@ def check_exceptions(lessons, exceptions):
     for lesson_exception in exceptions:
         for no, lesson in enumerate(lessons):
             if lesson is not None and lesson.lesson_number == lesson_exception.lesson_number:
-                lessons = list(lessons)
-                lessons[lessons.index(lesson)] = lesson_exception
+                index = lessons.index(lesson)
+                lessons[index] = lesson_exception
                 break
-            elif lesson is None and lesson_exception.lesson_number == no:
-                lessons[lessons.index(lesson)] = lesson_exception
+            elif lesson is None and lesson_exception.lesson_number == no + 1:
+                index = lessons.index(None, no)  
+                lessons[index] = lesson_exception
     return lessons
 
 
@@ -131,7 +133,6 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
 
         class_unit = get_object_or_404(ClassUnit, id=class_id) if class_id else None
 
-
         lesson_form = LessonForm()
 
         context={
@@ -159,14 +160,45 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
             date = date_obj
             is_base = form.cleaned_data['is_base']
             
-            try:
-                lesson = Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=False)
 
-                messages.success(request, 'Lesson created successfully')
+            if is_base:
+                reservation_exists = ClassroomReservation.objects.filter(
+                classroom=classroom,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                start_date__gte=date,
+                ).exists()
+            else:
+                reservation_exists = ClassroomReservation.objects.filter(
+                classroom=classroom,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                start_date=date,
+                end_date=date
+                ).exists()
+
+            if not reservation_exists:
+                try:
+                    with transaction.atomic(): 
+
+                        if is_base:
+                            new_reservation = ClassroomReservation.objects.create(classroom = classroom, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, class_unit=class_name)
+
+                        else:
+                            new_reservation = ClassroomReservation.objects.create(classroom = classroom, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, end_date=date, class_unit=class_name)
+
+
+                        Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=False, classroom_reservation = new_reservation)
+
+
+                        messages.success(request, 'Lesson created successfully')
+                        return redirect('view_schedule', class_id=class_id, week_offset=week_offset)
+                except:
+                    messages.error(request, 'Occured an error while creating - please check data and try again.')
+                    return render(request, 'view_schedule.html', class_id=class_id , week_offset=week_offset)
+            else:
+                messages.error(request, 'Classroom is curently reserved for this date.')
                 return redirect('view_schedule', class_id=class_id, week_offset=week_offset)
-            except:
-                messages.error(request, 'Occured an error while creating - please check data and try again.')
-                return render(request, 'view_schedule.html', class_id=class_id , week_offset=week_offset)
         
         else:
             for field_errors in form.errors.values():
@@ -176,8 +208,11 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
             return redirect('.')
         
 @staff_member_required
-def edit_lesson(request, lesson_id, week_offset=None):
+def edit_lesson(request, lesson_id, date = None, week_offset=None):
     lesson = get_object_or_404(Lesson, id=lesson_id)
+
+    current_reservation = lesson.classroom_reservation
+
     if request.method == 'GET':
 
         initial_data = {
@@ -193,7 +228,7 @@ def edit_lesson(request, lesson_id, week_offset=None):
         context={
             'form': lesson_form,
             'class_unit': lesson.class_name,
-            'date': lesson.date,
+            'date': date,
             'lesson_number': lesson.lesson_number,
         }
         return render(request, 'edit_lesson.html', context)
@@ -208,27 +243,84 @@ def edit_lesson(request, lesson_id, week_offset=None):
             teacher = form.cleaned_data['teacher']
             class_name = lesson.class_name
             classroom = form.cleaned_data['classroom']
-            date = lesson.date
+            date = date
             is_base = form.cleaned_data['is_base']
             is_cancelled = form.cleaned_data['is_cancelled']
 
-            if lesson.is_base:
-                try:
-                    lesson = Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=is_cancelled)
-                    messages.success(request, 'Lesson edited successfully')
-                    return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
-                except:
-                    messages.error(request, 'Occured an error while editing - please check data and try again.')
-                    return render(request, 'view_schedule.html', class_id=lesson.class_id , week_offset=week_offset)
+            if lesson.is_base or lesson.classroom != classroom:
+                if is_base:
+                    try:
+                        with transaction.atomic():
+                            current_reservation.end_date = date
+                            current_reservation.save()
+                            
+                            pre_reservation_exists = ClassroomReservation.objects.filter(
+                            classroom=classroom,
+                            day_of_week=day_of_week,
+                            lesson_number=lesson_number,
+                            start_date__lte=date,
+                            end_date = None
+                            ).exists()
+
+                            post_reservation_exists = ClassroomReservation.objects.filter(
+                            classroom=classroom,
+                            day_of_week=day_of_week,
+                            lesson_number=lesson_number,
+                            start_date__gt=date,
+                            ).exists()
+                            
+                            if not pre_reservation_exists and not post_reservation_exists:
+                                
+                                new_reservation = ClassroomReservation.objects.create(classroom = classroom, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, class_unit=class_name)
+
+                                lesson = Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=is_cancelled, classroom_reservation= new_reservation)
+
+                                messages.success(request, 'Lesson edited successfully')
+                                return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
+                            else:
+                                messages.error(request, 'Classroom is curently reserved.')
+                                return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
+                    except:
+                        messages.error(request, 'Occured an error while editing - please check data and try again.')
+                        return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
+                else:
+                    try:
+                        with transaction.atomic():
+                            #Zamykamy starą rezerwację
+                            current_reservation.end_date = date
+                            current_reservation.save()
+                            
+                            pre_reservation_exists = ClassroomReservation.objects.filter(
+                            classroom=classroom,
+                            day_of_week=day_of_week,
+                            lesson_number=lesson_number,
+                            start_date__lte=date,
+                            end_date = None
+                            ).exists()          
+                            
+                            if not pre_reservation_exists:
+                                
+                                new_reservation = ClassroomReservation.objects.create(classroom = classroom, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, class_unit=class_name)
+
+                                lesson = Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=is_cancelled, classroom_reservation= new_reservation)
+
+                                messages.success(request, 'Lesson edited successfully')
+                                return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
+                            else:
+                                messages.error(request, 'Classroom is curently reserved for this date.')
+                                return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
+                    except:
+                        messages.error(request, 'Occured an error while editing - please check data and try again.')
+                        return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
             
             else:
                 try:
                     lesson.subject = form.cleaned_data['subject']
                     lesson.teacher = form.cleaned_data['teacher']
-                    lesson.classroom = form.cleaned_data['classroom']
                     lesson.is_base = form.cleaned_data['is_base']
                     lesson.is_cancelled = form.cleaned_data['is_cancelled']
                     lesson.save()
+
                     messages.success(request, 'Lesson edited successfully')
                     return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
                 except:

@@ -53,7 +53,9 @@
 							<li><a href="{%url 'events'%}">Events</a></li>
 							<li><a href="{%url 'inbox'%}">Messages</a></li>
 							<li><a href="{% url 'update_user_profile'%}"><img class='avatar-pic' src="{{ user.profile.photo.url }}" alt=""></a></li>
-							<li><a href="{% url 'logout' %}"><button id="login-nav" class="login-nav-btn" >Logout</button></a></li>
+							<li class="px-2"><span class="text-white">Welcome <br>{{user.username}}</span></li>
+							<li><a href="{% url 'logout' %}"><button id="login-nav" 
+								class="login-nav-btn" >Logout</button></a></li>
 						</ul>
 					</nav>
 				</header>

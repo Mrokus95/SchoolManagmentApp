@@ -167,17 +167,49 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
 
 
                 classroom_reservation_exists = ClassroomReservation.objects.filter(
-                (Q(start_date__gt=date) | Q(start_date__lte=date)),
+                start_date__gte=date,
                 classroom=classroom,
                 day_of_week=day_of_week,
                 lesson_number=lesson_number,
                 ).exists()
 
+                pre_base_classroom_reservation_exists = ClassroomReservation.objects.filter(
+                start_date__lt=date,
+                classroom=classroom,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                end_date=None
+                ).exists()
+
+                not_base_classroom_reservation_exists = ClassroomReservation.objects.filter(
+                start_date=date,
+                classroom=classroom,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                end_date=date
+                ).exists()
+
                 teacher_reservation_exists = TeacherReservation.objects.filter(
-                (Q(start_date__gt=date) | Q(start_date__lte=date)),
+                start_date__gte=date,
                 teacher=teacher,
                 day_of_week=day_of_week,
                 lesson_number=lesson_number,
+                ).exists()
+
+                pre_base_teacher_reservation_exists = TeacherReservation.objects.filter(
+                start_date__lt=date,
+                teacher=teacher,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                end_date=None
+                ).exists()
+
+                not_base_teacher_reservation_exists = TeacherReservation.objects.filter(
+                start_date=date,
+                teacher=teacher,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                end_date=date
                 ).exists()
 
 
@@ -189,6 +221,17 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
                 lesson_number=lesson_number,
                 ).exists()
 
+                not_base_classroom_reservation_exists = ClassroomReservation.objects.filter(
+                start_date=date,
+                classroom=classroom,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                end_date=date
+                ).exists()
+                
+                pre_base_classroom_reservation_exists= False
+                pre_base_teacher_reservation_exists=False
+
                 teacher_reservation_exists = TeacherReservation.objects.filter(
                 Q(start_date__lte=date) & (Q(end_date__gte=date) | Q(end_date=None)),
                 teacher=teacher,
@@ -196,9 +239,16 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
                 lesson_number=lesson_number,
                 ).exists()
 
+                not_base_teacher_reservation_exists = TeacherReservation.objects.filter(
+                start_date=date,
+                teacher=teacher,
+                day_of_week=day_of_week,
+                lesson_number=lesson_number,
+                end_date=date
+                ).exists()
 
-            if not teacher_reservation_exists:
-                if not classroom_reservation_exists:
+            if not teacher_reservation_exists and not pre_base_teacher_reservation_exists and not not_base_teacher_reservation_exists :
+                if not classroom_reservation_exists and not pre_base_classroom_reservation_exists and not not_base_classroom_reservation_exists:
                     try:
                         with transaction.atomic(): 
 

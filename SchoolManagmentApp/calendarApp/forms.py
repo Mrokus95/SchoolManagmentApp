@@ -1,8 +1,8 @@
 from django import forms
-from django.shortcuts import get_object_or_404
 from .models import Lesson
-from eventApp.models import Teacher
 from usersApp.models import ClassUnit
+
+
 
 class LessonForm(forms.ModelForm):
     class Meta:
@@ -20,7 +20,6 @@ class LessonForm(forms.ModelForm):
 
         return cleaned_data
     
-
 
 class EditLessonForm(forms.ModelForm):
     class Meta:

@@ -1,0 +1,32 @@
+var subjectField = document.getElementById('id_subject');
+var teacherField = document.getElementById('id_teacher');
+
+function updateTeacherOptions() {
+    var selectedSubject = subjectField.value;
+    if (selectedSubject) {
+        teacherField.disabled = true;
+        while (teacherField.firstChild) {
+            teacherField.removeChild(teacherField.firstChild);
+        }
+        fetch('/schedule/get_teachers/' + selectedSubject + '/')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(teacherId => {
+                    var option = document.createElement('option');
+                    option.value = teacherId;
+                    option.textContent = teacherId;
+                    teacherField.appendChild(option);
+                });
+                teacherField.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error while fetching teachers:', error);
+                teacherField.disabled = false;
+            });
+    } else {
+        console.log('Choose a subject before updating the teachers.');
+    }
+}
+
+subjectField.addEventListener('change', updateTeacherOptions);
+updateTeacherOptions();

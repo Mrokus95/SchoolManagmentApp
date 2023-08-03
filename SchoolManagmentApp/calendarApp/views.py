@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import Lesson, ClassroomReservation, TeacherReservation
 from usersApp.models import Student, ClassUnit
+from eventApp.models import Teacher, Subject
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from .forms import ClassUnitForm, LessonForm, EditLessonForm
@@ -9,6 +10,18 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
+from django.http import JsonResponse
+
+
+def teachers(request, subject_id):
+    try:
+        subject = Subject.objects.get(pk=subject_id)
+        teachers = Teacher.objects.filter(lesson_type=subject)
+        teacher_names = [teacher.__str__() for teacher in teachers]
+        return JsonResponse(teacher_names, safe=False)
+    except Subject.DoesNotExist:
+        return JsonResponse({'error': 'Subject not found'}, status=404)
+
 
 def get_weekdays(date):
     today = date
@@ -228,7 +241,7 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
                 lesson_number=lesson_number,
                 end_date=date
                 ).exists()
-                
+
                 pre_base_classroom_reservation_exists= False
                 pre_base_teacher_reservation_exists=False
 

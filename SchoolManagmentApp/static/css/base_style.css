@@ -709,3 +709,25 @@ tr:hover {
 .attendance-checkobox:hover{
   cursor: pointer;
 }
+
+.table-colors tbody tr:nth-of-type(odd) {
+  background-color: #0e912a; 
+}
+.table-colors tbody tr:nth-of-type(even) {
+  background-color: #076e23; 
+}
+
+.nohover:hover {
+  background-color: #2b103a !important;
+}
+
+.grade{
+  height: 1rem;
+  width: 1rem;
+  margin-right: 1rem;
+}
+
+.grade-student:hover{
+  text-decoration: none;
+  color: white;
+}

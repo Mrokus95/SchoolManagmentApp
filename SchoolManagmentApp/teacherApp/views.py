@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from usersApp.models import Profile, Student
 from eventApp.forms import AddEvent
 from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance, Teacher
+from . models import Grades
 from django.contrib import messages
 from eventApp.views import event_paginator, student_events
 from .forms import LessonRportFilter, ClassSubjectChoiceForm, AttendanceForm, LessonReportText
@@ -253,7 +254,8 @@ def add_event(request, current_lesson_report_id):
         else:
             errors = adding_form.errors
             return render(request, 'add_event.html', {'errors': errors})
-        
+
+@teacher_required         
 def edit_attendance(request, current_lesson_report_id):
     current_lesson_report = LessonReport.objects.get(id=current_lesson_report_id)
     current_attendance = Attendance.objects.filter(lesson_report = current_lesson_report)
@@ -274,3 +276,25 @@ def edit_attendance(request, current_lesson_report_id):
                 }
         return render(request, 'edit_attendance.html', context )
 
+
+def grades_teacher(request, current_lesson_report_id):
+    current_lesson_report= LessonReport.objects.get(id=current_lesson_report_id)
+
+    grades = Grades.objects.filter(subject=current_lesson_report.subject)
+
+    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
+
+    current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}
+
+    longest_grade_list = sorted([len(grades) for student, grades in current_lesson_grades.items() if grades])[-1]
+
+    print(longest_grade_list)
+
+
+  
+    context={
+        'current_lesson_report': current_lesson_report,
+        'students': students,
+        'current_lesson_grades': current_lesson_grades,
+    }
+    return render(request, 'grades_submition.html', context)

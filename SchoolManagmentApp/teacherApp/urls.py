@@ -21,6 +21,9 @@ urlpatterns = [
     path('add_event/<int:current_lesson_report_id>', views.add_event, name='add_event'),
 
     # edit attendance
-    path('edit_attendance/<int:current_lesson_report_id>', views.edit_attendance, name='edit_attendance')
+    path('edit_attendance/<int:current_lesson_report_id>', views.edit_attendance, name='edit_attendance'),
+
+    # grades
+    path('grades_teacher/<int:current_lesson_report_id>', views.grades_teacher, name='grades_teacher'),
 
 ]

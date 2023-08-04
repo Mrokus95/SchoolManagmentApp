@@ -1,5 +1,5 @@
 from django.db import models
-from usersApp.models import Profile, ClassUnit
+from usersApp.models import Profile, ClassUnit, Student
 
 # Create your models here.
 
@@ -66,7 +66,7 @@ class CalendarEvents(models.Model):
     ]
 
     description = models.TextField()
-    event_type = models.CharField(choices=EVENT_TYPES)
+    event_type = models.CharField(choices=EVENT_TYPES, default=OTHER)
     realisation_time = models.DateField()
     add_time = models.DateTimeField(auto_now_add=True)
     subject = models.ForeignKey(Subject, related_name='subject', on_delete=models.CASCADE)
@@ -78,10 +78,11 @@ class CalendarEvents(models.Model):
         return f'{self.event_type} added by: {self.author} on: {self.subject}'
 
 class Attendance(models.Model):
-    lesson_report = models.OneToOneField(LessonReport, on_delete=models.CASCADE)
-    student_name = models.CharField(max_length=100)
+    lesson_report = models.ForeignKey(LessonReport, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     is_present = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.student_name} - {self.lesson.day} - {self.lesson_report.create_date} - {'Obecny' if self.is_present else 'Nieobecny'}"
+        return f"{self.student} - {self.lesson_report.create_date} - {self.lesson_report.subject}:  {'Present' if self.is_present else 'Absent'}"
+    
     

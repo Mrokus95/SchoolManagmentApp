@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="report-box-detail">
+    <div class="report-card-detail text-white">
+        <div class="report-text">
+            <div>
+                <h3>Grades of {{ current_lesson_report.class_unit }}, {{ current_lesson_report.subject }}</h3>
+            </div>
+        </div>
+        <div class="mt-2 card-divider"></div>
+        <div class="filter-content mt-2">
+            <table class="table text-white table-colors">
+                <tbody>
+                    {% for student, grades in current_lesson_grades.items %}
+                    <tr>
+                        <td class="text-white"> <a href="" class="text-decoration-none">{{ student }}</a></td>
+                        <td class="">
+                            {% for grade in grades %}
+                            <span class="text-white grade">{{ grade }}</span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a class="container-fluid" href="{% url 'lesson_conducting' current_lesson_report.id %}">
+            <i class="fa-solid fa-backward back-button-image mt-2" style="color: #023602;"></i>
+        </a>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

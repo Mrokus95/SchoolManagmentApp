@@ -26,6 +26,7 @@ urlpatterns = [
     path('schedule/', include('calendarApp.urls')),
     path('', include('usersApp.urls')),
     path('', include('eventApp.urls')),
+    path('', include('teacherApp.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

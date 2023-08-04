@@ -163,7 +163,7 @@ def lesson_class_initiation(request, lesson_report_id):
     if request.method == 'POST':
 
         for participant in students:
-
+            
             if not Attendance.objects.filter(
                 lesson_report=current_lesson_report,
                 student=participant.id,
@@ -253,3 +253,24 @@ def add_event(request, current_lesson_report_id):
         else:
             errors = adding_form.errors
             return render(request, 'add_event.html', {'errors': errors})
+        
+def edit_attendance(request, current_lesson_report_id):
+    current_lesson_report = LessonReport.objects.get(id=current_lesson_report_id)
+    current_attendance = Attendance.objects.filter(lesson_report = current_lesson_report)
+    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
+
+    if request.method == 'POST':
+        for student in students:
+            participant = Attendance.objects.get(student=student.id)
+            participant.is_present = request.POST.get(str(student.id), False) == 'True'
+            participant.save()                           
+        messages.success(request, "Attendance updated!")
+        return redirect('lesson_conducting', current_lesson_report.id)
+       
+    else:
+        context={
+            'current_attendance': current_attendance,
+            'current_lesson_report': current_lesson_report,
+                }
+        return render(request, 'edit_attendance.html', context )
+

@@ -20,7 +20,7 @@
         <a class="text-decoration-none mx-2" href="{% url 'add_event' current_lesson_report.id  %}"><button id="filterButton"
             class="filter-button">Add Event</button></a>
 
-        <a class="text-decoration-none mx-2" href=""><button id="filterButton"
+        <a class="text-decoration-none mx-2" href="{% url 'edit_attendance' current_lesson_report.id %}"><button id="filterButton"
             class="filter-button">Aattendance</button></a>
 
         <a class="text-decoration-none mx-2" href=""><button id="filterButton"

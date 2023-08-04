@@ -20,4 +20,7 @@ urlpatterns = [
     # add event
     path('add_event/<int:current_lesson_report_id>', views.add_event, name='add_event'),
 
+    # edit attendance
+    path('edit_attendance/<int:current_lesson_report_id>', views.edit_attendance, name='edit_attendance')
+
 ]

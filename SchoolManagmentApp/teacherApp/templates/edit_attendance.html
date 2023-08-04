@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content%}
+
+<div class="report-box-detail">
+    <div class="report-card-detail text-white">
+        <div class="report-text">
+            <h3>U are checking attendance for class: {{ current_lesson_report.class_unit }} </h3>
+        </div>
+        <div class="mt-2 card-divider"></div>
+        <div class="filter-content mt-2">
+            <form method="post">
+                {% csrf_token %}
+                <table class="table text-white">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Present</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in current_attendance %}
+                            <tr>
+                                <td>{{ result.student }}</td>
+                                <div class="form-check form-check-inline">
+                                <td><input type="checkbox" name="{{ result.student.id }}" value="True" class="attendance-checkobox" {% if result.is_present %}checked{% endif %}></td></div>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="text-center mt-3">
+                <button class="apply-button" type="submit">Update</button>
+            </div>
+            </form>
+        </div>
+        <a class="container-fluid" href="{% url 'lesson_conducting' current_lesson_report.id %}">
+            <i class="fa-solid fa-backward back-button-image mt-2" style="color: #023602;"></i>
+        </a>
+    </div>
+</div>
+
+{% endblock content%}

@@ -701,11 +701,11 @@ tr:hover {
   position: relative;
 }
 
-.example{
-  display: relative;
+.attendance-checkobox{
+  transform:  scale(1.5);
+  margin-left: 1rem;
 }
 
 .attendance-checkobox:hover{
   cursor: pointer;
 }
-

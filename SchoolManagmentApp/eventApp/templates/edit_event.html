@@ -10,29 +10,41 @@
 {% endfor %}
 {% endif %}
 
-
-
-
-<div class="adding-window">
-    <div class="adding-content">
-        <h2 class="text-white">{{connected_to_lesson}}</h2>
-      
+<div class="report-box-detail">
+    <div class="report-card-detail text-white">
+        <div class="report-text">
+            <div>
+                <h2 class="mb-1">{{connected_to_lesson}}</h2>
+            </div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="filter-content mt-2">
             <form method="post">
                 {% csrf_token %}
+                <div>Description:</div>
+                <div class="m-3">{{ edit_form.description }}</div>
+                <div class="mb-3"> Event type: {{ edit_form.event_type }}</div>
 
-                <div class="adding-field">{{ edit_form.description }}</div>
-                <div class="adding-field">Event type: {{ edit_form.event_type }}</div>
-                <div class="adding-field">Realisation Date: {{ edit_form.realisation_time }}</div>
+                <div class="mb-3"> Realisation Date: {{ edit.realisation_time }}</div>
 
-                <button class="apply-button" type="submit">Modify Event</button>
+                <div class="text-center">
+                    <button class="apply-button" type="submit">Edit Event</button>
+                </div>
             </form>
-            <a class = "container-fluid" href="{% url 'teacher_events' %}">
+        </div>
+        <div class="mt-3">
+            <a class="container-fluid" href="{% url 'teacher_events' %}">
                 <i class="fa-solid fa-backward back-button-image " style="color: #023602;"></i>
             </a>
+        </div>
     </div>
-
-
 </div>
+</div>
+
+
+
+
+
 
 
 {% endblock content %}

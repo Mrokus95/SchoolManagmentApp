@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import Lesson, ClassroomReservation, TeacherReservation
-from usersApp.models import Student, ClassUnit
+from messagesApp.models import Message
+from usersApp.models import Student, ClassUnit, Profile
 from eventApp.models import Teacher, Subject
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
@@ -11,14 +12,15 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
 from django.http import JsonResponse
+import calendar
 
 
 def teachers(request, subject_id):
     try:
         subject = Subject.objects.get(pk=subject_id)
         teachers = Teacher.objects.filter(lesson_type=subject)
-        teacher_names = [teacher.__str__() for teacher in teachers]
-        return JsonResponse(teacher_names, safe=False)
+        teacher_data = [{'id': teacher.id, 'name': str(teacher)} for teacher in teachers]
+        return JsonResponse(teacher_data, safe=False)
     except Subject.DoesNotExist:
         return JsonResponse({'error': 'Subject not found'}, status=404)
 
@@ -174,10 +176,7 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
             date = date_obj
             is_base = form.cleaned_data['is_base']
             
-
             if is_base:
-
-
 
                 classroom_reservation_exists = ClassroomReservation.objects.filter(
                 start_date__gte=date,
@@ -224,7 +223,6 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
                 lesson_number=lesson_number,
                 end_date=date
                 ).exists()
-
 
             else:
                 classroom_reservation_exists = ClassroomReservation.objects.filter(
@@ -278,11 +276,34 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
 
                             Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=False, classroom_reservation = new_reservation, teacher_reservation = new_teacher_reservation)
 
+                            sender_profile = Profile.objects.get(user=request.user)
+
+                            students = class_name.students_in_class.all()
+                            date_str = date.strftime('%Y-%m-%d')
+                            day_of_week_str= calendar.day_name[day_of_week]
+
+                            for student in students:
+                                receiver = student.user
+                                title = 'New lesson for your class'
+                                body = f'''There is a new lesson for your class in schedule:
+
+                                    Subject: {subject}
+                                    Teacher: {teacher}
+                                    Classroom: {classroom}
+                                    When: {day_of_week_str} lesson no. {lesson_number}
+                                    Date: {date_str}
+
+                                    Please check your schedule for more information.
+                                '''
+                                Message.objects.create(sender=sender_profile, receiver=receiver, title=title, body=body)
+
+
                             messages.success(request, 'Lesson created successfully')
+                                    
                             return redirect('view_schedule', class_id=class_id, week_offset=week_offset)
                     except:
                         messages.error(request, 'Occured an error while creating - please check data and try again.')
-                        return render(request, 'view_schedule.html', class_id=class_id , week_offset=week_offset)
+                        return redirect('view_schedule', class_id=class_id, week_offset=week_offset)
                 else:
                     messages.error(request, 'Classroom is curently reserved for this date.')
                     return redirect('view_schedule', class_id=class_id, week_offset=week_offset)
@@ -298,15 +319,12 @@ def create_lesson(request, class_id=None, date = None, lesson_number = None, wee
         
 @staff_member_required
 def edit_lesson(request, lesson_id, date = None, week_offset=None):
-    print('Edit lessonW')
-    print('Edit lessdfdfo')
-    
 
+    
     lesson = get_object_or_404(Lesson, id=lesson_id)
 
     current_classroom_reservation = lesson.classroom_reservation
     current_teacher_reservation = lesson.teacher_reservation
-    # list(current_classroom_reservation)
     if request.method == 'GET':
 
         initial_data = {
@@ -345,13 +363,13 @@ def edit_lesson(request, lesson_id, date = None, week_offset=None):
                 if is_base:
                     try:
                         with transaction.atomic():
-                            print('jestem 1')
+
                             current_classroom_reservation.end_date = date
                             current_classroom_reservation.save()
-                            print('jestem 2')
+
                             current_teacher_reservation.end_date = date
                             current_teacher_reservation.save()
-                            print('jestem 3')
+
                             classroom_reservation_exists = ClassroomReservation.objects.filter(
                                 (Q(start_date__gt=date) | Q(start_date__lte=date)),
                                 classroom=classroom,
@@ -359,15 +377,10 @@ def edit_lesson(request, lesson_id, date = None, week_offset=None):
                                 lesson_number=lesson_number,
                                 end_date = None
                             )
-                            print('jestem 3A')
-                            print(classroom_reservation_exists)
-
 
                             if classroom_reservation_exists:
                                 if classroom_reservation_exists.count() == 1 and classroom_reservation_exists[0] == current_classroom_reservation:
                                     classroom_reservation_exists = False
-                            print('jestem 4', classroom_reservation_exists)
-
 
                             teacher_reservation_exists = TeacherReservation.objects.filter(
                                 (Q(start_date__gt=date) | Q(start_date__lte=date)),
@@ -376,55 +389,55 @@ def edit_lesson(request, lesson_id, date = None, week_offset=None):
                                 lesson_number=lesson_number,
                                 end_date = None
                             )
-                            print ('TeacherReservation')
-                            print('jestem 4a', teacher_reservation_exists)
-
 
                             if teacher_reservation_exists:
                                 if teacher_reservation_exists.count() == 1 and teacher_reservation_exists[0] == current_teacher_reservation:
                                     teacher_reservation_exists = False
-                            print('jestem 5') 
-
 
                             if not teacher_reservation_exists:
                                 if not classroom_reservation_exists:
-                                    print('jestem 6') 
-
 
                                     classrooom_new_reservation = ClassroomReservation.objects.create(classroom = classroom, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, class_unit=class_name)
 
-
-                                    print('jestem 7') 
-                                    print(teacher , type(teacher))
-
-
                                     teacher_new_reservation = TeacherReservation.objects.create(teacher = teacher, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, class_unit=class_name)
-                                    print('jestem 8') 
-
 
                                     lesson = Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=is_cancelled, classroom_reservation= classrooom_new_reservation, teacher_reservation= teacher_new_reservation)
-                                    print('jestem 9') 
 
+                                    sender_profile = Profile.objects.get(user=request.user)
+
+                                    students = class_name.students_in_class.all()
+                                    date_str = date.strftime('%Y-%m-%d')
+                                    day_of_week_str= calendar.day_name[day_of_week]
+
+                                    for student in students:
+                                        receiver = student.user
+                                        title = 'New lesson for your class'
+                                        body = f'''There is a change in your schedule. Currently your {lesson_number} lesson on {day_of_week_str} ({date_str}) will be:
+
+                                        Subject: {subject}
+                                        Teacher: {teacher}
+                                        Classroom: {classroom}
+
+                                        Please check your schedule for more information.
+                                        '''
+                                        Message.objects.create(sender=sender_profile, receiver=receiver, title=title, body=body)
 
                                     messages.success(request, 'Lesson edited successfully')
                                     return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
                                 else:
-                                    print('jestem 10') 
                                     messages.error(request, 'Classroom is curently reserved.')
                                     return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
                             else:
-                                print('jestem 11') 
-                                messages.error(request, 'Teacher is curently reserved125.')
+                                messages.error(request, 'Teacher is curently reserved.')
                                 return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
 
                     except:
-                        print('jestem 12') 
-                        messages.error(request, 'Occured an error while editing - please check data and try again2.')
+                        messages.error(request, 'Occured an error while editing - please check data and try again.')
                         return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
                 else:
                     try:
                         with transaction.atomic():
-                            #Zamykamy starą rezerwację
+                            
                             current_classroom_reservation.end_date = date
                             current_classroom_reservation.save()
                             
@@ -449,20 +462,40 @@ def edit_lesson(request, lesson_id, date = None, week_offset=None):
 
                             if not pre_teacher_reservation_exists:
                                 if not pre_classroom_reservation_exists:
-                                    print('21')
+                                    
                                     classrooom_new_reservation = ClassroomReservation.objects.create(classroom = classroom, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, end_date=date, class_unit=class_name)
-                                    print('22')
+                                    
                                     teacher_new_reservation = TeacherReservation.objects.create(teacher = teacher, day_of_week = day_of_week, lesson_number=lesson_number, start_date=date, end_date=date, class_unit=class_name)
-                                    print('23')
+                                    
                                     Lesson.objects.create(subject=subject, day_of_week=day_of_week, lesson_number=lesson_number, teacher=teacher, class_name=class_name, classroom=classroom, date=date, is_base= is_base, is_cancelled=is_cancelled, classroom_reservation= classrooom_new_reservation, teacher_reservation= teacher_new_reservation)
-                                    print('24')
+
+                                    sender_profile = Profile.objects.get(user=request.user)
+
+                                    students = class_name.students_in_class.all()
+                                    date_str = date.strftime('%Y-%m-%d')
+                                    day_of_week_str= calendar.day_name[day_of_week]
+
+                                    for student in students:
+                                        receiver = student.user
+                                        title = 'New lesson for your class'
+                                        body = f'''There is a change in your schedule. Currently your {lesson_number} lesson on {day_of_week_str} ({date_str}) will be:
+
+                                        Subject: {subject}
+                                        Teacher: {teacher}
+                                        Classroom: {classroom}
+
+                                        Please check your schedule for more information.
+                                        '''
+                                        Message.objects.create(sender=sender_profile, receiver=receiver, title=title, body=body)
+
+
                                     messages.success(request, 'Lesson edited successfully')
                                     return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
                                 else:
-                                    messages.error(request, 'Classroom is curently reserved for this date34.')
+                                    messages.error(request, 'Classroom is curently reserved for this date.')
                                     return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
                             else:
-                                    messages.error(request, 'Teacher is curently reserved for this date34.')
+                                    messages.error(request, 'Teacher is curently reserved for this date.')
                                     return redirect('view_schedule', class_id=class_name.id, week_offset=week_offset)
                     except:
                         messages.error(request, 'Occured an error while editing - please check data and try again.')

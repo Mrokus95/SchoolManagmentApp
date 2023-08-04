@@ -11,10 +11,10 @@ function updateTeacherOptions() {
         fetch('/schedule/get_teachers/' + selectedSubject + '/')
             .then(response => response.json())
             .then(data => {
-                data.forEach(teacherId => {
+                data.forEach(teacher => {
                     var option = document.createElement('option');
-                    option.value = teacherId;
-                    option.textContent = teacherId;
+                    option.value = teacher.id;
+                    option.textContent = teacher.name;
                     teacherField.appendChild(option);
                 });
                 teacherField.disabled = false;

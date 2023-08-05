@@ -41,7 +41,7 @@ class Grades(models.Model):
     date = models.DateField(auto_now_add=True)
     submited_by = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='subject_grades')
-    semestr = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='grades')
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='grades')
 
     def __str__(self):
         return f'Student: {self.student}, class: {self.student.class_unit} Grade: {self.grade}, lesson: {self.subject}, date: {self.date}'

@@ -13,27 +13,31 @@ def view_grades(request, semester=None):
 
 
     if not semester:
-        semester = 0
+            semester = Semester.objects.last()
     else:
-        semester = get_object_or_404(Semester, id=semester)
-        
-    try:
-        if request.user.profile.account_type == 'Teacher':
-            # class_id = ClassUnit.objects.last()
-            pass
-        elif request.user.profile.account_type == 'Student':
-            student = get_object_or_404(Student, user=request.user.profile)
-            grades = {subject: Grades.objects.filter(student=student, subject=subject) for subject in Subject.objects.all()}
-        elif request.user.profile.account_type == 'Parent':
-            # parent_profile = request.user.profile.parent
-            # student = Student.objects.filter(parent=parent_profile).first()
-            # if student:
-            #     class_id = student.class_unit
-            pass
-        else:
-            class_id = ClassUnit.objects.last()
-    except AttributeError:
+        try:
+            semester = get_object_or_404(Semester, id=semester)
+        except:
+            semester = Semester.objects.last()
+
+    if request.user.profile.account_type == 'Teacher':
+        # class_id = ClassUnit.objects.last()
+        pass
+
+    elif request.user.profile.account_type == 'Student':
+
+        student = get_object_or_404(Student, user=request.user.profile)
+        grades = {subject: Grades.objects.filter(student=student, subject=subject, semester= semester) for subject in Subject.objects.all()}
+
+    elif request.user.profile.account_type == 'Parent':
+        # parent_profile = request.user.profile.parent
+        # student = Student.objects.filter(parent=parent_profile).first()
+        # if student:
+        #     class_id = student.class_unit
+        pass
+    else:
         class_id = ClassUnit.objects.last()
+
 
     
     if request.method == 'GET':        

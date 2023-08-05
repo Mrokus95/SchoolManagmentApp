@@ -4,7 +4,6 @@
   padding: 0;
   font-family: "Poppins", sans-serif;
   text-decoration: none;
-  overflow-y: hidden;
 }
 
 body {
@@ -255,14 +254,16 @@ nav .nav-list li:not(:last-child) a:hover {
   border: 2px solid #103a15;
   border-radius: 2rem;
   padding: 1rem;
-  background-color: #186428;
+  background-color: rgba(118, 135, 152, 0.464);
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  border: #21824a 3px solid;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  border: 0.15rem solid #000000;
 }
 
+
+
 .card-events:hover {
-  background-color: #2d8b40;
+  background-color: #212529;
 }
 
 .card-divider {
@@ -272,25 +273,28 @@ nav .nav-list li:not(:last-child) a:hover {
 }
 
 .card-one {
-	border: 2px solid #103a15;
 	border-radius: 2rem;
 	padding: 1rem;
-
-	background-color: #186428;
-	box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  background-color: rgba(118, 135, 152, 0.464);
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  border: #21824a 3px solid;
 }
 
 .card-chose-child {
 	border: 2px solid #103a15;
 	border-radius: 2rem;
 	padding: 1rem;
-	background-color: #186428;
-	box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+	border: 0.15rem solid #000000;
+	margin: 0.5rem;
 	transition: background-color 0.3s ease, transform 0.3s ease;
+  background-color: rgba(118, 135, 152, 0.464);
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  border: #21824a 3px solid;
 }
 
 .card-chose-child:hover {
-	background-color: #2d8b40;
+	background-color: #212529;
 }
 
 .exclamation {
@@ -339,18 +343,26 @@ nav .nav-list li:not(:last-child) a:hover {
 /* filtring */
 
 .filter-button {
-	height: 1.8rem;
-	width: 10rem;
-	cursor: pointer;
-	background-color: #07491b;
-	color: #fff;
-	border-radius: 2rem;
-	text-align: center;
-	margin-top: 0.5rem;
-	border: 0.15rem solid #000000;
+  font-size: 18px;
+  display: inline-block;
+  background: transparent;
+  border: 2px solid #2ecc71;
+  padding: 9px 28px;
+  border-radius: 30px;
+  line-height: 1.3;
+  color: #2ecc71;
+  font-weight: 500;
+
 }
+
+
 .filter-button:hover {
-	background-color: #08852d;
+  background: #2ecc71;
+  color: #fff;
+  border: 2px solid transparent;
+  transition: 0.4s;
+  cursor: pointer;
+  
 }
 
 .filter-window {
@@ -370,10 +382,10 @@ nav .nav-list li:not(:last-child) a:hover {
 	justify-content: center;
 	align-items: center;
 	height: 100%;
-	background-color: #07491b;
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  border: #21824a 3px solid;
+	background-color: #212529;
 	border-radius: 2rem;
-	box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-	border: 0.15rem solid #000000;
 }
 
 .filter-close {
@@ -540,12 +552,19 @@ tr.email-list:hover {
 }
 /* delete post */
 .delete-post-window {
-	background-color: #07491b;
-	border: 0.15rem solid #000000;
-	border-radius: 2rem;
+  border-radius: 2rem;
 	padding: 2rem;
 	width: 15rem;
 	text-align: center;
+  background-color: rgba(118, 135, 152, 0.464) !important;
+  border: #21824a 3px sol !important;
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5) !important;
+}
+
+.ddeleter{
+  background-color: rgba(118, 135, 152, 0.464);
+  border: #21824a 3px sol;
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
 }
 .dialog-message {
 	margin-bottom: 20px;
@@ -721,10 +740,8 @@ tr.email-list:hover {
   padding: 1rem;
   background-color: #186428;
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
-  border: 0.15rem solid #000000;
   margin: 0.5rem;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  border: 0.15rem solid #000000;
   flex-wrap: wrap;
 }
 
@@ -742,16 +759,16 @@ tr.email-list:hover {
 	height: auto;
 	width: auto;
 	max-width: 100%;
-	border: 2px solid #103a15;
 	border-radius: 2rem;
 	padding: 1rem;
-	background-color: #186428;
-	box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
-	border: 0.15rem solid #000000;
-	margin: 0.5rem;
-	transition: background-color 0.3s ease, transform 0.3s ease;
-	border: 0.15rem solid #000000;
+  background-color: rgba(118, 135, 152, 0.464);
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  border: 0.15rem solid #000000;
+  margin: 0.5rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  border: #21824a 3px solid;
   }
+
 
 .report-box-detail{
 	position: relative;
@@ -766,6 +783,22 @@ tr.email-list:hover {
   border: 2px solid #103a15;
 	border-radius: 2rem;
 	padding: 1rem;
+  background-color: rgba(118, 135, 152, 0.464);
+  border: #21824a 3px sol !important;
+  box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+	margin: 0.5rem;
+	transition: background-color 0.3s ease, transform 0.3s ease;
+	
+}
+
+.card-gray {
+  background-color: rgba(118, 135, 152, 0.464);
+  border: #21824a 3px solid;
+}
+
+.card-dark {
+  border: #21824a 3px solid;
+  background-color: #212529;
 }
 
 .form-field {
@@ -946,3 +979,8 @@ table.schedule thead {
   text-decoration: none;
   color: white;
 }
+
+.apply-border{
+  margin: 1rem;
+}
+

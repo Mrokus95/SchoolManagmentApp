@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-
 <div class="example">           
     <div class="report-box-detail">
         <div class="report-card-detail text-white">
@@ -23,10 +22,8 @@
  
         </div>
     </div>
- 
-       
+
     <!-- eventes connected to raport -->
-    
     <div class="report-events-display text-white d-flex justify-content-around">
         {% for event in connected_events %}
         <div class="report-events ">
@@ -43,5 +40,7 @@
         </div>
         {% endfor %}
     </div>
+
+    
 </div> 
 {% endblock content %}

@@ -41,11 +41,11 @@
     
     <div class="report-events-display text-white d-flex justify-content-around">
         {% for event in connected_events %}
-        <div class="report-events ">
+        <div class="report-card-detail" style="border: #21824a 3px sol">
             <h5 class="card-title text-center mb-3">{{event.event_type}}</h5>
             <h6 class="card-title text-center mb-3">Realisation: {{event.realisation_time}} </h6>
             <div class="mb-2 mt-2 card-divider"></div>
-            {{event.description}}
+            <div>{{event.description}}</div>
             {% if requested %}
             <a href="{% url 'teacher_event_detail' event.id %}">
                 <i class="fa-solid fa-backward back-button-image" style="color: #023602;"></i>

@@ -105,10 +105,11 @@ def from_event_to_raport(request, eventId):
     curret_profile = Profile.objects.get(user=request.user)
     account_type = curret_profile.account_type
 
-    if account_type == "Teacher":        
+    if account_type == "Teacher":      
         return report_detail(request, reportId, True)
         
     else:
+    
         current_report = LessonReport.objects.get(id=reportId)
         connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
         context={
@@ -142,7 +143,7 @@ def lesson_delivery_start(request):
             lesson_description = 'Initial Description',
         )
         lesson_report = lesson_report[0]
-        messages.success(request, "Lesson created!")
+        messages.success(request, "Lesson chosen!")
         return redirect('lesson_class_initiation', lesson_report.id)
 
     else:
@@ -170,6 +171,7 @@ def lesson_class_initiation(request, lesson_report_id):
                 student=participant.id,
                 is_present__in=[True, False]
                 ).exists():
+
                 attendance_object = Attendance.objects.create(
                     lesson_report = current_lesson_report,
                     student = participant,
@@ -263,7 +265,7 @@ def edit_attendance(request, current_lesson_report_id):
 
     if request.method == 'POST':
         for student in students:
-            participant = Attendance.objects.get(student=student.id)
+            participant = Attendance.objects.get(student=student.id, lesson_report=current_lesson_report)
             participant.is_present = request.POST.get(str(student.id), False) == 'True'
             participant.save()                           
         messages.success(request, "Attendance updated!")

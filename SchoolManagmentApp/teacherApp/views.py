@@ -288,7 +288,7 @@ def grades_teacher(request, current_lesson_report_id):
     
     students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
 
-    current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}
+    # current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}
 
     # longest_grade_list = sorted([len(grades) for student, grades in current_lesson_grades.items() if grades])[-1]
 
@@ -296,6 +296,6 @@ def grades_teacher(request, current_lesson_report_id):
     context={
         'current_lesson_report': current_lesson_report,
         'students': students,
-        'current_lesson_grades': current_lesson_grades,
+        # 'current_lesson_grades': current_lesson_grades,
     }
     return render(request, 'grades_submition.html', context)

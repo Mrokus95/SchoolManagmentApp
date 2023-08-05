@@ -81,7 +81,6 @@ class Attendance(models.Model):
     lesson_report = models.ForeignKey(LessonReport, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     is_present = models.BooleanField(default=False)
-    # date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.student} - {self.lesson_report.create_date} - {self.lesson_report.subject}:  {'Present' if self.is_present else 'Absent'}"

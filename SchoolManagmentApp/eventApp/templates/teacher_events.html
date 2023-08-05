@@ -15,8 +15,9 @@
                     {% csrf_token %}
                     <label for="subject" class="text-white">Subject:</label>
                     <select name="subject" id="subject" class="">
-                        <option value="empty">Empty</option>
+                        <option value="all">All</option>
                         <option value="Mathematic">Mathematic</option>
+                        <option value="English">English</option>
                         <option value="History">History</option>
                         <option value="Biology">Biology</option>
                         <option value="Physics">Physics</option>
@@ -27,7 +28,7 @@
                 <div class="form-field">
                     <label for="event_type" class="text-white">Event Type:</label>
                     <select name="event_type" id="event_type" class="">
-                        <option value="empty">Empty</option>
+                        <option value="all">All</option>
                         <option value="Other">Other</option>
                         <option value="Small Test">Small Test</option>
                         <option value="Test">Test</option>
@@ -36,11 +37,11 @@
                     </select>
                 </div>
                 <div class="form-field">
-                    <label for="start_date" class="text-white">Start Date:</label>
+                    <label for="start_date" class="text-white">Start Date(current semester):</label>
                     <input type="date" name="start_date" class="">
                 </div>
                 <div class="form-field" typ="date">
-                    <label for="end_date" class="text-white">End Date:</label>
+                    <label for="end_date" class="text-white">End Date(current semester):</label>
                     <input type="date" name="end_date" class="">
                 </div>
                 <button type="submit" class="login-nav-btn apply-border">Apply</button>

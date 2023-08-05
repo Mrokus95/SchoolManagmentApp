@@ -733,16 +733,17 @@ tr.email-list:hover {
 }
 
 .report-card {
-  height: auto;
-  max-width: 100%;
-  border: 2px solid #103a15;
-  border-radius: 2rem;
-  padding: 1rem;
-  background-color: #186428;
+	height: auto;
+	width: auto;
+	max-width: 100%;
+	border-radius: 2rem;
+	padding: 1rem;
+  background-color: rgba(118, 135, 152, 0.464);
   box-shadow: 3px 3px 4px rgba(10, 13, 42, 1.5);
+  border: 0.15rem solid #000000;
   margin: 0.5rem;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  flex-wrap: wrap;
+  border: #21824a 3px solid;
 }
 
 .report-text{
@@ -751,7 +752,7 @@ tr.email-list:hover {
 }
 
 .report-card:hover{
-	background-color: #2d8b40;
+	background-color: #212529;
 }
 
 

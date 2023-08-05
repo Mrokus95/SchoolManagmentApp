@@ -14,15 +14,15 @@
                 {% csrf_token %}
                 <div class="form-field">
 
-                    <label for="subject">Subject:</label>
-                    <select name="{{ filter_form.subject.name }}" class="filter-form-control">
+                    <label for="subject" class="text-white">Subject:</label>
+                    <select name="{{ filter_form.subject.name }}" class="">
                         {% for choice_value, choice_label in subject_choices %}
                             <option value="{{ choice_value }}">{{ choice_label }}</option>
                         {% endfor %}
                     </select>
 
-                <label for="class_unit">Class unit:</label>
-                <select name="{{filter_form.class_unit.name}}" class="filter-form-control" >
+                <label for="class_unit" class="text-white">Class unit:</label>
+                <select name="{{filter_form.class_unit.name}}" class="" >
                         {% for choice_value, choice_label in class_choices %}
                  <option value="{{ choice_value }}">{{ choice_label }}</option> 
                  {% endfor %}      
@@ -31,10 +31,10 @@
                 </div>
 
                 <div class="form-field">
-                    <label for="start_date">Select date: </label>
-                    <input type="date" name="start_date" class="filter-form-control">
+                    <label for="start_date" class="text-white">Select date: </label>
+                    <input type="date" name="start_date" class="">
                 </div>
-                <button type="submit" class="apply-button">Apply</button>
+                <button type="submit" class="login-nav-btn apply-border">Apply</button>
             </form>
         </div>
     </div>
@@ -55,11 +55,11 @@
 
     <div class="report-box">
         {% for report in pages %}
-        <div class="report-card">
-            <a class="text-decoration-none text-white" href="{% url 'report_detail' report.id %}">
+        <a class="text-decoration-none text-white" href="{% url 'report_detail' report.id %}">
+                <div class="report-card">
                 <div class="report-text">{{ report }} </div>
+            </div>
             </a>
-        </div>
         {% endfor %}
     </div>
 </div>

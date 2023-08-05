@@ -18,6 +18,7 @@
             </div>
         </div>
         <div class="card-divider"></div>
+        
         <div class="filter-content mt-2">
             <form method="post">
                 {% csrf_token %}
@@ -25,10 +26,10 @@
                 <div class="m-3">{{ edit_form.description }}</div>
                 <div class="mb-3"> Event type: {{ edit_form.event_type }}</div>
 
-                <div class="mb-3"> Realisation Date: {{ edit.realisation_time }}</div>
+                <div class="mb-3"> Realisation Date: {{ edit_form.realisation_time }}</div>
 
                 <div class="text-center">
-                    <button class="apply-button" type="submit">Edit Event</button>
+                    <button class="filter-button apply-border" type="submit">Edit Event</button>
                 </div>
             </form>
         </div>

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="report-box-detail">
-    <div class="report-card-detail text-white">
+<div class="report-box-detail ">
+    <div class="report-card-detail text-white card-gray">
 
         <div class="report-text">
             <h3>Welcome {{ user.first_name }} {{ user.last_name }}!</h3>
         </div>
         <div class="mt-2 card-divider"></div>
-        <div class="filter-content mt-2">
+        <div class="filter-content mt-2 card-dark">
             <form method="post" class="form-inline">
                 {% csrf_token %}
 
@@ -30,7 +30,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <button class="apply-button" type="submit">Apply</button>
+                    <button class="login-nav-btn apply-border" type="submit">Apply</button>
                 </div>
             </form>
         </div>

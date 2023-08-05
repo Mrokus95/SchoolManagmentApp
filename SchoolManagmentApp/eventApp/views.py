@@ -52,7 +52,7 @@ def student_events(request):
     current_class = current_student.class_unit
     
     if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
-        events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
+        events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('-add_time')
         event_status_changer(events)
         filter_form = EventFilterStudentForm()
 
@@ -133,7 +133,7 @@ def parent_events_viewing(request, kid_id):
     current_class = kid_profile.class_unit
 
     if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
-        events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('realisation_time')
+        events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('-add_time')
         event_status_changer(events)  
         filter_form = EventFilterStudentForm()
 

@@ -37,13 +37,14 @@ def reports_student_filter(request, queryset):
         condition_letter_mark = class_condition[1]
         queryset = queryset.filter(class_unit__study_year=condition_year)
         queryset = queryset.filter(class_unit__letter_mark=condition_letter_mark)
+
     return queryset
 
 def teacher_app_teacher(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
     if LessonReport.objects.filter(teacher=current_teacher.id).exists():
-        current_reports = LessonReport.objects.filter(teacher=current_teacher.id).order_by('create_date')
+        current_reports = LessonReport.objects.filter(teacher=current_teacher.id).order_by('-create_date')
         subject_choices =[('All', 'All')] + [(subject.name, subject.name) for subject in Subject.objects.all()]
 
         class_choices = [('All', 'All')] + [(str(unit.study_year) + unit.letter_mark, str(unit.study_year) + unit.letter_mark) for unit in ClassUnit.objects.all()]
@@ -71,6 +72,7 @@ def teacher_app_teacher(request):
 def report_detail(request, reportId, requested=False):
     current_report = LessonReport.objects.get(id=reportId)
     connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
+   
     if requested:
         
         context={
@@ -81,6 +83,7 @@ def report_detail(request, reportId, requested=False):
         return render(request, 'report_detail.html', context)
 
     else:
+        
         context={
             'current_report': current_report,
             'connected_events': connected_events,
@@ -103,16 +106,18 @@ def from_event_to_raport(request, eventId):
     curret_profile = Profile.objects.get(user=request.user)
     account_type = curret_profile.account_type
 
-    if account_type == "Teacher":        
+    if account_type == "Teacher":      
         return report_detail(request, reportId, True)
         
     else:
+        print('przed igfem')
         current_report = LessonReport.objects.get(id=reportId)
         connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
         context={
-            'connected_evens': connected_events,
+            'connected_events': connected_events,
             'current_report': current_report,
         }
+        print('jestem pred contextem', connected_events)
         return render(request, 'pure_report.html', context)      
 
 @teacher_required
@@ -140,7 +145,7 @@ def lesson_delivery_start(request):
             lesson_description = 'Initial Description',
         )
         lesson_report = lesson_report[0]
-        messages.success(request, "Lesson created!")
+        messages.success(request, "Lesson chosen!")
         return redirect('lesson_class_initiation', lesson_report.id)
 
     else:
@@ -168,6 +173,7 @@ def lesson_class_initiation(request, lesson_report_id):
                 student=participant.id,
                 is_present__in=[True, False]
                 ).exists():
+
                 attendance_object = Attendance.objects.create(
                     lesson_report = current_lesson_report,
                     student = participant,
@@ -261,7 +267,7 @@ def edit_attendance(request, current_lesson_report_id):
 
     if request.method == 'POST':
         for student in students:
-            participant = Attendance.objects.get(student=student.id)
+            participant = Attendance.objects.get(student=student.id, lesson_report=current_lesson_report)
             participant.is_present = request.POST.get(str(student.id), False) == 'True'
             participant.save()                           
         messages.success(request, "Attendance updated!")
@@ -279,17 +285,14 @@ def grades_teacher(request, current_lesson_report_id):
     current_lesson_report= LessonReport.objects.get(id=current_lesson_report_id)
 
     grades = Grades.objects.filter(subject=current_lesson_report.subject)
-
+    
     students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
 
     current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}
 
-    longest_grade_list = sorted([len(grades) for student, grades in current_lesson_grades.items() if grades])[-1]
-
-    print(longest_grade_list)
+    # longest_grade_list = sorted([len(grades) for student, grades in current_lesson_grades.items() if grades])[-1]
 
 
-  
     context={
         'current_lesson_report': current_lesson_report,
         'students': students,

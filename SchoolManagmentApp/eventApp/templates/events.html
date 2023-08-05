@@ -26,8 +26,8 @@
                             {% csrf_token %}
 
 
-                            <label for="subject">Subject:</label>
-                            <select name="subject" id="subject" class="filter-form-control">
+                            <label for="subject" class="text-white">Subject:</label>
+                            <select name="subject" id="subject" class="">
                                 <option value="empty">Empty</option>
                                 <option value="Mathematic">Mathematic</option>
                                 <option value="History">History</option>
@@ -40,8 +40,8 @@
                             
                         </div>
                         <div class="form-field">
-                            <label for="event_type">Event Type:</label>
-                            <select name="event_type" id="event_type" class="filter-form-control">
+                            <label for="event_type" class="text-white">Event Type:</label>
+                            <select name="event_type" id="event_type" class=>
                                 <option value="empty">Empty</option>
                                 <option value="Other">Other</option>
                                 <option value="Small Test">Small Test</option>
@@ -51,14 +51,14 @@
                             </select>
                         </div>
                         <div class="form-field">
-                            <label for="start_date">Start Date:</label>
-                            <input type="date" name="start_date" class="filter-form-control">
+                            <label for="start_date" class="text-white">Start Date:</label>
+                            <input type="date" name="start_date" class="">
                         </div>
                         <div class="form-field" typ="date">
-                            <label for="end_date">End Date:</label>
-                            <input type="date" name="end_date" class="filter-form-control">
+                            <label for="end_date class="text-white"">End Date:</label>
+                            <input type="date" name="end_date" class="">
                         </div>
-                        <button type="submit" class="apply-button">Apply</button>
+                        <button type="submit" class="login-nav-btn apply-border">Apply</button>
                     </form>
                 </div>
             </div>
@@ -105,7 +105,7 @@
             <!-- pagination -->
             {% if pages.paginator.num_pages > 1 %}
                 <nav aria-label="..." >
-                    <ul class="pagination d-flex justify-content-center">
+                    <ul class="pagination d-flex justify-content-center mb-0">
                         {% if pages.has_previous %}
                             <li class="">
                                 <a class="page-link" href="?page={{ pages.previous_page_number }}">Prevoius</a>
@@ -129,6 +129,8 @@
                 </nav>
             {% endif %}
     {% else %}
+
+    <!-- child chose -->
         <div class="container">
             <div class="row">
                 <div class="col-md-12 text-center">
@@ -139,9 +141,10 @@
             </div>
         </div>
         {% for kid in parent_kids %}
-            <a href="{% url 'filter_events_student_parent' kid.id %}" class="text-decoration-none text-white">
+            
                 <div class="row pt-4 justify-content-center mt-4 ">
                     <div class="col-md-4 mb-4">
+                        <a href="{% url 'filter_events_student_parent' kid.id %}" class="text-decoration-none text-white">
                         <div class="card-one card-chose-child">
                             <div class="text-center text-white">
                                 <h4 class="my-3" editable="inline">{{kid}}</h4>

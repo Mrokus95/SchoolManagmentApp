@@ -2,10 +2,11 @@ from django.shortcuts import render, redirect, reverse
 from usersApp.models import Profile, Student
 from eventApp.forms import AddEvent
 from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance, Teacher
-from gradesApp.models import Grades
+from gradesApp.models import Grades, Semester
+from gradesApp.forms import GradesForm
 from django.contrib import messages
 from eventApp.views import event_paginator, student_events
-from .forms import LessonRportFilter, ClassSubjectChoiceForm, AttendanceForm, LessonReportText
+from .forms import LessonRportFilter, ClassSubjectChoiceForm, LessonReportText
 from usersApp.models import ClassUnit
 from datetime import date
 
@@ -20,6 +21,20 @@ def teacher_required(func):
             return redirect('home')         
         return func(request, *args, **kwargs)  
     return _wrapped_func
+
+def current_semestr():
+    if Semester.objects.all().order_by('-start_date').exists():
+        current_semester = Semester.objects.all().order_by('-start_date').first()
+    else: 
+        current_semester = Semester(
+            number=1,
+            start_school_year=2023,
+            start_date=date(2023, 1, 1),
+            end_date=date(2023, 12,31))
+        
+    return current_semester    
+
+    
 
 def reports_student_filter(request, queryset):
     subject_condition = request.POST.get('subject')
@@ -183,10 +198,8 @@ def lesson_class_initiation(request, lesson_report_id):
         return redirect('lesson_conducting', current_lesson_report.id)
         
     else:
-        form = AttendanceForm()
         context={
             'students': students,
-            'form': form,
             'current_class': current_class
             }
         return render(request, 'lesson_class_initiation.html', context)
@@ -280,22 +293,54 @@ def edit_attendance(request, current_lesson_report_id):
                 }
         return render(request, 'edit_attendance.html', context )
 
-
+@teacher_required
 def grades_teacher(request, current_lesson_report_id):
     current_lesson_report= LessonReport.objects.get(id=current_lesson_report_id)
-
-    grades = Grades.objects.filter(subject=current_lesson_report.subject)
-    
+    subject=current_lesson_report.subject
+    current_teacher=Teacher.objects.get(user=request.user.profile)
     students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
 
-    # current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}
+    if request.method == 'POST':
 
-    # longest_grade_list = sorted([len(grades) for student, grades in current_lesson_grades.items() if grades])[-1]
+        for student in students:            
+            grade = request.POST.get(str(student.id))
+            print(grade)
+            if grade != 'None':
+                description = request.POST.get(str(student.user.id))
+                if description:
+                    grade_to_create = Grades.objects.create(
+                        student=student,
+                        grade=grade,
+                        grade_description=description,
+                        connected_to_lesson=current_lesson_report,
+                        submited_by=current_teacher,
+                        subject=subject,
+                        semester=current_semestr()
+                        )
+                                        
+                else:
+                    messages.error(request, "Description required!")
+                    return redirect('grades_teacher',current_lesson_report_id)
+                    
+        messages.success(request, "Grades sumbited!")
+        return redirect('lesson_conducting', current_lesson_report_id)
 
-
-    context={
-        'current_lesson_report': current_lesson_report,
-        'students': students,
-        # 'current_lesson_grades': current_lesson_grades,
-    }
-    return render(request, 'grades_submition.html', context)
+    else:
+        grades = Grades.objects.filter(subject=current_lesson_report.subject)
+        current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}
+        grade_options=[
+            ('None', 'None'),
+            (1, 1),
+            (2, 2),
+            (3, 3),
+            (4, 4),
+            (5, 5),
+            (6, 6)
+        ] 
+        context={
+            'current_lesson_report': current_lesson_report,
+            'students': students,
+            'current_lesson_grades': current_lesson_grades,
+            'grade_options': grade_options,
+        }
+        return render(request, 'grades_submition.html', context)

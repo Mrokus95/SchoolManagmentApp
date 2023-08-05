@@ -1,5 +1,5 @@
 from django import forms
-from eventApp.models import Attendance, LessonReport
+from eventApp.models import LessonReport
 
 class LessonRportFilter(forms.Form):
 
@@ -11,11 +11,6 @@ class ClassSubjectChoiceForm(forms.Form):
 
     class_unit = forms.ChoiceField()    
     subject = forms.ChoiceField()    
-
-
-class AttendanceForm(forms.Form):
-    
-    fields = forms.BooleanField()
 
 class LessonReportText(forms.ModelForm):
     class Meta:

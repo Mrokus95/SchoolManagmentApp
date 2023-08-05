@@ -6,8 +6,20 @@ from datetime import date
 
 class EventFilterStudentForm(forms.Form):
 
-    current_semester = Semester.objects.all().order_by('-start_date').first()
-    print(current_semester)
+   
+    try:
+        current_semester = Semester.objects.all().order_by('-start_date').first()
+        if not current_semester:
+            current_semester = Semester(
+                number=1,
+                start_school_year=2023,
+                start_date=date(2023, 1, 1),
+                end_date=date(2023, 12,31)
+                )
+    except: 
+        ValueError('No registred semester yet')
+
+  
     subject = forms.ChoiceField()
     event_type = forms.ChoiceField()
     start_date = forms.DateField(

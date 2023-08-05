@@ -10,24 +10,51 @@
         </div>
         <div class="mt-2 card-divider"></div>
         <div class="filter-content mt-2">
-            <table class="table text-white">
-                <tbody>
-                    
-                    {% for student, grades in current_lesson_grades.items %}
+            <table class="table text-white m-2">
+                <thead>
                     <tr>
-                        <td class="text-white"> <a href="" class="text-decoration-none">{{ student }}</a></td>
+                        
+                        <th><p class="text-muted">Student</p></th>
+                        <th><p class="text-muted">Grades</p></th>
+                        <th><p class="text-muted">Choose Grade</p></th>
+                        <th><p class="text-muted">Grade Description(required)</p></th>
+                   
+                    </tr>
+                </thead>
+                <tbody>
+                    <form method="post">
+                        {% csrf_token %}
+                    {% for student, grades in current_lesson_grades.items %}
+                    
+                    <tr>
+                        <td class="text-white"> {{ student }}</td></a>
                         <td class="">
                             {% for grade in grades %}
                             <span class="text-white grade">{{ grade }}</span>
+                            
                             {% endfor %}
+                        </td>
+
+                        <td class="inputes-grades">
+                    <select name="{{student.id}}">
+                    {% for choice_value, choice_label in grade_options %}
+                    <option value="{{ choice_value }}" class="text-dark">{{ choice_label }}</option>
+                    {% endfor %}
+                    </select>
+                        </td>
+                        <td>
+                    <input type="text" name="{{student.user.id}}">
                         </td>
                     </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+ 
+                    </tbody>
+                </table>
+                <button class="login-nav-btn mb-2" type="submit">Submit</button>  
+            </form>
         </div>
         <a class="container-fluid" href="{% url 'lesson_conducting' current_lesson_report.id %}">
-            <i class="fa-solid fa-backward back-button-image mt-2" style="color: #023602;"></i>
+            <i class="fa-solid fa-backward back-button-image mt-3" style="color: #023602;"></i>
         </a>
     </div>
 </div>

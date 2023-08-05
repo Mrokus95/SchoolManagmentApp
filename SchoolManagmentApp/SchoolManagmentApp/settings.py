@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'messagesApp',
     'calendarApp',
     'teacherApp',
+    'gradesApp'
 ]
 
 MIDDLEWARE = [

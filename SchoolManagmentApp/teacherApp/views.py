@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, reverse
 from usersApp.models import Profile, Student
 from eventApp.forms import AddEvent
 from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance, Teacher
-from . models import Grades
+from gradesApp.models import Grades
 from django.contrib import messages
 from eventApp.views import event_paginator, student_events
 from .forms import LessonRportFilter, ClassSubjectChoiceForm, AttendanceForm, LessonReportText
@@ -12,8 +12,6 @@ from datetime import date
 
 
 # Create your views here.
-
-
 
 def teacher_required(func):
     def _wrapped_func(request, *args, **kwargs):

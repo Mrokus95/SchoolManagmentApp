@@ -287,7 +287,7 @@ def grades_teacher(request, current_lesson_report_id):
     current_lesson_report= LessonReport.objects.get(id=current_lesson_report_id)
 
     grades = Grades.objects.filter(subject=current_lesson_report.subject)
-
+    
     students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
 
     current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}

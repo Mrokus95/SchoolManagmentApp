@@ -25,5 +25,7 @@ urlpatterns = [
 
     # grades
     path('grades_teacher/<int:current_lesson_report_id>', views.grades_teacher, name='grades_teacher'),
+    
+    path('edit_student_grades/<int:student_id>/<int:current_lesson_report_id>/', views.edit_student_grades, name='edit_student_grades')
 
 ]

@@ -13,47 +13,53 @@
             <table class="table text-white m-2">
                 <thead>
                     <tr>
-                        
-                        <th><p class="text-muted">Student</p></th>
-                        <th><p class="text-muted">Grades</p></th>
-                        <th><p class="text-muted">Choose Grade</p></th>
-                        <th><p class="text-muted">Grade Description(required)</p></th>
-                   
+                        <th>
+                            <p class="text-muted">Student</p>
+                        </th>
+                        <th>
+                            <p class="text-muted"></p>
+                        </th>
+                        <th>
+                            <p class="text-muted">Grades</p>
+                        </th>
+                        <th>
+                            <p class="text-muted">Choose Grade</p>
+                        </th>
+                        <th>
+                            <p class="text-muted">Grade Description(required)</p>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <form method="post">
                         {% csrf_token %}
-                    {% for student, grades in current_lesson_grades.items %}
-                    
-                    <tr>
-                        <td class="text-white"> {{ student }}</td></a>
-                        <td class="">
-                            {% for grade in grades %}
-                            <span class="text-white grade">{{ grade }}</span>
-                            
-                            {% endfor %}
-                        </td>
-
-                        <td class="inputes-grades">
-                    <select name="{{student.id}}">
-                    {% for choice_value, choice_label in grade_options %}
-                    <option value="{{ choice_value }}" class="text-dark">{{ choice_label }}</option>
-                    {% endfor %}
-                    </select>
-                        </td>
-                        <td>
-                    <input type="text" name="{{student.user.id}}">
-                        </td>
-                    </tr>
-                    {% endfor %}
- 
-                    </tbody>
-                </table>
-                <button class="login-nav-btn mb-2" type="submit">Submit</button>  
-            </form>
+                        {% for student, grades in current_lesson_grades.items %}
+                        <tr>
+                            <td class="text-white"> {{ student }}</td>
+                            <td><a href="{% url 'edit_student_grades' student.id current_lesson_report_id %}"><button class="login-nav-btn edit-grades-intable" type="button">Edit</button></a></td>
+                            <td class="">
+                                {% for grade in grades %}
+                                <span class="text-white grade">{{ grade }}</span>
+                                {% endfor %}
+                            </td>
+                            <td class="inputes-grades">
+                                <select name="{{student.id}}">
+                                    {% for choice_value, choice_label in grade_options %}
+                                    <option value="{{ choice_value }}" class="text-dark">{{ choice_label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" name="{{student.user.id}}">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </form>
+                </tbody>
+            </table>
+            <button class="login-nav-btn mb-2" type="submit">Submit</button>
         </div>
-        <a class="container-fluid" href="{% url 'lesson_conducting' current_lesson_report.id %}">
+        <a class="container-fluid" href="{% url 'lesson_conducting' current_lesson_report_id %}">
             <i class="fa-solid fa-backward back-button-image mt-3" style="color: #023602;"></i>
         </a>
     </div>

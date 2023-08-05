@@ -320,8 +320,7 @@ def grades_teacher(request, current_lesson_report_id):
                                         
                 else:
                     messages.error(request, "Description required!")
-                    return redirect('grades_teacher',current_lesson_report_id)
-                    
+                    return redirect('grades_teacher',current_lesson_report_id)                    
         messages.success(request, "Grades sumbited!")
         return redirect('lesson_conducting', current_lesson_report_id)
 
@@ -338,9 +337,17 @@ def grades_teacher(request, current_lesson_report_id):
             (6, 6)
         ] 
         context={
-            'current_lesson_report': current_lesson_report,
+            'current_lesson_report_id': current_lesson_report_id,
             'students': students,
             'current_lesson_grades': current_lesson_grades,
             'grade_options': grade_options,
         }
         return render(request, 'grades_submition.html', context)
+
+
+@teacher_required   
+def edit_student_grades(request, student_id, current_lesson_report_id):
+    print(student_id, current_lesson_report_id)
+
+    context = {}
+    return render(request, 'edit_student_grades.html')

@@ -17,10 +17,10 @@ def events_student_filter(request, queryset):
     start_date_condition=request.POST.get('start_date')
     end_date_condition=request.POST.get('end_date')
 
-    if subject_condition != 'empty':
+    if subject_condition != 'all':
         queryset = queryset.filter(subject__name=subject_condition)
          
-    if type_condition != 'empty':
+    if type_condition != 'all':
         queryset = queryset.filter(event_type=type_condition)
        
     if start_date_condition:

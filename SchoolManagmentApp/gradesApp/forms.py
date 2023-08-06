@@ -1,8 +1,14 @@
 from django import forms
 from .models import Grades
 
-class GradesForm(forms.Form):
+class GradesForm(forms.modelForm):
+    class Meta:
+        model = Grades
 
-    grade = forms.ChoiceField()
-    grade_description = forms.CharField(max_length=250)
+        fields = {
+            'grade',
+            'grade_sdiscriptions',
+        }
+
+
  

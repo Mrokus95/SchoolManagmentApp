@@ -12,6 +12,7 @@ class ClassSubjectChoiceForm(forms.Form):
     class_unit = forms.ChoiceField()    
     subject = forms.ChoiceField()    
 
+
 class LessonReportText(forms.ModelForm):
     class Meta:
        model = LessonReport

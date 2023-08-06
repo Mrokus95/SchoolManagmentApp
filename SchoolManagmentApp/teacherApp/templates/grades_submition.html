@@ -5,7 +5,7 @@
     <div class="report-card-detail text-white">
         <div class="report-text">
             <div>
-                <h3>Grades of {{ current_lesson_report.class_unit }}, {{ current_lesson_report.subject }}</h3>
+                <h3>Grades of {{ class_unit }} - {{subject}} </h3>
             </div>
         </div>
         <div class="mt-2 card-divider"></div>
@@ -43,26 +43,26 @@
                                 {% endfor %}
                             </td>
                             <td class="inputes-grades">
+
                                 <select name="{{student.id}}">
                                     {% for choice_value, choice_label in grade_options %}
                                     <option value="{{ choice_value }}" class="text-dark">{{ choice_label }}</option>
                                     {% endfor %}
                                 </select>
+                                
                             </td>
                             <td>
                                 <input type="text" name="{{student.user.id}}">
                             </td>
                         </tr>
                         {% endfor %}
-                    </form>
-                </tbody>
-            </table>
-            <button class="login-nav-btn mb-2" type="submit">Submit</button>
+                    </tbody>
+                </table>
+                <button class="login-nav-btn mb-2" type="submit">Submit</button>
+            </form>
         </div>
-        <a class="container-fluid" href="{% url 'lesson_conducting' current_lesson_report_id %}">
-            <i class="fa-solid fa-backward back-button-image mt-3" style="color: #023602;"></i>
-        </a>
-    </div>
+            <a class="container-fluid" href="{% url 'lesson_conducting' current_lesson_report_id %}">
+                <i class="fa-solid fa-backward back-button-image mt-3" style="color: #023602;"></i>
 </div>
 
 

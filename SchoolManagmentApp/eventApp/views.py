@@ -55,7 +55,6 @@ def student_events(request):
         events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('-add_time')
         event_status_changer(events)
         filter_form = EventFilterStudentForm()
-
         if request.method == 'GET':
             pages = event_paginator(request, events, 6)
             context = {

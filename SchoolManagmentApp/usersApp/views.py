@@ -29,6 +29,7 @@ class HomeView(View):
     def get(self, request):
         form = AuthenticationForm()
         next_url = request.GET.get('next', '')
+
         context = {'form': form, 'next': next_url}
         return render(request, self.template_name, context)
 

@@ -3,7 +3,7 @@ from usersApp.models import Profile, Student
 from eventApp.forms import AddEvent
 from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance, Teacher
 from gradesApp.models import Grades, Semester
-from gradesApp.forms import GradesForm
+# from gradesApp.forms import GradesForm
 from django.contrib import messages
 from eventApp.views import event_paginator, student_events
 from .forms import LessonRportFilter, ClassSubjectChoiceForm, LessonReportText
@@ -299,15 +299,16 @@ def grades_teacher(request, current_lesson_report_id):
     subject=current_lesson_report.subject
     current_teacher=Teacher.objects.get(user=request.user.profile)
     students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
-
+    class_unit=current_lesson_report.class_unit
+    any_grade=False
     if request.method == 'POST':
-
+       
         for student in students:            
             grade = request.POST.get(str(student.id))
-            print(grade)
             if grade != 'None':
+                any_grade = True
                 description = request.POST.get(str(student.user.id))
-                if description:
+                if 3 < len(description) < 250:
                     grade_to_create = Grades.objects.create(
                         student=student,
                         grade=grade,
@@ -319,10 +320,12 @@ def grades_teacher(request, current_lesson_report_id):
                         )
                                         
                 else:
-                    messages.error(request, "Description required!")
-                    return redirect('grades_teacher',current_lesson_report_id)                    
-        messages.success(request, "Grades sumbited!")
-        return redirect('lesson_conducting', current_lesson_report_id)
+                    messages.error(request, "Description required 3-250 signs!")                 
+                messages.success(request, "Grade sumbited!")
+                
+        if not any_grade:
+            messages.error(request, "Any grade required! No changes Submited!")                 
+        return redirect('grades_teacher', current_lesson_report_id)
 
     else:
         grades = Grades.objects.filter(subject=current_lesson_report.subject)
@@ -341,13 +344,51 @@ def grades_teacher(request, current_lesson_report_id):
             'students': students,
             'current_lesson_grades': current_lesson_grades,
             'grade_options': grade_options,
+            'class_unit': class_unit,
+            'subject': subject,
         }
         return render(request, 'grades_submition.html', context)
 
 
 @teacher_required   
 def edit_student_grades(request, student_id, current_lesson_report_id):
-    print(student_id, current_lesson_report_id)
+    current_lesson = LessonReport.objects.get(id=current_lesson_report_id)
+    student_grades = Grades.objects.filter(student=student_id, subject=current_lesson.subject)
+    current_student = Student.objects.get(id=student_id)
 
-    context = {}
-    return render(request, 'edit_student_grades.html')
+    if request.method == 'POST':
+        for raw in student_grades:
+            if request.POST.get(str(raw.id), False) == 'True':
+                raw.delete()
+                messages.success(request, 'One grade deleted!')
+            else:
+                changed_description = request.POST.get(f"description_{raw.id}")
+
+                if 3 < len(changed_description) < 250:   
+                    raw.grade_description = changed_description
+                    changed_grade = request.POST.get(f"grade_{raw.id}")
+                    raw.grade = changed_grade
+                    raw.save() 
+
+                else:
+                    messages.error(request, "Description required 3-250 signs!")
+                    redirect ('grades_teacher', current_lesson_report_id)
+        messages.success(request, "Grades sucesfully changed")
+        return redirect ('grades_teacher', current_lesson_report_id)
+    
+    else:
+        grade_options=[
+                (1, 1),
+                (2, 2),
+                (3, 3),
+                (4, 4),
+                (5, 5),
+                (6, 6)
+            ]
+        context = {
+            'student_grades': student_grades,
+            'current_student': current_student,
+            'grade_options': grade_options,
+            'current_lesson_report_id': current_lesson_report_id,
+                    }    
+        return render(request, 'edit_student_grades.html', context)

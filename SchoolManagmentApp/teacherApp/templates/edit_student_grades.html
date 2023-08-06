@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="report-box-detail">
+    <div class="report-card-detail text-white">
+        <div class="report-text">          
+            {{ student }}               
+        </div>
+        <div class="mt-2 card-divider"></div>
+        <div class="filter-content mt-2">
+            <form method="post" class="m-2">
+                    {% csrf_token %}
+                    <table class="table text-white">
+                            <thead>
+                                <tr>
+                                    <th><p class="text-muted">Grade</p></th>
+                                    <th class="px-4"><p class="text-muted m-2">Date</p></th>
+                                    <th><p class="text-muted">Description</p></th>
+                                    <th><p class="text-muted">Delete</p></th>
+                                    </tr>
+                            </thead>
+                            <tbody>
+                                {% for raw in student_grades %}
+                                <tr>
+                                    <!-- grades -->
+                                    <td>
+                                    <select name="grade_{{ raw.id }}">
+                                    
+                                    {% for choice_value, choice_label in grade_options %}
+
+                                    <option value="{{ choice_value }}" {% if choice_value == raw.grade %}selected{% endif %}>
+                                        {{ choice_label }}
+                                    </option>
+                                    
+                                    {% endfor %}
+                                    </select>
+                                </td>
+                                <!-- dates -->
+                                <td class="px-4">{{raw.date}}</td>
+                                
+                                <!-- descriptions -->
+                                  <td class="px-4"><input type="text" name="description_{{ raw.id }}" value="{{raw.grade_description}}"></td>
+                            <!-- to delete -->
+                                  <td><input type="checkbox" name="{{raw.id}}" value="True"></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+                    </table>
+                    <div class="d-flex justify-content-center">
+                    <button class="login-nav-btn apply-border" type="submit">Update</button></div>
+            </form>
+        </div>
+        <a class="container-fluid" href="{% url 'grades_teacher' current_lesson_report_id %}">
+            <i class="fa-solid fa-backward back-button-image mt-3" style="color: #023602;"></i>
+    </div>
+</div>
+
+{% endblock content%}

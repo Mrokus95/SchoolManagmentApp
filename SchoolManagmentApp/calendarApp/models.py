@@ -80,8 +80,6 @@ class TeacherReservation(models.Model):
     def __str__(self):
         return f"Reservation of {self.teacher} - Day: {self.get_day_of_week_display()} - Lesson {self.lesson_number}"
 
-
-
 class Lesson(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     day_of_week = models.IntegerField(choices=((1, 'Monday'), (2, 'Tuesday'), (3, 'Wednesday'), (4, 'Thursday'), (5, 'Friday')), default=1)

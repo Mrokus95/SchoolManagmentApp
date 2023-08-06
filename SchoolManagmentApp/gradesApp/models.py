@@ -47,4 +47,4 @@ class Grades(models.Model):
         return f'Student: {self.student}, class: {self.student.class_unit} Grade: {self.grade}, lesson: {self.subject}, date: {self.date}'
     
     class Meta:
-        ordering = ('-date',)
+        ordering = ('date',)

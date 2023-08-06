@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load plus_date %}
+{% block title%}
+    SchoolManagmentApp
+{% endblock title %}
+{% block content%}
+
+<section class="first-section mt-5">
+    <div class="container-fluid ">
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-md-9 col-lg-6 col-xl-7 empty-class">
+                <div class="text-center">
+                    <img src="{% static 'img/pencil.png' %}"
+                    class="img-fluid pics-height-transparent" alt="Sample image">
+                </div>
+            </div>
+            <div class="mt-5 col-12 col-md-8 col-lg-6 col-xl-5 d-flex justify-content-center align-items-center">
+                <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                    <di class="card-body p-5 text-center">
+                    <form method="POST">
+                        <div class=" mt-md-4 pb-5">
+
+                    <h2 class="fw-bold mb-2 text-uppercase mb-5">Choose class, semester and subject to see grades.</h2>
+
+
+                        {%for field in form %}
+                            {{field|add_class:"form-control form-control-md"}}
+                            {{field|add_label_class:"form-label"}}
+                        {%endfor%}
+
+                        {% csrf_token %}
+                        
+                        <div>
+                        <button class= "btn btn-outline-light btn-lg px-5 mt-3 mb-2" type="submit">See grades</button>
+                        </div>
+
+                        </div>           
+                        
+                    </form>
+                   
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

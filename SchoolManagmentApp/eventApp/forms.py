@@ -11,6 +11,9 @@ class EventFilterStudentForm(forms.Form):
     end_date = forms.DateField()
 
     
+    
+
+
 class AddEvent(forms.ModelForm):
     class Meta:
         model = CalendarEvents

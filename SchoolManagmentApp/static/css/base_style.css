@@ -829,6 +829,18 @@ tr.email-list:hover {
 	text-align: center;
 }
 
+.max-width-semester {
+	min-width: 265px;
+	width: 340px;
+	color: white;
+	text-align: center;
+}
+.max-width-semester select {
+  width: 240px;
+}
+
+
+
 table.schedule {
 	border-collapse: collapse;
 	overflow: hidden;
@@ -944,6 +956,12 @@ table.schedule thead {
 	margin: 0.5rem;
 	transition: background-color 0.3s ease, transform 0.3s ease;
 	border: 0.15rem solid #000000;
+}
+
+.pics-height-transparent{
+  height: 600px;
+  max-width: 25rem;
+	margin: 0.5rem;
 }
 
 .report-events-display{

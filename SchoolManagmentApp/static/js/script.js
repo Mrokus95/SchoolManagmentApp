@@ -9,7 +9,7 @@ hamburger.addEventListener('click', function(){
 
 
 var typed = new Typed(".input", {
-    strings:["Szkołą Prywatną.", "Wsparciem Ucznia.", "Przyjaciółmi Rodziców.", "5 LO w Zabrzu!"],
+    strings:["Private School.", "Student Support.", "Parents' Friends."],
     typeSpeed: 70,
     backSpeed: 60,
     loop: true,

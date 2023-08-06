@@ -51,9 +51,10 @@
 							<span></span>
 						</div>
 						<ul class="nav-list">
-							
+							{% if user.profile.account_type == user.profile.TEACHER %}
 							<li><a href="{% url 'teacher_reports' %}">Your Reports</a></li>
 							<li><a href="{% url 'lesson_delivery_start' %}">Start Lesson</a></li>
+							{% endif %}
 							
 							<li><a href="{%url 'view_schedule'%}">Schedule</a></li>
 							<li><a href="{%url 'events'%}">Events</a></li>

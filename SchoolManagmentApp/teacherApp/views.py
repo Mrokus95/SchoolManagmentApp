@@ -55,6 +55,7 @@ def reports_student_filter(request, queryset):
 
     return queryset
 
+@teacher_required   
 def teacher_app_teacher(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
@@ -319,9 +320,10 @@ def grades_teacher(request, current_lesson_report_id):
                         semester=current_semestr()
                         )
                                         
+                    messages.success(request, "Grade sumbited!")
+
                 else:
                     messages.error(request, "Description required 3-250 signs!")                 
-                messages.success(request, "Grade sumbited!")
                 
         if not any_grade:
             messages.error(request, "Any grade required! No changes Submited!")                 

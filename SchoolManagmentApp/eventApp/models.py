@@ -12,7 +12,6 @@ class Subject(models.Model):
     CHEMISTRY = "Chemistry"
     PHILOSOPHY = "Philosophy"
 
-
     SUBJECT_CHOICES = [
     (MATHEMATIC, "Mathematic"),
     (ENGLISH, "English"),

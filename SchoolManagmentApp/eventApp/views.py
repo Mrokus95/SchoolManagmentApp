@@ -13,14 +13,15 @@ from datetime import date
 def events_student_filter(request, queryset):
 
     subject_condition = request.POST.get('subject')
+    print(subject_condition)
     type_condition = request.POST.get('event_type')
     start_date_condition=request.POST.get('start_date')
     end_date_condition=request.POST.get('end_date')
 
-    if subject_condition != 'all':
+    if subject_condition != 'All':
         queryset = queryset.filter(subject__name=subject_condition)
-         
-    if type_condition != 'all':
+  
+    if type_condition != 'All':
         queryset = queryset.filter(event_type=type_condition)
        
     if start_date_condition:
@@ -92,7 +93,7 @@ def teacher_events(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
     if CalendarEvents.objects.filter(author=current_teacher).exists():
-        events = CalendarEvents.objects.filter(author=current_teacher)
+        events = CalendarEvents.objects.filter(author=current_teacher).order_by('-add_time')
         filter_form = EventFilterStudentForm()
 
         if request.method == 'GET':
@@ -189,17 +190,21 @@ def parent_events(request, kid_profile=None):
     return parent_events_viewing(request, kid_profile) 
 
 def show_events(request):
-    current_profile = Profile.objects.get(user=request.user)
-    account_type = current_profile.account_type
-
-    if account_type == Profile.STUDENT:
-        return student_events(request)
+    if not request.user.is_staff:
+        current_profile = Profile.objects.get(user=request.user)
+        account_type = current_profile.account_type
+    
+        if account_type == Profile.STUDENT:
+            return student_events(request)
        
-    elif account_type == Profile.PARENT:
-        return parent_events(request)
+        elif account_type == Profile.PARENT:
+            return parent_events(request)
+    
+        elif account_type == Profile.TEACHER:
+            return teacher_events(request)
 
     else:
-        return teacher_events(request)
+        return redirect ('index')
 
 def event_detail(request, eventId):
     if CalendarEvents.objects.filter(id=eventId).exists():
@@ -266,6 +271,7 @@ def edit_event(request, eventId):
         if edited_form.is_valid():
             edited_form.save()
             edited_event.visited = False
+            edited_event.connected_to_lesson=connected_to_lesson
             edited_event.save()
             messages.success(request, "Event changed!")
             return redirect ('teacher_events')

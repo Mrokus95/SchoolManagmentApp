@@ -420,3 +420,6 @@ span {
 	}
 }
 
+.text-size-box{
+	min-width: 100rem;
+}

@@ -45,35 +45,31 @@
 						</div>
 						<ul class="nav-list">
 							{% if user.is_authenticated %}
-								<li><a href="{%url 'events'%}">Events</a></li>
-								<li><a href="{%url 'inbox'%}">Messages</a></li>
+
 								<li><a href="{% url 'update_user_profile'%}"><img class='avatar-pic' src="{{ user.profile.photo.url }}" alt=""></a></li>
 								<li><a href="{% url 'logout' %}"><button id="login-nav" class="login-nav-btn" >Logout</button></a></li>
 							{% else %}
-								<li><a href="#">About project</a></li>
 								<li><a href="#">Authors</a></li>
 								<li><a href=""><button id="login-nav-btn" class="login-nav-btn">Login</button></a></li>
 							{%endif%}
 						</ul>
 					</nav>
 				</header>
-				<div class="container">
+				<div class="container text-size-box">
 					<div class="hero-text">
-						<h3>Witamy!</h3>
-						<h1>Jesteśmy <span class="input"></span></h1>
+						<h1>Welcome!</h1>
+						
+						<h1>We are <span class="input"></span></h1>
 						<p>
-							Od 70 lat kształcimy przyszłych naukowców,lekarzy, architektów,
-							prawników i artystów. <br />
+							For 70 years, we have been educating future scientists, doctors, architects, lawyers, and artists. <br />
 
-							Od 40 lat jesteśmy Szkołą Stowarzyszoną UNESCO.<br />
+							OFor 40 years, we have been a UNESCO Associated School.<br />
 
-							Organizujemy międzynarodowe wyjazdy i przedsięwzięcia -
-							odwiedziliśmy już niemal całą Europę, byliśmy także w Tajlandii i
-							w Japonii.<br />
+							We organize international trips and initiatives - we have already visited almost the entire Europe, and we have also been to Thailand and Japan.<br />
 
-							Rozwijamy talenty naukowe, sportowe i artystyczne!<br />
+							We nurture scientific, sports, and artistic talents! <br />
 
-							Stawiamy na naukę!
+							We prioritize education!
 						</p>
 						<div class="social">
 							<a href="https://www.facebook.com/2lozabrze/" target="_blank"

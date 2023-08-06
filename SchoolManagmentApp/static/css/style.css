@@ -7,6 +7,7 @@
 	overflow-y: hidden;
 }
 
+
 body {
 	overflow-x: hidden;
 }
@@ -130,11 +131,17 @@ nav .nav-list li:not(:last-child) a:hover {
 	padding-left: 10%;
 	padding-right: 10%;
 }
-.container .login-form,
+
 .container .hero-text {
 	margin-bottom: 40px;
+	margin-right: 20px;
 	overflow-y: hidden;
 	max-width: 50%;
+	min-width: 615px;
+}
+.container .login-form{
+margin-bottom: 40px;
+overflow-y: hidden;
 }
 
 .container .hero-text h1 {
@@ -298,7 +305,7 @@ span {
 	flex-direction: column;
 	align-items: center;
 	transition: opacity 0.7s;
-}
+} 
 
 .login-form * {
 	font-family: "Poppins", sans-serif;
@@ -420,6 +427,24 @@ span {
 	}
 }
 
-.text-size-box{
-	min-width: 100rem;
+
+
+
+
+
+@media screen and (max-width: 1410px) {
+	.container {
+		padding-top: 20%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-left: 10%;
+		padding-right: 10%;
+		flex-direction: column;
+	}
+	.hero-text{
+		display: none;
+	}
 }
+
+

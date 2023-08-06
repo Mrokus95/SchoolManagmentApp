@@ -7,6 +7,7 @@ handler403 = permission_denied
 urlpatterns = [
     # Home and Login&Logout
     path('home/', views.HomeView.as_view(), name="home"),
+    path('home/authors', views.AuthorsView.as_view(), name="authors"),
     path('account/logout/', views.LogoutView.as_view(template_name='index.html'), name='logout'),
 
 

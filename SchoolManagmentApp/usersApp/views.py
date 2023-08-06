@@ -22,11 +22,21 @@ from django.core.exceptions import PermissionDenied
 def staff_check(user):
     return user.is_authenticated and user.is_staff
 
+class AuthorsView(View):
+    template_name = 'authors.html'
+    
+    def get(self, request):
+        return render(request, self.template_name)
 
 class HomeView(View):
     template_name = 'index.html'
 
     def get(self, request):
+
+        
+        if request.user.is_authenticated:
+            return redirect('view_schedule')
+
         form = AuthenticationForm()
         next_url = request.GET.get('next', '')
 

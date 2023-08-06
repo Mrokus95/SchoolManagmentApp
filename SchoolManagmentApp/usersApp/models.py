@@ -7,10 +7,12 @@ class Profile(models.Model):
     TEACHER = "Teacher"
     PARENT = "Parent"
     STUDENT = "Student"
+    ADMIN = "Admin"
     TYPE_ACCOUNT_CHOICES = [
         (TEACHER, "Teacher"),
         (PARENT, "Parent"),
         (STUDENT, "Student"),
+        (ADMIN, "Admin"),
     ]
     
     user = models.OneToOneField(User, on_delete=models.CASCADE)

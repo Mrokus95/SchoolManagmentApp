@@ -1007,3 +1007,87 @@ table.schedule thead {
   font-size: 0.8rem;
   margin: 0.1 rem;
 }
+
+
+/* Authors */
+
+.cards {
+
+  width: 100%;
+  height: 80vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+  
+}
+.cards .card {
+  position: relative;
+  overflow: hidden;
+  margin: 25px;
+  width: 30vh;
+  height: 45vh;
+  text-align: center;
+  background-position: center;
+  background-size: cover;
+  border-radius: 15px;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+.cards .one {
+  background-image: url("../img/Lukasz.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  background-position-y: top 32px;
+}
+.cards .two {
+  background-image: url("../img/Mateusz.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.cards button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 140%;
+  text-shadow: 2px 2px 5px rgb(0, 0, 0);
+  cursor: pointer;
+  z-index: 3;
+}
+.cards .text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15% 5%;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  -webkit-clip-path: circle(0% at 89% 6%);
+          clip-path: circle(0% at 89% 6%);
+  transition: -webkit-clip-path 1.1s;
+  transition: clip-path 1.1s;
+  transition: clip-path 1.1s, -webkit-clip-path 1.1s;
+}
+.cards h1 {
+  color: rgb(182, 179, 97);
+}
+.cards h2 {
+  margin-bottom: 20px;
+  color: rgb(141, 138, 138);
+}
+/* .cards button:hover ~ .text {
+  -webkit-clip-path: circle(133% at 89% 6%);
+          clip-path: circle(133% at 89% 6%);
+} */
+
+.cards .text.visible {
+  clip-path: circle(133% at 89% 6%);
+}

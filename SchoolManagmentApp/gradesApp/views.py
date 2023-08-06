@@ -3,14 +3,15 @@ from django.contrib import messages
 from .forms import GradesForm
 from .models import Grades, Semester
 from usersApp.models import Student, ClassUnit, Parent
-from eventApp.models import Teacher, Subject
+from eventApp.models import  Subject
 from django.shortcuts import get_object_or_404
 from gradesApp.forms import SemesterForm, GradesForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-from teacherApp.views import teacher_required
+from .decorators.auth_decorators import teacher_and_staff_only
 from django.views.decorators.cache import cache_page
 # Create your views here.
+
 
 @login_required
 def view_grades(request, semester=None):
@@ -85,7 +86,7 @@ def view_grades(request, semester=None):
 
         
 @login_required
-@teacher_required
+@teacher_and_staff_only
 @cache_page(60 * 15)
 def view_grades_teacher(request):
 
@@ -107,7 +108,7 @@ def view_grades_teacher(request):
 
 
 @login_required
-@teacher_required
+@teacher_and_staff_only
 @cache_page(60 * 15)
 def view_grades_teacher_final(request, semester, class_unit, subject):
         

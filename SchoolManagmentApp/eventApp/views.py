@@ -204,7 +204,7 @@ def show_events(request):
             return teacher_events(request)
 
     else:
-        return redirect ('index')
+        return redirect ('home')
 
 def event_detail(request, eventId):
     if CalendarEvents.objects.filter(id=eventId).exists():

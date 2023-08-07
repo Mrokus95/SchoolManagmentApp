@@ -39,7 +39,7 @@ class Grades(models.Model):
     grade_description = models.CharField(max_length=250)
     connected_to_lesson = models.ForeignKey(LessonReport, on_delete=models.CASCADE, related_name='connected_to_lesson')
     date = models.DateField(auto_now_add=True)
-    submited_by = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    submitted_by = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='subject_grades')
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name='grades')
 

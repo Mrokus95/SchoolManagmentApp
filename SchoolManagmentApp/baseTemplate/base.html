@@ -58,6 +58,14 @@
 							<li><a href="{% url 'teacher_reports' %}">Your Reports</a></li>
 							<li><a href="{% url 'lesson_delivery_start' %}">Start Lesson</a></li>
 							{% endif %}
+							
+							{% if user.profile.account_type == "Admin" %}
+							<li><a href="{%url 'register_student'%}">Register student</a></li>
+							<li><a href="{%url 'register_parent'%}">Register parent</a></li>
+							<li><a href="{%url 'register_teacher'%}">Register teacher</a></li>
+							{%endif%}
+
+
 
 							{% if user.profile.account_type == "Teacher" or user.profile.account_type == "Admin" %}
 							<li><a href="{%url 'view_grades_teacher'%}">Grades</a></li>

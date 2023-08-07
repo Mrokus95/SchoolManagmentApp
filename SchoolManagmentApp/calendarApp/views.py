@@ -76,11 +76,21 @@ def get_lessons_for_day(lessons, day_of_week_no, lesson_date):
 @login_required
 def view_schedule(request, class_id=None, week_offset=None):
 
-    if not week_offset:
+    if not week_offset :
             week_offset = 0
             date = datetime.now().date()
+
     else:
         week_offset = int(week_offset)
+        if week_offset < -8 :
+            messages.error(request, 'Too far away. 8 weeks in past is maximum offset.')
+            week_offset = -8
+        elif week_offset > 8:
+            messages.error(request, 'Too far away. 8 weeks in future is maximum offset.')
+            week_offset = 8
+        else:
+            pass
+
         if week_offset > 0:
             date = datetime.now().date() + timedelta(weeks=week_offset)
         elif week_offset < 0:

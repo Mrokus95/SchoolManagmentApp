@@ -134,7 +134,6 @@ def view_grades_teacher_final(request, semester, class_unit, subject):
             if max_length > scope:
                 scope = max_length
 
-        print(kids_grades)
         form = GradesForm()
         context = {
             'class_unit': class_unit_obj,

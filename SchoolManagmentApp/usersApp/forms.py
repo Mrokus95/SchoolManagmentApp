@@ -1,10 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
 from eventApp.models import Subject, Teacher
-from django.core.validators import validate_email
 from .models import Student, Parent, ClassUnit, Profile
 import re
-from django.contrib.auth import get_user_model
+
 
 
 class RegistrationForm(forms.ModelForm):

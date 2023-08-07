@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'teacherApp',
     'gradesApp',
     'debug_toolbar',
+    'coverage',
 ]
 
 MIDDLEWARE = [

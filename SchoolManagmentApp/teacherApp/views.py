@@ -9,18 +9,12 @@ from eventApp.views import event_paginator, student_events
 from .forms import LessonRportFilter, ClassSubjectChoiceForm, LessonReportText
 from usersApp.models import ClassUnit
 from datetime import date
-
+from teacherApp.decorators.teacher_decorators import teacher_required
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
 
-def teacher_required(func):
-    def _wrapped_func(request, *args, **kwargs):
-        if request.user.profile.account_type != 'Teacher':
-            messages.error(request, "Only for teachers!")
-            return redirect('home')         
-        return func(request, *args, **kwargs)  
-    return _wrapped_func
 
 def current_semestr():
     if Semester.objects.all().order_by('-start_date').exists():
@@ -35,7 +29,6 @@ def current_semestr():
     return current_semester    
 
     
-
 def reports_student_filter(request, queryset):
     subject_condition = request.POST.get('subject')
     start_date_condition = request.POST.get('start_date')
@@ -84,7 +77,8 @@ def teacher_app_teacher(request):
     else:
         messages.error(request, "You have no reports")
         return render(request, 'teacher_app')
-
+    
+@login_required
 def report_detail(request, reportId, requested=False):
     current_report = LessonReport.objects.get(id=reportId)
     connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
@@ -106,6 +100,7 @@ def report_detail(request, reportId, requested=False):
          }
         return render(request, 'report_detail.html', context)
 
+@login_required
 def teacher_app_start(request):
     current_profile = Profile.objects.get(user=request.user)
     account_type = current_profile.account_type
@@ -116,6 +111,7 @@ def teacher_app_start(request):
     else:
         return student_events(request)
 
+@login_required
 def from_event_to_raport(request, eventId):
     event = CalendarEvents.objects.get(id=eventId)
     reportId = event.connected_to_lesson.id
@@ -315,7 +311,7 @@ def grades_teacher(request, current_lesson_report_id):
                         grade=grade,
                         grade_description=description,
                         connected_to_lesson=current_lesson_report,
-                        submited_by=current_teacher,
+                        submitted_by=current_teacher,
                         subject=subject,
                         semester=current_semestr()
                         )
@@ -326,7 +322,7 @@ def grades_teacher(request, current_lesson_report_id):
                     messages.error(request, "Description required 3-250 signs!")                 
                 
         if not any_grade:
-            messages.error(request, "Any grade required! No changes Submited!")                 
+            messages.error(request, "Any grade required! No changes Submitted!")                 
         return redirect('grades_teacher', current_lesson_report_id)
 
     else:

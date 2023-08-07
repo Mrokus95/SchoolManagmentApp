@@ -4,11 +4,13 @@ from django.core.paginator import Paginator
 from eventApp.models import CalendarEvents, Teacher
 from eventApp.forms import EventFilterStudentForm, AddEvent
 from usersApp.models import Profile, Student, Parent
-
+from django.contrib.auth.decorators import login_required
+from teacherApp.decorators.teacher_decorators import teacher_required
 
 from datetime import date
 
 # Create your views here.
+
 
 def events_student_filter(request, queryset):
 
@@ -47,8 +49,8 @@ def event_paginator(request, events_to_paginate, events_per_site):
 def date_filter_validation(request):
     return request.POST.get('start_date') > request.POST.get('end_date')
 
+@login_required
 def student_events(request):
-
     current_student = Student.objects.get(user=request.user.profile)
     current_class = current_student.class_unit
     
@@ -89,6 +91,7 @@ def student_events(request):
         messages.error(request, 'No events!')
         return render(request, 'events.html')
 
+@login_required
 def teacher_events(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
@@ -127,6 +130,7 @@ def teacher_events(request):
         messages.error(request, 'No events!')
         return render(request, 'events.html')
 
+@login_required
 def parent_events_viewing(request, kid_id):
 
     kid_profile = Student.objects.get(id=kid_id)
@@ -175,6 +179,7 @@ def parent_events_viewing(request, kid_id):
         messages.error(request, 'No events!')
         return render(request, 'events.html')   
 
+@login_required
 def parent_events(request, kid_profile=None):
     current_parent = Parent.objects.get(user=request.user.profile)
 
@@ -189,6 +194,7 @@ def parent_events(request, kid_profile=None):
             
     return parent_events_viewing(request, kid_profile) 
 
+@login_required
 def show_events(request):
     if not request.user.is_staff:
         current_profile = Profile.objects.get(user=request.user)
@@ -206,6 +212,7 @@ def show_events(request):
     else:
         return redirect ('home')
 
+@login_required
 def event_detail(request, eventId):
     if CalendarEvents.objects.filter(id=eventId).exists():
         event = CalendarEvents.objects.get(id=eventId)
@@ -216,7 +223,8 @@ def event_detail(request, eventId):
         messages.error(
         request, 'Event cannot be viewd, please contact the author!')
         return redirect('events')
-    
+
+@login_required    
 def teacher_event_detail(request, eventId):
     curret_profile = Profile.objects.get(user=request.user)
     current_teacher = Teacher.objects.get(user=request.user.profile)
@@ -242,7 +250,7 @@ def teacher_event_detail(request, eventId):
             messages.error(
             request, 'Event cannot be viewd, please contact the author!')
             return redirect('events')
-        
+@teacher_required     
 def delete_event(request, eventId):
 
     if CalendarEvents.objects.get(id=eventId):
@@ -254,7 +262,8 @@ def delete_event(request, eventId):
     else:
         messages.error(request, 'Problem with deleting!')
         return redirect('teacher_events')
-    
+
+@teacher_required    
 def edit_event(request, eventId):
     edited_event = CalendarEvents.objects.get(id=eventId)
     connected_to_lesson = edited_event.connected_to_lesson

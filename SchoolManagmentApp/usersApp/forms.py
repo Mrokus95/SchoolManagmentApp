@@ -63,7 +63,8 @@ class TeacherRegistrationForm(forms.ModelForm):
     name = forms.ModelMultipleChoiceField(
                         queryset=Subject.objects.all().order_by('name'),
                         label="Subjects",
-                        widget=forms.CheckboxSelectMultiple)
+                        widget=forms.CheckboxSelectMultiple,
+                        error_messages={'invalid_choice': 'Some selected subjects are not valid.'})
 
     class Meta:
         model = Teacher
@@ -76,15 +77,22 @@ class TeacherRegistrationForm(forms.ModelForm):
         if selected_subjects:
             available_subjects = Subject.objects.filter(pk__in=[subject.pk for subject in selected_subjects])
             if len(selected_subjects) != len(available_subjects):
-                raise forms.ValidationError("Some selected subjects are not valid.")
-
+                self.add_error('name', "invalid_choice")
         return cleaned_data
 
 
 
 class StudentRegistrationForm(forms.ModelForm):
-    class_unit = forms.ModelChoiceField(queryset=ClassUnit.objects.all(), label='Class:')
-    parent = forms.ModelChoiceField(queryset=Parent.objects.all(), label='Parent:')
+    class_unit = forms.ModelChoiceField(
+        queryset=ClassUnit.objects.all(),
+        label='Class:',
+        error_messages={'invalid_choice': "Class does not exist."}
+    )
+    parent = forms.ModelChoiceField(
+        queryset=Parent.objects.all(),
+        label='Parent:',
+        error_messages={'invalid_choice': "Parent does not exist."}
+    )
 
     class Meta:
         model = Student
@@ -120,10 +128,9 @@ class UserEditForm(forms.ModelForm):
         if email:
             regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
             if not re.fullmatch(regex, email):
-                self.add_error('email', "Invalid email address.")
+                self.add_error('email', "Enter a valid email address.")
             
         return cleaned_data
-
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
@@ -134,11 +141,10 @@ class ProfileEditForm(forms.ModelForm):
         cleaned_data = super().clean()
         phone_number = cleaned_data.get('phone_number')
 
-            # Check if phone number has 9 digits and all signs are digits
         if phone_number and len(phone_number) != 9:
-            raise forms.ValidationError("Phone number has to be 9 digits.")
+            self.add_error('phone_number', "Phone number has to be 9 digits.")
             
         if phone_number and not phone_number.isdigit():
-            raise forms.ValidationError("Phone number can only contain digits.")
+            self.add_error('phone_number', "Phone number can only contain digits.")
             
         return cleaned_data

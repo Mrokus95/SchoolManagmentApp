@@ -57,7 +57,6 @@ class TeacherTestCase(TestCase):
     def test_teacher_related_names(self):
        self.assertEqual(self.teacher, self.profile.teacher_student)
        self.assertIn(self.teacher, self.lesson_type_english.subject_teachers.all())
-
     
     def test_limit_choices(self):
         invalid_user = User.objects.create_user(username='invalid_user', password='test_password')
@@ -73,9 +72,7 @@ class TeacherTestCase(TestCase):
     def test_delete_subject(self):
         self.teacher.lesson_type.clear()
         self.assertTrue(Teacher.objects.filter(id=self.teacher.id).exists())
-
-
-     
+    
     def test_delete_teacher(self):
         teacher_id = self.teacher.id
         self.teacher.delete()
@@ -199,14 +196,12 @@ class CalendarEventsTestCase(TestCase):
         self.create_time = timezone.now()
 
         #report data:
-
         self.teacher.lesson_type.add(self.subject)
         self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
         self.lesson_title = 'Simple Title'
         self.lesson_discription = 'Simple Description'
 
         #create report
-
         self.report = LessonReport.objects.create(
             subject=self.subject,
             teacher=self.teacher,
@@ -215,7 +210,6 @@ class CalendarEventsTestCase(TestCase):
             lesson_description = self.lesson_discription
         )
         #create event
-
         self.event = CalendarEvents.objects.create(
             description=self.description,
             realisation_time=date.today(),
@@ -256,7 +250,6 @@ class CalendarEventsTestCase(TestCase):
         self.event.connected_to_lesson = None
         self.assertIsNone(self.event.connected_to_lesson)
 
-
     def test_delete_event(self):
         event_id = self.event.id
         self.event.delete()
@@ -287,7 +280,6 @@ class CalendarEventsTestCase(TestCase):
         self.event.author.delete()
         self.assertFalse(CalendarEvents.objects.filter(id=event_id).exists())
 
-
 class AttendanceTestCase(TestCase):
     def setUp(self):
         #data for objects
@@ -300,7 +292,7 @@ class AttendanceTestCase(TestCase):
         self.title = 'Simple Lesson Title'
         self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
         self.parent = Parent.objects.create(user=self.profile)
-        self.student = Student.objects.create(user=self.user, class_unit=self.class_unit, parent=self.parent)
+        self.student = Student.objects.create(user=self.profile, class_unit=self.class_unit, parent=self.parent)
         
         # lesson_raport
         self.report = LessonReport.objects.create(
@@ -312,7 +304,7 @@ class AttendanceTestCase(TestCase):
             )
         
         # attendance
-        self.attendance = Attendance.objects.create(less_report=self.report, student=self.student, is_present=True)
+        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
 
     def attendance_creation(self):
         self.assertEqual(self.attendance.lesson_report, self.report)
@@ -331,5 +323,28 @@ class AttendanceTestCase(TestCase):
         attendance_id = self.attendance.id
         self.attendance.delete()
         self.assertFalse(Attendance.objects.filter(id=attendance_id).exists())
+        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
+
+    def test_delete_attendance_lesson_report(self):
+        lesson_report_id = self.report.id
+        self.report.delete()
+        self.assertFalse(Attendance.objects.filter(lesson_report_id=lesson_report_id).exists())
+        self.report = LessonReport.objects.create(
+            subject=self.subject,
+            teacher=self.teacher,
+            class_unit=self.class_unit,
+            lesson_title = self.title,
+            lesson_description = self.description
+            )
+        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
+
+    def test_delete_student(self):
+        student_id = self.student.id
+        self.student.delete()
+        self.assertFalse(Attendance.objects.filter(student_id=student_id).exists())
+        self.student = Student.objects.create(user=self.profile, class_unit=self.class_unit, parent=self.parent)
+        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
+
+
 
 

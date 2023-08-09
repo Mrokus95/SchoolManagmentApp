@@ -33,12 +33,12 @@ class HomeView(View):
 
     def get(self, request):
 
-        
-        if request.user.is_authenticated:
-            return redirect('view_schedule')
 
         form = AuthenticationForm()
         next_url = request.GET.get('next', '')
+        
+        if request.user.is_authenticated:
+            return redirect('view_schedule')
 
         context = {'form': form, 'next': next_url}
         return render(request, self.template_name, context)

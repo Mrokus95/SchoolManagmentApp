@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
+from PIL import Image
 # Users
 
 class Profile(models.Model):
@@ -22,6 +24,31 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
+    
+    def validate_image(self, value):
+        img = Image.open(value)
+        if img.format not in ('JPEG','JPG','WEBP', 'PNG'):
+            raise ValidationError('Invalid image format')
+    
+    def clean(self):
+        super().clean()
+
+        if self.account_type not in [choice[0] for choice in self.TYPE_ACCOUNT_CHOICES]:
+            raise ValidationError({'account_type': 'Invalid account type'})
+        
+        if self.phone_number and len(self.phone_number) != 9:
+            raise ValidationError({'phone_number': 'Phone number has to contain 9 digits'})
+        
+        if self.phone_number and not self.phone_number.isdigit():
+            raise ValidationError({'phone_number': "Phone number can only contains digits."})
+        
+        if self.photo:
+            self.validate_image(self.photo)
+
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
         
     
 class ClassUnit(models.Model):
@@ -43,7 +70,7 @@ class ClassUnit(models.Model):
 
 
     def __str__(self):
-        return f' Class {self.study_year}{self.letter_mark}'
+        return f'Class {self.study_year}{self.letter_mark}'
    
 
 class Parent(models.Model):

@@ -57,7 +57,6 @@ class CalendarEvents(models.Model):
     PROJECT = 'Project'
 
     EVENT_TYPES=[
-    (OTHER,'Other'),
     (SMALL_TEST,'Small Test'),
     (TEST,'Test'),
     (ESSAY,'Essay'),

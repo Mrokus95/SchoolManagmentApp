@@ -5,8 +5,7 @@ from gradesApp.models import Semester
 from datetime import date
 
 class EventFilterStudentForm(forms.Form):
-
-   
+  
     try:
         current_semester = Semester.objects.all().order_by('-start_date').first()
         if not current_semester:

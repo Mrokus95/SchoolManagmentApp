@@ -11,7 +11,6 @@ from datetime import date
 
 # Create your views here.
 
-
 def events_student_filter(request, queryset):
 
     subject_condition = request.POST.get('subject')

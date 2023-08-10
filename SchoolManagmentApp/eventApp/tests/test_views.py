@@ -3,11 +3,11 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from usersApp.models import Profile, Student, ClassUnit, Parent
 from eventApp.models import CalendarEvents, LessonReport, Subject, Teacher
-from eventApp.views import events_student_filter
+from eventApp.views import events_student_filter, event_status_changer, date_filter_validation, event_paginator
 from django.utils import timezone
 from django.http import HttpRequest
 from datetime import timedelta, date
-
+from django.core.paginator import Paginator
 
 class EventsViewTest(TestCase):
 
@@ -83,23 +83,19 @@ class EventsViewTest(TestCase):
         url = reverse('filter_events_student')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed('events.html')
+        self.assertTemplateUsed(response, 'events.html')
 
     def test_event_url_filter_event_parent(self):
         self.client.force_login(self.user_parent)
         url = reverse('filter_events_student')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed('home.html')
-        self.assertTemplateUsed('events.html')
 
     def test_event_url_filter_event_teacher(self):
         self.client.force_login(self.user_teacher)
         url = reverse('filter_events_student')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed('home')
-        self.assertTemplateUsed('teacher_events')
    
     def test_event_url_filter_event_stuednt_parent_parent(self):
         test_id = self.student.id
@@ -107,7 +103,7 @@ class EventsViewTest(TestCase):
         url = reverse('filter_events_student_parent', args=[test_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed('events')
+        self.assertTemplateUsed(response, 'events.html')
 
     def test_event_url_filter_event_student_parent_student(self):
         test_id = self.student.id
@@ -115,7 +111,6 @@ class EventsViewTest(TestCase):
         url = reverse('filter_events_student_parent', args=[test_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed('events')
 
     def test_event_url_filter_event_student_parent_teacher(self):
         test_id = self.student.id
@@ -123,28 +118,27 @@ class EventsViewTest(TestCase):
         url = reverse('filter_events_student_parent', args=[test_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
-        self.assertTemplateUsed('home')
-        self.assertTemplateUsed('teacher_event')
 
     def test_event_url_teacher_events_teacher(self):
         self.client.force_login(self.user_teacher)
         url = reverse('teacher_events')
-        respoense = self.client.get(url)
-        self.assertEqual(respoense.status_code, 200)
-        self.assertTemplateUsed('teacher_event')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'teacher_events.html')
 
     def test_event_url_teacher_events_student(self):
         self.client.force_login(self.user_student)
         url = reverse('teacher_events')
-        respoense = self.client.get(url)
-        self.assertEqual(respoense.status_code, 302)
-  
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'teacher_events.html')
 
     def test_event_url_teacher_events_parent(self):
         self.client.force_login(self.user_parent)
         url = reverse('teacher_events')
-        respoense = self.client.get(url)
-        self.assertEqual(respoense.status_code, 302)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'teacher_events.html')
 
     #events_detail
     def test_event_detail_url_event_detail_student(self):
@@ -153,6 +147,7 @@ class EventsViewTest(TestCase):
         url = reverse('event_detail', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'event_detail.html')
 
     def test_event_detail_url_event_detail_parent(self):
         event_id = self.event.id
@@ -160,6 +155,7 @@ class EventsViewTest(TestCase):
         url = reverse('event_detail', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'event_detail.html')
 
     def test_event_detail_url_event_detail_teacher(self):
         event_id = self.event.id
@@ -167,6 +163,7 @@ class EventsViewTest(TestCase):
         url = reverse('event_detail', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'event_detail.html')
 
     def test_event_url_teacher_event_detail_teacher(self):
         event_id = self.event.id
@@ -174,6 +171,7 @@ class EventsViewTest(TestCase):
         url = reverse('teacher_event_detail', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'teacher_event_details.html')
 
     def test_event_url_teacher_event_detail_student(self):
         event_id = self.event.id
@@ -181,6 +179,7 @@ class EventsViewTest(TestCase):
         url = reverse('teacher_event_detail', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'teacher_events_detail.html')
 
     def test_event_url_teacher_event_detail_parent(self):
         event_id = self.event.id
@@ -188,6 +187,7 @@ class EventsViewTest(TestCase):
         url = reverse('teacher_event_detail', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'teacher_events_detail.html')
 
     #event_delete
     def test_event_url_delete_event_teacher(self):
@@ -203,6 +203,7 @@ class EventsViewTest(TestCase):
         url = reverse('delete_event', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'delete_event.html')
 
     def test_event_url_delete_event_student(self):
         event_id = self.event.id
@@ -210,15 +211,16 @@ class EventsViewTest(TestCase):
         url = reverse('delete_event', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'delete_event.html')
 
     #event edit
-
     def test_event_url_edit_event_student(self):
         event_id = self.event.id
         self.client.force_login(user=self.user_student)
         url = reverse('edit_event', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'edit_event.html')
 
     def test_event_url_edit_event_teacher(self):
         event_id = self.event.id
@@ -226,6 +228,7 @@ class EventsViewTest(TestCase):
         url = reverse('edit_event', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'edit_event.html')
 
     def test_event_url_edit_event_parent(self):
         event_id = self.event.id
@@ -233,4 +236,168 @@ class EventsViewTest(TestCase):
         url = reverse('edit_event', args=[event_id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
+        self.assertTemplateNotUsed(response, 'edit_event.html')
+
+class EventsFunctionTest(TestCase):
+    
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.profile_teacher = Profile.objects.create(user=self.user, account_type = Profile.TEACHER)
+        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
+        self.teacher = Teacher.objects.create(user=self.profile_teacher)
+
+        #lesson_report
+        self.subject = Subject.objects.create(name=Subject.ENGLISH)
+        self.subject_1 = Subject.objects.create(name=Subject.HISTORY)
+        self.subject_2 = Subject.objects.create(name=Subject.MATHEMATIC)
+        self.title = 'Test title'
+        self.description = 'Test description'
+
+        self.lesson_report = LessonReport.objects.create(
+            subject = self.subject,
+            teacher = self.teacher,
+            class_unit = self.class_unit,
+            lesson_title = self.title,
+            lesson_description = self.description
+        )
+
+        #calendar_event
+        self.event = CalendarEvents.objects.create(
+            description = self.description,
+            realisation_time = date.today(),
+            subject = self.subject,
+            author = self.teacher,
+            event_type = 'Test',
+            connected_to_lesson = self.lesson_report
+        )
+
+        self.event_1 = CalendarEvents.objects.create(
+            description = self.description,
+            realisation_time = date.today() + timedelta(days=2),
+            subject = self.subject_1,
+            author = self.teacher,
+            event_type = 'Small Test',
+            connected_to_lesson = self.lesson_report
+        )
+
+        self.event_2 = CalendarEvents.objects.create(
+            description = self.description,
+            realisation_time = date.today() + timedelta(days=4),
+            subject = self.subject_2,
+            author = self.teacher,
+            event_type = 'Project',
+            connected_to_lesson = self.lesson_report
+        )
+
+    def test_event_status_changer(self):
+        realisation_time = date.today() - timedelta(days=1)
+        self.event.realisation_time = realisation_time
+        event_status_changer([self.event])
+        self.assertEqual(self.event.finished, True)
+    
+    def test_invalid_date_validation(self):
+        request = HttpRequest()
+        request.POST['start_date'] = str(date.today())
+        request.POST['end_date'] = str(date.today() - timedelta(days=1))
+        self.assertEqual(date_filter_validation(request), True)
+
+    def test_valid_date_validation(self):
+        request = HttpRequest()
+        request.POST['start_date'] = str(date.today())
+        request.POST['end_date'] = str(date.today() + timedelta(days=1))
+        self.assertEqual(date_filter_validation(request), False)
+   
+    def test_event_paginator(self):
+        events_to_paginate=list(range(12)) 
+        events_per_site=3
+        request = HttpRequest()
+        request.GET['page'] = 4
+        result = event_paginator(request, events_to_paginate, events_per_site)
+        self.assertEqual(result.number, 4)
+        self.assertTrue(result.paginator.page(2).has_previous())
+        self.assertTrue(result.paginator.page(2).has_next())
+        
+
+    def test_event_filter_events_subject(self):
+        request = HttpRequest()
+        request.POST['subject'] = self.subject
+        request.POST['event_type'] = 'All'
+        request.POST['start_date'] = None
+        request.POST['end_date'] = None
+        queryset = CalendarEvents.objects.all()
+        queryset_after = events_student_filter(request, queryset)
+        self.assertEqual(len(queryset), 3)
+        self.assertEqual(len(queryset_after), 1)
+        self.assertEqual(queryset_after.first().subject, self.subject)
+
+    def test_event_filter_events_event_type(self):
+        request = HttpRequest()
+        request.POST['subject'] = 'All'
+        request.POST['event_type'] = 'Test'
+        request.POST['start_date'] = None
+        request.POST['end_date'] = None
+        queryset = CalendarEvents.objects.all()
+        queryset_after = events_student_filter(request, queryset)
+        self.assertEqual(len(queryset), 3)
+        self.assertEqual(len(queryset_after), 1)
+        self.assertEqual(queryset_after.first().event_type, 'Test')
+
+    def test_event_filter_events_start_date(self):
+        request = HttpRequest()
+        request.POST['subject'] = 'All'
+        request.POST['event_type'] = 'All'
+        request.POST['start_date'] = date.today() + timedelta(days=4)
+        request.POST['end_date'] = None
+        queryset = CalendarEvents.objects.all()
+        queryset_after = events_student_filter(request, queryset)
+        self.assertEqual(len(queryset), 3)
+        self.assertEqual(len(queryset_after), 1)
+        self.assertEqual(queryset_after.first().realisation_time, date.today() + timedelta(days=4))
+
+    def test_event_filter_events_end_date(self):
+        request = HttpRequest()
+        request.POST['subject'] = 'All'
+        request.POST['event_type'] = 'All'
+        request.POST['start_date'] = None
+        request.POST['end_date'] = date.today() + timedelta(days=1)
+        queryset = CalendarEvents.objects.all()
+        queryset_after = events_student_filter(request, queryset)
+        self.assertEqual(len(queryset), 3)
+        self.assertEqual(len(queryset_after), 1)
+        self.assertEqual(queryset_after.first().realisation_time, date.today())
+
+    def test_event_filter_events_Both_date(self):
+        request = HttpRequest()
+        request.POST['subject'] = self.subject
+        request.POST['event_type'] = 'All'
+        request.POST['start_date'] = date.today() - timedelta(days=1)
+        request.POST['end_date'] = date.today() + timedelta(days=1)
+        queryset = CalendarEvents.objects.all()
+        queryset_after = events_student_filter(request, queryset)
+        self.assertEqual(len(queryset), 3)
+        self.assertEqual(len(queryset_after), 1)
+        self.assertEqual(queryset_after.first().realisation_time, date.today())
+
+    def test_event_filter_events_all(self):
+        request = HttpRequest()
+        request.POST['subject'] = self.subject
+        request.POST['event_type'] = 'Test'
+        request.POST['start_date'] = date.today() - timedelta(days=1)
+        request.POST['end_date'] = date.today() + timedelta(days=10)
+        queryset = CalendarEvents.objects.all()
+        queryset_after = events_student_filter(request, queryset)
+        self.assertEqual(len(queryset), 3)
+        self.assertEqual(len(queryset_after), 1)
+
+    def test_event_filter_events_no_conditions(self):
+        request = HttpRequest()
+        request.POST['subject'] = 'All'
+        request.POST['event_type'] = 'All'
+        request.POST['start_date'] = None
+        request.POST['end_date'] = None
+        queryset = CalendarEvents.objects.all()
+        queryset_after = events_student_filter(request, queryset)
+        self.assertEqual(len(queryset), 3)
+        self.assertEqual(len(queryset_after), 3)
+
 

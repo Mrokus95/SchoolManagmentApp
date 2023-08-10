@@ -58,24 +58,24 @@ class EventsViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     #redirect if kids
-    # def test_event_url_parent_filter_event_teacher(self):
-    #     self.client.force_login(self.user_teacher)
-    #     url = reverse('parent_filter_events')
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 302)
 
-    # def test_event_url_parent_filter_event_parent(self):
-    #     self.client.force_login(self.user_parent)
-    #     url = reverse('parent_filter_events')
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 302)
+    def test_event_url_parent_filter_event_teacher(self):
+        self.client.force_login(self.user_teacher)
+        url = reverse('parent_filter_events')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
 
-    # def test_event_url_parent_filter_event_student(self):
-    #     self.client.force_login(self.user_student)
-    #     url = reverse('parent_filter_events')
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, 302)
+    def test_event_url_parent_filter_event_parent(self):
+        self.client.force_login(self.user_parent)
+        url = reverse('parent_filter_events')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
 
+    def test_event_url_parent_filter_event_student(self):
+        self.client.force_login(self.user_student)
+        url = reverse('parent_filter_events')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
 
     #views events
     def test_event_url_filter_events_student(self):

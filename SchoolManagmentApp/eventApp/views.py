@@ -180,18 +180,14 @@ def parent_events_viewing(request, kid_id):
 
 #check if parent has more than 1 kid
 @parent_required
-def parent_events(request, kid_profile=None):
-    current_parent = Parent.objects.get(user=request.user.profile)
+def parent_events(request):
+    current_parent = Parent.objects.get(user=request.user.profile)    
+    parent_kids = Student.objects.filter(parent=current_parent)
 
-    if not kid_profile:        
-        parent_kids = Student.objects.filter(parent=current_parent)
-
-        if len(parent_kids) > 1:
-            return render(request, 'events.html',{'parent_kids': parent_kids})
+    if len(parent_kids) > 1:
+        return render(request, 'events.html',{'parent_kids':parent_kids})
     
-        else:
-            kid_profile = parent_kids.first()
-            
+    kid_profile = parent_kids.first()           
     return parent_events_viewing(request, kid_profile) 
 
 @login_required

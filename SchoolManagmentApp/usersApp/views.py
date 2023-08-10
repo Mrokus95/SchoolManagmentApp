@@ -156,8 +156,8 @@ class TeacherRegisterView(UserPassesTestMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['registration_form'] = RegistrationForm()
-        context['teacher_registration_form'] = TeacherRegistrationForm()
+        context['registration_form'] = RegistrationForm(self.request.POST, self.request.FILES)
+        context['teacher_registration_form'] = TeacherRegistrationForm(self.request.POST, self.request.FILES)
         context['view_name'] = 'register_teacher'
         return context
     
@@ -196,15 +196,25 @@ class TeacherRegisterView(UserPassesTestMixin, FormView):
 
             return super().form_valid(form)
         else:
-            for field_errors in form.errors.values():
+
+            for field_errors in registration_form.errors.values():
                 for error in field_errors:
                     messages.error(self.request, error)
 
+            for field_errors in form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
+                    print(error)
+                    
             return self.render_to_response(self.get_context_data(registration_form=registration_form, teacher_registration_form=teacher_registration_form))
 
     def form_invalid(self, form):
         registration_form = RegistrationForm(self.request.POST, self.request.FILES)
         teacher_registration_form = TeacherRegistrationForm(self.request.POST, self.request.FILES)
+
+        for field_errors in registration_form.errors.values():
+            for error in field_errors:
+                messages.error(self.request, error)
 
         for field_errors in form.errors.values():
             for error in field_errors:
@@ -224,8 +234,8 @@ class StudentRegisterView(UserPassesTestMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['registration_form'] = RegistrationForm()
-        context['student_registration_form'] = StudentRegistrationForm()
+        context['registration_form'] = RegistrationForm(self.request.POST, self.request.FILES)
+        context['student_registration_form'] = StudentRegistrationForm(self.request.POST, self.request.FILES)
         context['view_name'] = 'register_student'
         return context
 
@@ -249,8 +259,6 @@ class StudentRegisterView(UserPassesTestMixin, FormView):
             parent = student_registration_form.cleaned_data['parent']
             class_unit = student_registration_form.cleaned_data['class_unit']
 
-
-
             with transaction.atomic():
                 # Create a new user account
                 user = User.objects.create_user(username=username, first_name=first_name, last_name=last_name, email=email, password=password1)
@@ -268,6 +276,10 @@ class StudentRegisterView(UserPassesTestMixin, FormView):
         
         else:
             
+            for field_errors in registration_form.errors.values():
+                for error in field_errors:
+                    messages.error(self.request, error)
+
             for field_errors in form.errors.values():
                 for error in field_errors:
                     messages.error(self.request, error)
@@ -277,6 +289,10 @@ class StudentRegisterView(UserPassesTestMixin, FormView):
     def form_invalid(self, form):
         registration_form = RegistrationForm(self.request.POST, self.request.FILES)
         student_registration_form = StudentRegistrationForm(self.request.POST, self.request.FILES)
+
+        for field_errors in registration_form.errors.values():
+            for error in field_errors:
+                messages.error(self.request, error)
 
         for field_errors in form.errors.values():
                 for error in field_errors:

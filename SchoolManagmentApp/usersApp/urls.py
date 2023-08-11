@@ -65,11 +65,11 @@ urlpatterns = [
     path(
         "account/password_change/",
         views.CustomPaswordChangeView.as_view(),
-        name="passwordChange",
+        name="password_change",
     ),
     path(
         "account/password_change/done/",
         views.CustomPaswordChangeDoneView.as_view(),
-        name="passwordChangeDone",
+        name="password_change_done",
     ),
 ]

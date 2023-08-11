@@ -629,7 +629,7 @@ class CustomPasswordChangeViewTest(TestCase):
             "new_password2": "newtestpassword",
         }
         response = self.client.post(self.url, data, follow=True)
-        self.assertRedirects(response, reverse("passwordChangeDone"))
+        self.assertRedirects(response, reverse("password_change_done"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Your password has been changed.")
 
@@ -651,7 +651,7 @@ class CustomPasswordChangeDoneViewTest(TestCase):
         self.user = User.objects.create_user(
             username="testuser", password="testpassword"
         )
-        self.url = reverse("passwordChangeDone")
+        self.url = reverse("password_change_done")
         self.client = Client()
         self.client.login(username="testuser", password="testpassword")
 

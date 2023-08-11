@@ -1,23 +1,32 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
+from datetime import date, timedelta
 from eventApp.forms import AddEvent, EventFilterStudentForm
 from eventApp.models import LessonReport, Subject, Teacher, ClassUnit
 from gradesApp.models import Semester
-from django.contrib.auth.models import User
 from usersApp.models import Profile
-from datetime import date, timedelta
 
 class AddEventFormTest(TestCase):
 
     def setUp(self):
         self.subject = Subject.objects.create(name=Subject.ENGLISH)
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.profile = Profile.objects.create(user=self.user, phone_number='123456789', account_type = Profile.TEACHER)
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpassword'
+            )
+        self.profile = Profile.objects.create(user=self.user,
+                                              phone_number='123456789',
+                                              account_type = Profile.TEACHER
+                                              )
         self.teacher = Teacher.objects.create(user=self.profile)
-        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
+        self.class_unit = ClassUnit.objects.create(
+            start_year=2023,
+            study_year=1,
+            letter_mark='A'
+            )
         self.lesson_title = 'Simple Title'
         self.lesson_description = 'Simple Description'       
         self.event_type = 'Small Test'
-
         self.fake_lesson = LessonReport.objects.create(
             subject=self.subject,
             teacher=self.teacher,
@@ -64,8 +73,7 @@ class EventFilterSutentFormTest(TestCase):
             'event_type': self.event_type,
             'start_date': date.today(),
             'end_date': date.today() + timedelta(days=1),
-        }
-        
+        }       
         form = EventFilterStudentForm(data=data)
         self.assertTrue(form.is_valid())
 
@@ -76,7 +84,6 @@ class EventFilterSutentFormTest(TestCase):
             'start_date': date.today(),
             'end_date': date.today() - timedelta(days=5),
         }
-
         form = EventFilterStudentForm(data=wrong_data)
         self.assertFalse(form.is_valid())
         self.assertEqual(len(form.errors), 3)

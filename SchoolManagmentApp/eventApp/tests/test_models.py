@@ -1,11 +1,17 @@
 from django.test import TestCase
-from eventApp.models import Subject, Teacher, LessonReport, CalendarEvents, Attendance
-from usersApp.models import Profile, ClassUnit, Student, Parent
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.core.exceptions import ValidationError
-from datetime import date, timedelta
 from django.utils import timezone
+from datetime import date, timedelta
+from usersApp.models import Profile, ClassUnit, Student, Parent
+from eventApp.models import(
+    Subject,
+    Teacher,
+    LessonReport,
+    CalendarEvents,
+    Attendance
+    )
 
 class SubjectTestCase(TestCase):
 
@@ -36,17 +42,31 @@ class SubjectTestCase(TestCase):
 class TeacherTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.profile = Profile.objects.create(user=self.user, phone_number='123456789', account_type = Profile.TEACHER)
-        self.lesson_type_english = Subject.objects.create(name=Subject.ENGLISH)
-        self.lesson_type_mathematic = Subject.objects.create(name=Subject.MATHEMATIC)
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpassword'
+            )
+        self.profile = Profile.objects.create(
+            user=self.user,
+            phone_number='123456789',
+            account_type = Profile.TEACHER
+            )
+        self.lesson_type_english = Subject.objects.create(
+            name=Subject.ENGLISH
+            )
+        self.lesson_type_mathematic = Subject.objects.create(
+            name=Subject.MATHEMATIC
+            )
         self.teacher = Teacher.objects.create(user=self.profile)
         self.teacher.lesson_type.add(self.lesson_type_mathematic)
         self.teacher.lesson_type.add(self.lesson_type_english)
 
     def test_teacher_creation(self):
         self.assertEqual(self.teacher.user, self.profile)
-        expected_lesson_types = [self.lesson_type_english, self.lesson_type_mathematic]
+        expected_lesson_types = [
+            self.lesson_type_english,
+            self.lesson_type_mathematic
+            ]
         actual_lesson_types = list(self.teacher.lesson_type.all())
         self.assertEqual(expected_lesson_types, actual_lesson_types)
 
@@ -56,11 +76,21 @@ class TeacherTestCase(TestCase):
 
     def test_teacher_related_names(self):
        self.assertEqual(self.teacher, self.profile.teacher_student)
-       self.assertIn(self.teacher, self.lesson_type_english.subject_teachers.all())
+       self.assertIn(
+           self.teacher,
+           self.lesson_type_english.subject_teachers.all()
+           )
     
     def test_limit_choices(self):
-        invalid_user = User.objects.create_user(username='invalid_user', password='test_password')
-        invalid_profile = Profile.objects.create(user=invalid_user, phone_number='987654321', account_type=Profile.PARENT)
+        invalid_user = User.objects.create_user(
+            username='invalid_user',
+            password='test_password'
+            )
+        invalid_profile = Profile.objects.create(
+            user=invalid_user,
+            phone_number='987654321',
+            account_type=Profile.PARENT
+            )
 
         try:
             invalid_teacher = Teacher.objects.create(user=invalid_user)
@@ -92,11 +122,22 @@ class LessonReportCase(TestCase):
     def setUp(self):
         self.create_date = date.today()
         self.subject = Subject.objects.create(name=Subject.ENGLISH)
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.profile = Profile.objects.create(user=self.user, phone_number='123456789', account_type = Profile.TEACHER)
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpassword'
+            )
+        self.profile = Profile.objects.create(
+            user=self.user,
+            phone_number='123456789',
+            account_type = Profile.TEACHER
+            )
         self.teacher = Teacher.objects.create(user=self.profile)
         self.teacher.lesson_type.add(self.subject)
-        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
+        self.class_unit = ClassUnit.objects.create(
+            start_year=2023,
+            study_year=1,
+            letter_mark='A'
+            )
         self.lesson_title = 'Simple Title'
         self.lesson_description = 'Simple Description'
 
@@ -119,18 +160,36 @@ class LessonReportCase(TestCase):
         self.assertEqual(self.report.lesson_description, 'Simple Description')
 
     def test_lesson_str(self):
-        expected_str = f'Lesson report: {self.subject} from {self.create_date} of {self.class_unit}'
+        expected_str = (
+        f'Lesson report: {self.subject} from {self.create_date} '
+        f'of {self.class_unit}'
+)
         self.assertEqual(str(self.report), expected_str)
 
     def test_lesson_report_related_names(self):
-        self.assertEqual(list(self.report.subject.reports_subject.all()), [self.report])
-        self.assertEqual(list(self.report.teacher.reports_teacher.all()), [self.report])
-        self.assertEqual(list(self.report.class_unit.reports_class_unit.all()), [self.report])
-
+        self.assertEqual(
+            list(self.report.subject.reports_subject.all()),
+            [self.report]
+            )
+        self.assertEqual(
+            list(self.report.teacher.reports_teacher.all()),
+            [self.report]
+            )
+        self.assertEqual(
+            list(self.report.class_unit.reports_class_unit.all()),
+            [self.report]
+            )
 
     def test_lesson_report_title_length(self):
         orginal_title = self.report.lesson_title
-        invalid_title = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget justo nulla. Fusce accumsan sapien sit amet hendrerit interdum. Nulla facilisi. Nam feugiat tristique risus, ac pellentesque dolor dictum nec. Fusce auctor feugiat libero, vel ullamcorper odio suscipit ut.'
+        invalid_title = 'Lorem ipsum dolor sit amet, consectetur'\
+            'adipiscing elit. Vestibulum eget justo nulla. Fusce'\
+                'accumsan sapien sit amet hendrerit interdum.'\
+                    'Nulla facilisi. Nam feugiat tristique'\
+                        'risus, ac pellentesque dolor dictum'\
+                            'nec. Fusce auctor feugiat'\
+                                'libero,vel ullamcorper'\
+                                    'odio suscipit ut.'
         self.report.lesson_title = invalid_title
 
         with self.assertRaises(ValidationError):
@@ -157,7 +216,11 @@ class LessonReportCase(TestCase):
         self.class_unit .delete()
         self.assertFalse(LessonReport.objects.filter(id=report_id).exists())
 
-        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
+        self.class_unit = ClassUnit.objects.create(
+            start_year=2023,
+            study_year=1,
+            letter_mark='A'
+            )
         self.report = LessonReport.objects.create(
             subject=self.subject,
             teacher=self.teacher,
@@ -187,8 +250,15 @@ class LessonReportCase(TestCase):
 
 class CalendarEventsTestCase(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.profile = Profile.objects.create(user=self.user, phone_number='123456789', account_type=Profile.TEACHER)
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpassword'
+            )
+        self.profile = Profile.objects.create(
+            user=self.user,
+            phone_number='123456789',
+            account_type=Profile.TEACHER
+            )
         self.subject = Subject.objects.create(name=Subject.ENGLISH)
         self.teacher = Teacher.objects.create(user=self.profile)
         self.teacher.lesson_type.add(self.subject)
@@ -197,7 +267,11 @@ class CalendarEventsTestCase(TestCase):
 
         #report data:
         self.teacher.lesson_type.add(self.subject)
-        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
+        self.class_unit = ClassUnit.objects.create(
+            start_year=2023,
+            study_year=1,
+            letter_mark='A'
+            )
         self.lesson_title = 'Simple Title'
         self.lesson_discription = 'Simple Description'
 
@@ -229,7 +303,11 @@ class CalendarEventsTestCase(TestCase):
         self.assertEqual(self.event.connected_to_lesson, self.report)
         self.assertEqual(self.event.author, self.teacher)
         self.assertEqual(self.event.visited, False)
-        self.assertAlmostEqual(self.event.add_time, self.create_time, delta=timedelta(seconds=1))
+        self.assertAlmostEqual(
+            self.event.add_time,
+            self.create_time,
+            delta=timedelta(seconds=1)
+            )
         
     def test_change_event_type(self):
         for event_type in CalendarEvents.EVENT_TYPES:
@@ -238,13 +316,23 @@ class CalendarEventsTestCase(TestCase):
             self.assertEqual(self.report.event_type, event_type)
 
     def test_event_str(self):
-        expected_str = f'{self.event.event_type} added by: {self.teacher} on: {self.subject}'
+        expected_str = f'{self.event.event_type} added by: {self.teacher}'\
+            f' on: {self.subject}'
         self.assertEqual(str(self.event), expected_str)
 
     def test_event_related_names(self):
-        self.assertEqual(list(self.event.subject.subject.all()), [self.event])
-        self.assertEqual(list(self.event.author.author.all()), [self.event])
-        self.assertEqual(list(self.event.connected_to_lesson.related_lesson.all()), [self.event])
+        self.assertEqual(
+            list(self.event.subject.subject.all()),
+            [self.event]
+            )
+        self.assertEqual(
+            list(self.event.author.author.all()),
+            [self.event]
+            )
+        self.assertEqual(
+            list(self.event.connected_to_lesson.related_lesson.all()),
+            [self.event]
+            )
 
     def test_event_connected_to_lesson_null(self):
         self.event.connected_to_lesson = None
@@ -283,16 +371,31 @@ class CalendarEventsTestCase(TestCase):
 class AttendanceTestCase(TestCase):
     def setUp(self):
         #data for objects
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.profile = Profile.objects.create(user=self.user, phone_number='123456789', account_type=Profile.TEACHER)
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpassword'
+            )
+        self.profile = Profile.objects.create(
+            user=self.user,
+            phone_number='123456789',
+            account_type=Profile.TEACHER
+            )
         self.subject = Subject.objects.create(name=Subject.ENGLISH)
         self.teacher = Teacher.objects.create(user=self.profile)
         self.teacher.lesson_type.add(self.subject)
         self.description = 'Simple Leson Description'
         self.title = 'Simple Lesson Title'
-        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
+        self.class_unit = ClassUnit.objects.create(
+            start_year=2023,
+            study_year=1,
+            letter_mark='A'
+            )
         self.parent = Parent.objects.create(user=self.profile)
-        self.student = Student.objects.create(user=self.profile, class_unit=self.class_unit, parent=self.parent)
+        self.student = Student.objects.create(
+            user=self.profile,
+            class_unit=self.class_unit,
+            parent=self.parent
+            )
         
         # lesson_raport
         self.report = LessonReport.objects.create(
@@ -304,7 +407,11 @@ class AttendanceTestCase(TestCase):
             )
         
         # attendance
-        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
+        self.attendance = Attendance.objects.create(
+            lesson_report=self.report,
+            student=self.student,
+            is_present=True
+            )
 
     def attendance_creation(self):
         self.assertEqual(self.attendance.lesson_report, self.report)
@@ -312,7 +419,8 @@ class AttendanceTestCase(TestCase):
         self.assertEqual(self.attendance.is_present, True)
 
     def attendance_str(self):
-        expected_str = f"{self.student} - {self.report.create_date} - {self.report.subject}: Present"
+        expected_str = f'{self.student} - {self.report.create_date}'\
+            f'- {self.report.subject}: Present'
         self.assertEqual(str(self.attendance), expected_str)
 
     def attendance_default_is_present(self):
@@ -323,12 +431,19 @@ class AttendanceTestCase(TestCase):
         attendance_id = self.attendance.id
         self.attendance.delete()
         self.assertFalse(Attendance.objects.filter(id=attendance_id).exists())
-        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
+        self.attendance = Attendance.objects.create(
+            lesson_report=self.report,
+            student=self.student,
+            is_present=True
+            )
 
     def test_delete_attendance_lesson_report(self):
         lesson_report_id = self.report.id
         self.report.delete()
-        self.assertFalse(Attendance.objects.filter(lesson_report_id=lesson_report_id).exists())
+        self.assertFalse(
+            Attendance.objects.filter(
+            lesson_report_id=lesson_report_id
+            ).exists())
         self.report = LessonReport.objects.create(
             subject=self.subject,
             teacher=self.teacher,
@@ -336,14 +451,28 @@ class AttendanceTestCase(TestCase):
             lesson_title = self.title,
             lesson_description = self.description
             )
-        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
+        self.attendance = Attendance.objects.create(
+            lesson_report=self.report,
+            student=self.student,
+            is_present=True
+            )
 
     def test_delete_student(self):
         student_id = self.student.id
         self.student.delete()
-        self.assertFalse(Attendance.objects.filter(student_id=student_id).exists())
-        self.student = Student.objects.create(user=self.profile, class_unit=self.class_unit, parent=self.parent)
-        self.attendance = Attendance.objects.create(lesson_report=self.report, student=self.student, is_present=True)
+        self.assertFalse(Attendance.objects.filter(
+            student_id=student_id).exists()
+            )
+        self.student = Student.objects.create(
+            user=self.profile,
+            class_unit=self.class_unit,
+            parent=self.parent
+            )
+        self.attendance = Attendance.objects.create(
+            lesson_report=self.report,
+            student=self.student,
+            is_present=True
+            )
 
 
 

@@ -1,32 +1,59 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from usersApp.models import Profile, Student, ClassUnit, Parent
-from eventApp.models import CalendarEvents, LessonReport, Subject, Teacher
-from eventApp.views import events_student_filter, event_status_changer, date_filter_validation, event_paginator
-from django.utils import timezone
 from django.http import HttpRequest
 from datetime import timedelta, date
-from django.core.paginator import Paginator
+from usersApp.models import Profile, Student, ClassUnit, Parent
+from eventApp.models import CalendarEvents, LessonReport, Subject, Teacher
+from eventApp.views import( 
+    events_student_filter, 
+    event_status_changer, 
+    date_filter_validation, 
+    event_paginator
+    )
 
 class EventsViewTest(TestCase):
 
     def setUp(self):
-
         #users
-        self.user_student = User.objects.create_user(username='testuser', password='testpassword')
-        self.user_parent = User.objects.create_user(username='testuser1', password='testpassword')
-        self.user_teacher = User.objects.create_user(username='testuser3', password='testpassword')
+        self.user_student = User.objects.create_user(
+            username='testuser',
+            password='testpassword'
+            )
+        self.user_parent = User.objects.create_user(
+            username='testuser1',
+            password='testpassword'
+            )
+        self.user_teacher = User.objects.create_user(
+            username='testuser3',
+            password='testpassword'
+            )
 
         #profiles
-        self.profile_student = Profile.objects.create(user=self.user_student, account_type = Profile.STUDENT)
-        self.profile_parent = Profile.objects.create(user=self.user_parent, account_type = Profile.PARENT)
-        self.profile_teacher = Profile.objects.create(user=self.user_teacher, account_type = Profile.TEACHER)
+        self.profile_student = Profile.objects.create(
+            user=self.user_student,
+            account_type = Profile.STUDENT
+            )
+        self.profile_parent = Profile.objects.create(
+            user=self.user_parent,
+            account_type = Profile.PARENT
+            )
+        self.profile_teacher = Profile.objects.create(
+            user=self.user_teacher,
+            account_type = Profile.TEACHER
+            )
+        self.class_unit = ClassUnit.objects.create(
+            start_year=2023,
+            study_year=1,
+            letter_mark='A')
 
-        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
         #accounts
         self.parent = Parent.objects.create(user=self.profile_parent)
-        self.student = Student.objects.create(user=self.profile_student, class_unit=self.class_unit, parent=self.parent)
+        self.student = Student.objects.create(
+            user=self.profile_student,
+            class_unit=self.class_unit,
+            parent=self.parent
+            )
         self.teacher = Teacher.objects.create(user=self.profile_teacher)
 
         #lesson_report
@@ -61,12 +88,6 @@ class EventsViewTest(TestCase):
 
     def test_event_url_parent_filter_event_teacher(self):
         self.client.force_login(self.user_teacher)
-        url = reverse('parent_filter_events')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 302)
-
-    def test_event_url_parent_filter_event_parent(self):
-        self.client.force_login(self.user_parent)
         url = reverse('parent_filter_events')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
@@ -239,11 +260,21 @@ class EventsViewTest(TestCase):
         self.assertTemplateNotUsed(response, 'edit_event.html')
 
 class EventsFunctionTest(TestCase):
-    
+    #users
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.profile_teacher = Profile.objects.create(user=self.user, account_type = Profile.TEACHER)
-        self.class_unit = ClassUnit.objects.create(start_year=2023, study_year=1, letter_mark='A')
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpassword'
+            )
+        self.profile_teacher = Profile.objects.create(
+            user=self.user,
+            account_type = Profile.TEACHER
+            )
+        self.class_unit = ClassUnit.objects.create(
+            start_year=2023,
+            study_year=1,
+            letter_mark='A'
+            )
         self.teacher = Teacher.objects.create(user=self.profile_teacher)
 
         #lesson_report
@@ -312,7 +343,10 @@ class EventsFunctionTest(TestCase):
         events_per_site=3
         request = HttpRequest()
         request.GET['page'] = 4
-        result = event_paginator(request, events_to_paginate, events_per_site)
+        result = event_paginator(request,
+                                 events_to_paginate,
+                                 events_per_site
+                                 )
         self.assertEqual(result.number, 4)
         self.assertTrue(result.paginator.page(2).has_previous())
         self.assertTrue(result.paginator.page(2).has_next())
@@ -352,7 +386,9 @@ class EventsFunctionTest(TestCase):
         queryset_after = events_student_filter(request, queryset)
         self.assertEqual(len(queryset), 3)
         self.assertEqual(len(queryset_after), 1)
-        self.assertEqual(queryset_after.first().realisation_time, date.today() + timedelta(days=4))
+        self.assertEqual(
+            queryset_after.first().realisation_time,
+            date.today() + timedelta(days=4))
 
     def test_event_filter_events_end_date(self):
         request = HttpRequest()
@@ -364,7 +400,10 @@ class EventsFunctionTest(TestCase):
         queryset_after = events_student_filter(request, queryset)
         self.assertEqual(len(queryset), 3)
         self.assertEqual(len(queryset_after), 1)
-        self.assertEqual(queryset_after.first().realisation_time, date.today())
+        self.assertEqual(
+            queryset_after.first().realisation_time,
+            date.today()
+            )
 
     def test_event_filter_events_Both_date(self):
         request = HttpRequest()
@@ -376,7 +415,10 @@ class EventsFunctionTest(TestCase):
         queryset_after = events_student_filter(request, queryset)
         self.assertEqual(len(queryset), 3)
         self.assertEqual(len(queryset_after), 1)
-        self.assertEqual(queryset_after.first().realisation_time, date.today())
+        self.assertEqual(
+            queryset_after.first().realisation_time,
+            date.today()
+            )
 
     def test_event_filter_events_all(self):
         request = HttpRequest()

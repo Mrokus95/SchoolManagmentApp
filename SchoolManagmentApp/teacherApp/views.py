@@ -9,7 +9,7 @@ from eventApp.views import event_paginator, student_events
 from .forms import LessonRportFilter, ClassSubjectChoiceForm, LessonReportText
 from usersApp.models import ClassUnit
 from datetime import date
-from teacherApp.decorators.teacher_decorators import teacher_required
+from teacherApp.decorators import teacher_required
 from django.contrib.auth.decorators import login_required
 
 

@@ -605,7 +605,7 @@ class CustomPasswordChangeViewTest(TestCase):
         self.user = User.objects.create_user(
             username="testuser", password="testpassword"
         )
-        self.url = reverse("passwordChange")
+        self.url = reverse("password_change")
         self.client = Client()
 
     def get_password_changing_unauthorized(self):

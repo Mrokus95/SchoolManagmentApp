@@ -26,7 +26,7 @@ class ProfileTestCase(TestCase):
 
     def test_default_photo(self):
         self.assertEqual(self.profile.photo.url, 
-                         "/media/users/avatars/musk.webp")
+                         "/media/users/avatars/unknown.png")
 
     def test_change_account_type(self):
         self.profile.account_type = Profile.PARENT
@@ -143,7 +143,7 @@ class ClassUnitTestCase(TestCase):
     def test_parent_creation(self):
         self.assertEqual(self.parent.user.user, self.user)
         self.assertEqual(self.parent.user.phone_number, "123456789")
-        self.assertEqual(self.parent.user.photo, "users/avatars/musk.webp")
+        self.assertEqual(self.parent.user.photo, "users/avatars/unknown.png")
         self.assertEqual(self.parent.user.account_type, Profile.PARENT)
 
     def test_str_representation(self):

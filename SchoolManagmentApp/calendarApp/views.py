@@ -1,4 +1,7 @@
+from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required
 from .models import Lesson, ClassroomReservation, TeacherReservation
 from messagesApp.models import Message
 from usersApp.models import Student, ClassUnit, Profile
@@ -6,9 +9,6 @@ from eventApp.models import Teacher, Subject
 from datetime import datetime, timedelta
 from django.shortcuts import get_object_or_404
 from .forms import ClassUnitForm, LessonForm, EditLessonForm
-from django.contrib import messages
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
 from django.http import JsonResponse

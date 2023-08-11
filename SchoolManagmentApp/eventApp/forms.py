@@ -1,15 +1,17 @@
 from django import forms
-from django.forms.widgets import SelectDateWidget
-from .models import CalendarEvents
-from gradesApp.models import Semester
-from datetime import date, timedelta
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.forms.widgets import SelectDateWidget
+from datetime import date, timedelta
+from .models import CalendarEvents
+from gradesApp.models import Semester
 
 class EventFilterStudentForm(forms.Form):
   
     try:
-        current_semester = Semester.objects.all().order_by('-start_date').first()
+        current_semester = Semester.objects.all().order_by(
+            '-start_date'
+            ).first()
         if not current_semester:
             current_semester = Semester(
                 number=1,
@@ -30,7 +32,6 @@ class EventFilterStudentForm(forms.Form):
         ('Chemistry', 'Chemistry'),
         ('Philosophy', 'Philosophy'),
     ]
-
     EVENT_TYPE_CHOICES = [
         ('All', 'All'),
         ('Other', 'Other'),
@@ -39,7 +40,6 @@ class EventFilterStudentForm(forms.Form):
         ('Essay', 'Essay'),
         ('Project', 'Project'),
     ]
-
     subject = forms.ChoiceField(choices=SUBJECT_CHOICES)
     event_type = forms.ChoiceField(choices=EVENT_TYPE_CHOICES)
     start_date = forms.DateField(
@@ -48,22 +48,26 @@ class EventFilterStudentForm(forms.Form):
             'min': current_semester.start_date,
             'max': current_semester.end_date,
             }), initial=date.today()
-    )
+        )
     end_date = forms.DateField(
         widget=forms.DateInput(attrs={
             'type': 'date',
             'min': current_semester.start_date,
             'max': current_semester.end_date,
             }), initial=date.today()
-    )
-
+        )
+    
     def clean_end_date(self):
         end_date = self.cleaned_data.get('end_date')
         start_date = self.cleaned_data.get('start_date')
-        if end_date < self.current_semester.start_date or end_date > self.current_semester.end_date or end_date < start_date:
-            raise forms.ValidationError("Date must be on current semester and past start date")
+        if end_date < self.current_semester.start_date: 
+            raise forms.ValidationError("Date must be on current semester")
+        if end_date > self.current_semester.end_date:
+            raise forms.ValidationError("Date must be on current semester")
+        if end_date < start_date:
+            raise forms.ValidationError("Date must be past start date")
         return end_date
-
+    
 class AddEvent(forms.ModelForm):
     class Meta:
         model = CalendarEvents
@@ -73,10 +77,9 @@ class AddEvent(forms.ModelForm):
             'realisation_time',
             'connected_to_lesson',           
         )
-
     realisation_time = forms.SelectDateWidget(
             attrs={'min': (timezone.now() + timedelta(days=1)).date()}
-        )
+            )
 
     def clean_realisation_time(self):
         realisation_time = self.cleaned_data.get('realisation_time')

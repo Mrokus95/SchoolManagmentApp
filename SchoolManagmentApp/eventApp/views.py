@@ -1,16 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
-from eventApp.models import CalendarEvents, Teacher
-from eventApp.forms import EventFilterStudentForm, AddEvent
-from usersApp.models import Profile, Student, Parent
 from django.contrib.auth.decorators import login_required
-from teacherApp.decorators.teacher_decorators import teacher_required
-from eventApp.decorators.event_decorators import student_required, parent_required
-
 from datetime import date
+from eventApp.models import CalendarEvents, Teacher
+from usersApp.models import Profile, Student, Parent
+from eventApp.forms import EventFilterStudentForm, AddEvent
+from teacherApp.decorators import teacher_required
+from eventApp.decorators import student_required, parent_required
 
-# Create your views here.
+EVENT_PER_PAGE = 6
 
 def events_student_filter(request, queryset):
 
@@ -53,12 +52,16 @@ def student_events(request):
     current_student = Student.objects.get(user=request.user.profile)
     current_class = current_student.class_unit
     
-    if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
-        events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('-add_time')
+    if CalendarEvents.objects.filter(
+        connected_to_lesson__class_unit=current_class
+        ).exists():
+        events = CalendarEvents.objects.filter(
+            connected_to_lesson__class_unit=current_class
+            ).order_by('-add_time')
         event_status_changer(events)
         filter_form = EventFilterStudentForm()
         if request.method == 'GET':
-            pages = event_paginator(request, events, 6)
+            pages = event_paginator(request, events, EVENT_PER_PAGE)
             context = {
             'pages': pages,
             'filter': filter_form,
@@ -68,8 +71,11 @@ def student_events(request):
                       
         else:
             if date_filter_validation(request):
-                messages.error(request,"End date must be set after start date!")
-                pages = event_paginator(request, events, 6)
+                messages.error(
+                    request,
+                    "End date must be set after start date!"
+                    )
+                pages = event_paginator(request, events, EVENT_PER_PAGE)
                 context = {
                 'pages': pages,
                 'filter': filter_form
@@ -78,7 +84,7 @@ def student_events(request):
                            
             else:
                 filtred=events_student_filter(request, events)
-                pages = event_paginator(request, filtred, 6)               
+                pages = event_paginator(request, filtred, EVENT_PER_PAGE)               
                 context = {
                     'pages': pages,
                     'filter': filter_form,
@@ -95,11 +101,13 @@ def teacher_events(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
     if CalendarEvents.objects.filter(author=current_teacher).exists():
-        events = CalendarEvents.objects.filter(author=current_teacher).order_by('-add_time')
+        events = CalendarEvents.objects.filter(
+            author=current_teacher
+            ).order_by('-add_time')
         filter_form = EventFilterStudentForm()
 
         if request.method == 'GET':
-            pages = event_paginator(request, events, 6)
+            pages = event_paginator(request, events, EVENT_PER_PAGE)
             context = {
             'pages': pages,
             'filter': filter_form,                
@@ -108,17 +116,22 @@ def teacher_events(request):
     
         else:
             if date_filter_validation(request):
-                messages.error(request,"End date must be set after start date!")
-                pages = event_paginator(request, events, 6)
+                messages.error(
+                    request,
+                    "End date must be set after start date!"
+                    )
+                pages = event_paginator(request, events, EVENT_PER_PAGE)
                 context = {
                 'pages': pages,
                 'filter': filter_form,
                     }
-                return render(request, 'teacher_events.html', context)
+                return render(
+                    request,
+                    'teacher_events.html', context)
             
             else:
                 filtred=events_student_filter(request, events)
-                pages = event_paginator(request, filtred, 6)               
+                pages = event_paginator(request, filtred, EVENT_PER_PAGE)               
                 context = {
                     'pages': pages,
                     'filter': filter_form,
@@ -135,27 +148,33 @@ def parent_events_viewing(request, kid_id):
     kid_profile = Student.objects.get(id=kid_id)
     current_class = kid_profile.class_unit
 
-    if CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).exists():
-        events = CalendarEvents.objects.filter(connected_to_lesson__class_unit=current_class).order_by('-add_time')
+    if CalendarEvents.objects.filter(
+        connected_to_lesson__class_unit=current_class
+        ).exists():
+        events = CalendarEvents.objects.filter(
+            connected_to_lesson__class_unit=current_class
+            ).order_by('-add_time')
         event_status_changer(events)  
         filter_form = EventFilterStudentForm()
 
         if request.method == 'GET':
-            pages = event_paginator(request, events, 6)
+            pages = event_paginator(request, events, EVENT_PER_PAGE)
     
             context = {
             'pages': pages,
             'kid_id': kid_id,
             'filter': filter_form,
             'current_class': current_class
-            }
-    
+            }   
             return render(request, 'events.html', context) 
                       
         else:
             if date_filter_validation(request):
-                messages.error(request,"End date must be set after start date!")
-                pages = event_paginator(request, events, 6)
+                messages.error(
+                    request,
+                    "End date must be set after start date!"
+                    )
+                pages = event_paginator(request, events, EVENT_PER_PAGE)
                 context = {
                 'pages': pages,
                 'filter': filter_form,
@@ -166,7 +185,7 @@ def parent_events_viewing(request, kid_id):
                            
             else:
                 filtred=events_student_filter(request, events)
-                pages = event_paginator(request, filtred, 6)               
+                pages = event_paginator(request, filtred, EVENT_PER_PAGE)               
                 context = {
                 'pages': pages,
                 'filter': filter_form,
@@ -229,7 +248,11 @@ def teacher_event_detail(request, eventId):
 
         if CalendarEvents.objects.filter(author=current_teacher).exists():
             event = CalendarEvents.objects.get(id=eventId)
-            return render(request, 'teacher_event_details.html', {'event': event})
+            return render(
+                request,
+                'teacher_event_details.html',
+                {'event': event}
+                )
         
         else:    
             messages.error(request, 'Event cannot be viewd!')

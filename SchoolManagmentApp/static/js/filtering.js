@@ -1,5 +1,3 @@
-// filtering
-
 const filterButton = document.getElementById("filterButton");
 const filterWindow = document.getElementById("filterWindow");
 const filterButtonClose = document.getElementById("filterButtonClose");

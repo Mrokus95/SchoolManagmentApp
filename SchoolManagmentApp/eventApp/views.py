@@ -6,16 +6,15 @@ from eventApp.forms import EventFilterStudentForm, AddEvent
 from usersApp.models import Profile, Student, Parent
 from django.contrib.auth.decorators import login_required
 from teacherApp.decorators.teacher_decorators import teacher_required
+from eventApp.decorators.event_decorators import student_required, parent_required
 
 from datetime import date
 
 # Create your views here.
 
-
 def events_student_filter(request, queryset):
 
     subject_condition = request.POST.get('subject')
-    print(subject_condition)
     type_condition = request.POST.get('event_type')
     start_date_condition=request.POST.get('start_date')
     end_date_condition=request.POST.get('end_date')
@@ -49,7 +48,7 @@ def event_paginator(request, events_to_paginate, events_per_site):
 def date_filter_validation(request):
     return request.POST.get('start_date') > request.POST.get('end_date')
 
-@login_required
+@student_required
 def student_events(request):
     current_student = Student.objects.get(user=request.user.profile)
     current_class = current_student.class_unit
@@ -91,7 +90,7 @@ def student_events(request):
         messages.error(request, 'No events!')
         return render(request, 'events.html')
 
-@login_required
+@teacher_required
 def teacher_events(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
@@ -130,7 +129,7 @@ def teacher_events(request):
         messages.error(request, 'No events!')
         return render(request, 'events.html')
 
-@login_required
+@parent_required
 def parent_events_viewing(request, kid_id):
 
     kid_profile = Student.objects.get(id=kid_id)
@@ -179,19 +178,16 @@ def parent_events_viewing(request, kid_id):
         messages.error(request, 'No events!')
         return render(request, 'events.html')   
 
-@login_required
-def parent_events(request, kid_profile=None):
-    current_parent = Parent.objects.get(user=request.user.profile)
+#check if parent has more than 1 kid
+@parent_required
+def parent_events(request):
+    current_parent = Parent.objects.get(user=request.user.profile)    
+    parent_kids = Student.objects.filter(parent=current_parent)
 
-    if not kid_profile:        
-        parent_kids = Student.objects.filter(parent=current_parent)
-
-        if len(parent_kids) > 1:
-            return render(request, 'events.html',{'parent_kids': parent_kids})
+    if len(parent_kids) > 1:
+        return render(request, 'events.html',{'parent_kids':parent_kids})
     
-        else:
-            kid_profile = parent_kids.first()
-            
+    kid_profile = parent_kids.first()           
     return parent_events_viewing(request, kid_profile) 
 
 @login_required
@@ -224,7 +220,7 @@ def event_detail(request, eventId):
         request, 'Event cannot be viewd, please contact the author!')
         return redirect('events')
 
-@login_required    
+@teacher_required   
 def teacher_event_detail(request, eventId):
     curret_profile = Profile.objects.get(user=request.user)
     current_teacher = Teacher.objects.get(user=request.user.profile)
@@ -250,6 +246,7 @@ def teacher_event_detail(request, eventId):
             messages.error(
             request, 'Event cannot be viewd, please contact the author!')
             return redirect('events')
+        
 @teacher_required     
 def delete_event(request, eventId):
 

@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.shortcuts import redirect
 
 def teacher_required(func):
     def _wrapped_func(request, *args, **kwargs):

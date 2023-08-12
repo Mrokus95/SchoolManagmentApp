@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from datetime import date
 from .forms import(
-    LessonRportFilter,
+    LessonRportFilterForm,
     ClassSubjectChoiceForm,
-    LessonReportText
+    LessonReportTextForm
     )
 from usersApp.models import Profile, Student, ClassUnit
 from eventApp.forms import AddEvent
@@ -60,40 +60,36 @@ def reports_student_filter(request, queryset):
 def teacher_app_teacher(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
-    if LessonReport.objects.filter(teacher=current_teacher.id).exists():
-        current_reports = LessonReport.objects.filter(
-            teacher=current_teacher.id
-            ).order_by('-create_date')
-        subject_choices = [('All', 'All')] + [(
-            subject.name,
-            subject.name
-            ) for subject in Subject.objects.all()]
-
-        class_choices = [('All', 'All')] + [(
-            str(unit.study_year) + unit.letter_mark,
-            str(unit.study_year) + unit.letter_mark
-            ) for unit in ClassUnit.objects.all()]
-        filter_form = LessonRportFilter
-
-        if request.method == 'POST':
-            current_reports = reports_student_filter(request, current_reports)
-            pages = event_paginator(request, current_reports, EVENT_PER_PAGE)
-
-        else:
-            pages = event_paginator(request, current_reports, EVENT_PER_PAGE)
-        context = {
-            'pages': pages,
-            'current_teacher': current_teacher,
-            'filter_form': filter_form,
-            'subject_choices': subject_choices,
-            'class_choices': class_choices,
-            }
-        return render(request, 'teacher_app.html', context)
-    
-    else:
+    if not LessonReport.objects.filter(teacher=current_teacher.id).exists():
         messages.error(request, "You have no reports")
-        return render(request, 'teacher_app')
-    
+        return render(request, 'teacher_app.html')
+                
+    current_reports = LessonReport.objects.filter(
+        teacher=current_teacher.id
+        ).order_by('-create_date')
+    subject_choices = [('All', 'All')] + [(
+        subject.name,
+        subject.name
+        ) for subject in Subject.objects.all()]
+    class_choices = [('All', 'All')] + [(
+        str(unit.study_year) + unit.letter_mark,
+        str(unit.study_year) + unit.letter_mark
+        ) for unit in ClassUnit.objects.all()]
+    if request.method == 'POST':
+        current_reports = reports_student_filter(request, current_reports)
+        pages = event_paginator(request, current_reports, EVENT_PER_PAGE)
+    else:
+        pages = event_paginator(request, current_reports, EVENT_PER_PAGE)
+    filter_form = LessonRportFilterForm
+    context = {
+        'pages': pages,
+        'current_teacher': current_teacher,
+        'filter_form': filter_form,
+        'subject_choices': subject_choices,
+        'class_choices': class_choices,
+        }
+    return render(request, 'teacher_app.html', context)
+     
 @login_required
 def report_detail(request, reportId, requested=False):
     current_report = LessonReport.objects.get(id=reportId)
@@ -138,7 +134,6 @@ def from_event_to_raport(request, eventId):
         return report_detail(request, reportId, True)
         
     else:
-        print('przed igfem')
         current_report = LessonReport.objects.get(id=reportId)
         connected_events = CalendarEvents.objects.filter(
             connected_to_lesson=current_report.id
@@ -147,7 +142,6 @@ def from_event_to_raport(request, eventId):
             'connected_events': connected_events,
             'current_report': current_report,
         }
-        print('jestem pred contextem', connected_events)
         return render(request, 'pure_report.html', context)      
 
 @teacher_required
@@ -236,10 +230,10 @@ def lesson_conducting(request, current_lesson_report_id):
         'lesson_title' : current_lesson_report.lesson_title,
         'lesson_description' : current_lesson_report.lesson_description,
             }
-    lesson_report_text = LessonReportText(initial=initial_data)
+    lesson_report_text = LessonReportTextForm(initial=initial_data)
 
     if request.method=='POST':
-        updated_form = LessonReportText(
+        updated_form = LessonReportTextForm(
             request.POST,
             instance=current_lesson_report
             )

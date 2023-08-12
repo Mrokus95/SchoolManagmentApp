@@ -77,10 +77,11 @@ class AddEvent(forms.ModelForm):
             'realisation_time',
             'connected_to_lesson',           
         )
-    realisation_time = forms.SelectDateWidget(
+    realisation_time = forms.DateField(
+        widget=forms.SelectDateWidget(
             attrs={'min': (timezone.now() + timedelta(days=1)).date()}
             )
-
+    )
     def clean_realisation_time(self):
         realisation_time = self.cleaned_data.get('realisation_time')
         if realisation_time < (timezone.now() + timedelta(days=1)).date():

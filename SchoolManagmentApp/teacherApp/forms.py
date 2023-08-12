@@ -1,7 +1,7 @@
 from django import forms
 from eventApp.models import LessonReport
 
-class LessonRportFilter(forms.Form):
+class LessonRportFilterForm(forms.Form):
 
     subject = forms.ChoiceField()
     class_unit = forms.ChoiceField()
@@ -13,13 +13,13 @@ class ClassSubjectChoiceForm(forms.Form):
     subject = forms.ChoiceField()    
 
 
-class LessonReportText(forms.ModelForm):
+class LessonReportTextForm(forms.ModelForm):
     class Meta:
        model = LessonReport
 
        fields = {
            'lesson_description',
-           'lesson_title'
+           'lesson_title',
        }
 
 

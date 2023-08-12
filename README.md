@@ -1,4 +1,4 @@
-# SchoolManagmentApp
+![aws-rds-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/7e14dca4-f706-4d44-acbb-921b404f7b51)![aws-rds-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/5ff4243d-d7f3-45fe-93ea-372af36d6ec8)![aws-rds-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/d1bd6f6a-128d-4d12-ae87-56e52cad0d3c)![postgresql-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/c6518a0a-0d32-4959-9b7e-41b6262a1d91)# SchoolManagmentApp
 
 Welcome to the School Management App, a web application designed to streamline and manage various aspects of educational institutions. This project is built using a powerful stack of technologies, ensuring a robust and efficient solution.
 
@@ -83,25 +83,27 @@ We integrated AWS RDS to host our database in the Amazon cloud. This allowed us 
 
 ### PostgreSQL Database
 
-![PostgreSQL Logo](postgresql-logo.svg)
+![PostgreSQL Logo](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/cc830139-b966-4cde-935c-e82657c00c3b)
 
 To surpass the limitations of SQLite and enhance our relational database capabilities, we migrated to PostgreSQL. This allowed us to work with larger datasets and practice handling more complex database interactions. 
 
 ### HTML5, CSS, JS, and Bootstrap
 
-![HTML5 Logo](html5-logo.svg) ![CSS3 Logo](css3-logo.svg) ![JavaScript Logo](javascript-logo.svg) ![Bootstrap Logo](bootstrap-logo.svg)
+![HTML5 Logo](html5-logo.svg) ![CSS3 Logo](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/4fb97c4f-5348-4410-b472-4fa1d62e3462) ![JavaScript Logo](javascript-logo.svg)](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/69f17eb6-1341-491f-b6b0-b28ce2e39c7d)) ![Bootstrap Logo](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/ff6acbe6-2da7-4dfe-93fb-90078c210457)
 
 For the frontend, we leveraged HTML5, CSS3, JavaScript, and Bootstrap5. These technologies collectively allowed us to design and develop a responsive, user-friendly, and visually appealing user interface.
 
 ### Python and Django
 
-![Python Logo](python-logo.svg) ![Django Logo](django-logo.svg)
+![Python Logo](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/769cd5ea-97ae-4f68-a65b-9c6b0331af09) ![Django Logo](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/a718a000-8d52-4ef2-91a6-5e6523c03f11)
 
 The backend of the project was developed using Python 3.12 and Django 4.2. Python's versatility and readability empowered us to create robust backend logic. Django's high-level framework facilitated rapid development, efficient database management, and seamless integration of various components.
 
 Through the harmonious collaboration of these technologies, we've crafted a comprehensive School Management App that embodies modern best practices and offers a rich user experience.
 
 ## Features
+
+
 
 
 images:

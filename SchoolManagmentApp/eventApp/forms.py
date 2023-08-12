@@ -1,9 +1,6 @@
 from django import forms
-from django.utils import timezone
-from django.core.exceptions import ValidationError
 from django.forms.widgets import SelectDateWidget
 from datetime import date, timedelta
-from .models import CalendarEvents
 from gradesApp.models import Semester
 
 class EventFilterStudentForm(forms.Form):
@@ -68,22 +65,3 @@ class EventFilterStudentForm(forms.Form):
             raise forms.ValidationError("Date must be past start date")
         return end_date
     
-class AddEvent(forms.ModelForm):
-    class Meta:
-        model = CalendarEvents
-        fields = (
-            'description',
-            'event_type',
-            'realisation_time',
-            'connected_to_lesson',           
-        )
-    realisation_time = forms.DateField(
-        widget=forms.SelectDateWidget(
-            attrs={'min': (timezone.now() + timedelta(days=1)).date()}
-            )
-    )
-    def clean_realisation_time(self):
-        realisation_time = self.cleaned_data.get('realisation_time')
-        if realisation_time < (timezone.now() + timedelta(days=1)).date():
-            raise ValidationError("End date must be tomorrow or further")
-        return realisation_time

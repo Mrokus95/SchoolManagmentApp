@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from datetime import date
 from eventApp.models import CalendarEvents, Teacher
 from usersApp.models import Profile, Student, Parent
-from eventApp.forms import EventFilterStudentForm, AddEvent
+from eventApp.forms import EventFilterStudentForm
+from teacherApp.forms import AddEvent
 from teacherApp.decorators import teacher_required
 from eventApp.decorators import student_required, parent_required
 

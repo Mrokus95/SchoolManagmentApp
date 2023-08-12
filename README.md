@@ -98,13 +98,54 @@ Through the harmonious collaboration of these technologies, we've crafted a comp
 
 ## Features
 
-images:
-![Adding_Grades](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/e382df2d-7ce8-4b25-86c8-f2decc24f967)
+The project was developed with the purpose of refining skills in the Django framework. Its goals included encompassing a diverse array of functionalities while staying closely aligned with market demands and venturing beyond the conventional scope of such projects. Recognizing a potential need, we identified an opportunity for a school platform that facilitates information dissemination and communication among all entities within the school community. The result of our endeavor is precisely this project.
+
+Functions and permissions vary depending on the account type. The website offers slightly different capabilities for teachers, students, and parents.
+
+### UserApp:
+
+After login as admin , we can add new users by assigning them all the relevant attributes. For instance, when creating a student account, aside from standard details, we need to select a class and a parent. Conversely, for a teacher, specifying a subject is essential. Each profile also has the option to add a photo.To również miejsce, kóre odpowiada za logowanie użytkowników. Każdy z nich może edytować kluczowe dane, jak adres email czy hasło.
+
 ![Adding_Student_By_Admin](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/8a601a25-d4ff-4d0a-a51b-9184028b2f2b)
-![Events_Student](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/58bb1c31-dbf1-432f-866e-ab23989d4f2a)
-![Grades_By_Teacher_With_Details](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/09b72b14-cdbe-4cf6-88d4-3478141ac465)
+
+### TeacherApp:
+
+After login as admin , we can add new users by assigning them all the relevant attributes. For instance, when creating a student account, aside from standard details, we need to select a class and a parent. Conversely, for a teacher, specifying a subject is essential. Each profile also has the option to add a photo.To również miejsce, kóre odpowiada za logowanie użytkowników. Każdy z nich może edytować kluczowe dane, jak adres email czy hasło.
+
+![Adding_Grades](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/e382df2d-7ce8-4b25-86c8-f2decc24f967)
+
 ![Lesson_Conducting](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/c147d16b-4cb4-483d-906d-b2f16257c93e)
+
 ![Lesson_Report_Filter](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/defc983f-4c6f-42c0-ac89-330ff9a37f08)
-![New_Message](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/852d5f92-612b-4d21-af8b-33207b2921e6)
-![Shelude_Updating_By_Admin](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/bad9ab16-ca8f-444a-b026-0fb1c782d47d)
+
+### MessagesApp:
+
+Through the messaging panel, we facilitate communication among distinct entities. Within this panel, messages are categorized into three sections: Inbox, Sent, and Important. We can reply to messages, mark them as important, or delete them. When a user receives a new message, they will see a special notification icon until the message is read.
+
+![New_Message](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/f979befb-60b6-4385-b368-06256e56c30c)
+
+![Messages_Inbox](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/d37fcfe1-1198-466e-83ee-c7066ffde6be)
+
+### GradesApp:
+
+The application allows for navigation through grades. When a student is logged in, they select a semester and view their grades categorized by subjects. Similarly, a parent, if associated with more than one student, will see a separate table for each of them. On the other hand, a teacher must choose not only the semester but also the subject and class. As a result, they will see a list of students with grades for that specific subject. Each user type can click on a grade to reveal a tooltip with details about the author, date, and a brief description
+
+![Grades_By_Teacher_With_Details](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/09b72b14-cdbe-4cf6-88d4-3478141ac465)
+
+### EventsApp:
+
+Each student and parent can browse through events associated with their class or their child's class, which are additionally marked with a red exclamation mark if they haven't been viewed yet. They have the ability to filter these events based on subjects, lessons, date ranges, or view all at once. By clicking on an event, they can read its details and navigate to the corresponding report.
+
+![Events_Student](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/58bb1c31-dbf1-432f-866e-ab23989d4f2a)
+
+###  CalendarApp:
+
+This section is responsible for displaying the schedule. We select a class, and then we can iterate through upcoming weeks. Additionally, the admin panel enables adding lessons from this view. The schedule itself verifies the availability of a specific teacher and classroom on a given day and time. The real-time form adjusts the options available in subsequent fields based on prior selections. It prevents creating conflicting lessons by considering the availability of subject-specific teachers, other students' lessons, and the availability of classrooms. Lessons can be added in two ways—by making permanent schedule changes or by introducing updates for specific weeks. Furthermore, a mechanism sends a message about introduced changes to each individual affected by a given lesson.
+
 ![Sheludes_Student](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/13740fa7-c73d-40a5-9a2f-3d95829c7946)
+
+![Shelude_Updating_By_Admin](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/bad9ab16-ca8f-444a-b026-0fb1c782d47d)
+
+## Authors:
+
+

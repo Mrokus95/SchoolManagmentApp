@@ -5,5 +5,6 @@ Welcome to the School Management App, a web application designed to streamline a
 [![AWS RDS](https://img.shields.io/badge/AWS%20RDS-Database-orange)](https://aws.amazon.com/rds/) [![Django](https://img.shields.io/badge/Django-Framework-brightgreen)](https://www.djangoproject.com/) [![Python](https://img.shields.io/badge/Python-4.2-blue)](https://www.python.org/) [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)](https://www.postgresql.org/) [![HTML5](https://img.shields.io/badge/HTML5-Markup-ff9900)](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5) [![CSS](https://img.shields.io/badge/CSS-Styles-brightgreen)](https://developer.mozilla.org/en-US/docs/Web/CSS) [![JavaScript](https://img.shields.io/badge/JavaScript-Behavior-yellow)](https://developer.mozilla.org/en-US/docs/Web/JavaScript) [![Bootstrap](https://img.shields.io/badge/Bootstrap-Framework-563d7c)](https://getbootstrap.com/) 
 
 ![image]()
+![Home page](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/d3abdfbe-1bf6-4752-bf9a-1a2e36fb742b)
 
 ## Getting Started

@@ -5,10 +5,10 @@ from datetime import date
 from .forms import(
     LessonRportFilterForm,
     ClassSubjectChoiceForm,
-    LessonReportTextForm
+    LessonReportTextForm,
+    AddEvent
     )
 from usersApp.models import Profile, Student, ClassUnit
-from eventApp.forms import AddEvent
 from eventApp.models import(
     LessonReport,
     CalendarEvents,
@@ -203,7 +203,6 @@ def lesson_class_initiation(request, lesson_report_id):
             if not Attendance.objects.filter(
                 lesson_report=current_lesson_report,
                 student=participant.id,
-                is_present__in=[True, False]
                 ).exists():
                 attendance_object = Attendance.objects.create(
                     lesson_report = current_lesson_report,
@@ -278,21 +277,16 @@ def add_event(request, current_lesson_report_id):
         adding_form = AddEvent(request.POST)
 
         if adding_form.is_valid():
-            form = adding_form.save(commit=False)
-            if form.realisation_time <= date.today():
-                messages.error(request, 'Ralisation date must be past today')
-                return redirect('add_event', current_lesson_report.id )
-            
-            else:
-                form.author = curret_teacher
-                form.subject = current_lesson_report.subject
-                form.connected_to_lesson = current_lesson_report
-                form.save()
-                messages.success(request, "Event added successfully!")
-                return redirect (
-                    'lesson_conducting',
-                    current_lesson_report.id
-                    )
+            event = adding_form.save(commit=False)
+            event.author = curret_teacher
+            event.subject = current_lesson_report.subject
+            event.connected_to_lesson = current_lesson_report
+            event.save()
+            messages.success(request, "Event added successfully!")
+            return redirect (
+                'lesson_conducting',
+                current_lesson_report.id
+                )
         
         else:
             errors = adding_form.errors
@@ -359,15 +353,15 @@ def grades_teacher(request, current_lesson_report_id):
                         submitted_by=current_teacher,
                         subject=subject,
                         semester=current_semestr()
-                        )                                       
-                    messages.success(request, "Grade sumbited!")
+                        )                                 
 
                 else:
                     messages.error(
                         request,
                         "Description required 3-250 signs!"
-                        )                 
-                
+                        )   
+                                  
+        messages.success(request, "Grade sumbited!")                
         if not any_grade:
             messages.error(
                 request,
@@ -414,7 +408,7 @@ def edit_student_grades(request, student_id, current_lesson_report_id):
         for raw in student_grades:
             if request.POST.get(str(raw.id), False) == 'True':
                 raw.delete()
-                messages.success(request, 'One grade deleted!')
+
             else:
                 changed_description=request.POST.get(f"description_{raw.id}")
 
@@ -430,6 +424,7 @@ def edit_student_grades(request, student_id, current_lesson_report_id):
                         "Description required 3-250 signs!"
                         )
                     redirect ('grades_teacher', current_lesson_report_id)
+          
         messages.success(request, "Grades sucesfully changed")
         return redirect ('grades_teacher', current_lesson_report_id)
     

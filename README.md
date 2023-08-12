@@ -1,4 +1,4 @@
-![aws-rds-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/7e14dca4-f706-4d44-acbb-921b404f7b51)![aws-rds-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/5ff4243d-d7f3-45fe-93ea-372af36d6ec8)![aws-rds-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/d1bd6f6a-128d-4d12-ae87-56e52cad0d3c)![postgresql-logo svg](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/c6518a0a-0d32-4959-9b7e-41b6262a1d91)# SchoolManagmentApp
+# SchoolManagmentApp
 
 Welcome to the School Management App, a web application designed to streamline and manage various aspects of educational institutions. This project is built using a powerful stack of technologies, ensuring a robust and efficient solution.
 
@@ -75,31 +75,21 @@ Welcome to the School Management App, a web application designed to streamline a
 
 We have utilized a diverse range of technologies to develop the School Management App, ensuring its functionality, scalability, and efficiency.
 
-### AWS RDS (Amazon Relational Database Service)
+### AWS RDS (Amazon Relational Database Service) ![aws rds](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/93a6776b-0dfb-4d21-8cb7-15af08644212)
 
-![aws rds](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/93a6776b-0dfb-4d21-8cb7-15af08644212)
+
 
 We integrated AWS RDS to host our database in the Amazon cloud. This allowed us to work collaboratively on the same dataset while gaining experience in cloud-based services integration. The use of Amazon RDS enables efficient and reliable data storage.
 
-### PostgreSQL Database
-![postgreSQL](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/017d3d41-b9bd-4c05-b5c7-8cd1e32e5efc)
+### PostgreSQL Database ![postgreSQL](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/017d3d41-b9bd-4c05-b5c7-8cd1e32e5efc)
 
 To surpass the limitations of SQLite and enhance our relational database capabilities, we migrated to PostgreSQL. This allowed us to work with larger datasets and practice handling more complex database interactions. 
 
-### HTML5, CSS, JS, and Bootstrap
-
-![html5-logo png](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/78447f01-ef70-44ce-b7d7-e10729e3c4a0) 
-
-![js](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/0c875413-b287-4950-8d9f-d4daeb87346f)
-![css3](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/be020416-3f50-4d2b-a3e0-85847c5e3312)
-![bootstrap](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/16bd8ee7-c4b9-4125-a6c1-34aeeb83c5d0)
+### HTML5, CSS, JS, and Bootstrap ![html5-logo png](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/78447f01-ef70-44ce-b7d7-e10729e3c4a0) ![js](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/0c875413-b287-4950-8d9f-d4daeb87346f) ![css3](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/be020416-3f50-4d2b-a3e0-85847c5e3312) ![bootstrap](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/16bd8ee7-c4b9-4125-a6c1-34aeeb83c5d0)
 
 For the frontend, we leveraged HTML5, CSS3, JavaScript, and Bootstrap5. These technologies collectively allowed us to design and develop a responsive, user-friendly, and visually appealing user interface.
 
-### Python and Django
-
-![python](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/b82413c4-2b4c-4c82-a06d-b0ba5cdeebfe)
-![django](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/6cb9996c-5ab0-4797-a422-1c8894d2b7de)
+### Python and Django ![python](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/b82413c4-2b4c-4c82-a06d-b0ba5cdeebfe) ![django](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/6cb9996c-5ab0-4797-a422-1c8894d2b7de)
 
 
 The backend of the project was developed using Python 3.12 and Django 4.2. Python's versatility and readability empowered us to create robust backend logic. Django's high-level framework facilitated rapid development, efficient database management, and seamless integration of various components.

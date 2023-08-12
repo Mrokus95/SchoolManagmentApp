@@ -35,7 +35,8 @@ class EditLessonForm(forms.ModelForm):
 
         if is_base and is_cancelled:
             raise forms.ValidationError(
-                "Both 'is base' and 'is cancelled' cannot be selected at the same time."
+                "Both 'is base' and 'is cancelled' cannot be selected \
+                    at the same time."
             )
 
         if subject not in teacher.lesson_type.all():

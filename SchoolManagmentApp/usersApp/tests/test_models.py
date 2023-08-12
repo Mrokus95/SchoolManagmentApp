@@ -149,7 +149,8 @@ class ClassUnitTestCase(TestCase):
     def test_str_representation(self):
         self.assertEqual(
             str(self.parent),
-            f"Parent: {self.parent.user.user.first_name} {self.parent.user.user.last_name}'s profile",
+            f"Parent: {self.parent.user.user.first_name} \
+                {self.parent.user.user.last_name}'s profile",
         )
 
     def test_invalid_parent_profile(self):
@@ -196,7 +197,8 @@ class StudentTestCase(TestCase):
         self.assertEqual(self.student.parent, self.parent)
 
     def test_str_representation(self):
-        expected_str = f"{self.user.first_name} {self.user.last_name} - student"
+        expected_str = f"{self.user.first_name} \
+            {self.user.last_name} - student"
         self.assertEqual(str(self.student), expected_str)
 
     def test_related_names(self):

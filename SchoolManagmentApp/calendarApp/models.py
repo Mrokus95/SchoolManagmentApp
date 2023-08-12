@@ -45,7 +45,8 @@ class ClassroomReservation(models.Model):
     class_unit = models.ForeignKey(ClassUnit, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Reservation of {self.classroom} - Day: {self.get_day_of_week_display()} - Lesson {self.lesson_number}"
+        return f"Reservation of {self.classroom} - Day: \
+            {self.get_day_of_week_display()} - Lesson {self.lesson_number}"
 
 
 class TeacherReservation(models.Model):
@@ -76,7 +77,8 @@ class TeacherReservation(models.Model):
     class_unit = models.ForeignKey(ClassUnit, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Reservation of {self.teacher} - Day: {self.get_day_of_week_display()} - Lesson {self.lesson_number}"
+        return f"Reservation of {self.teacher} - Day: \
+            {self.get_day_of_week_display()} - Lesson {self.lesson_number}"
 
 
 class Lesson(models.Model):
@@ -122,4 +124,5 @@ class Lesson(models.Model):
     )
 
     def __str__(self):
-        return f"{self.get_day_of_week_display()} - Lesson {self.lesson_number}: {self.subject} ({self.teacher})"
+        return f"{self.get_day_of_week_display()} - Lesson \
+            {self.lesson_number}: {self.subject} ({self.teacher})"

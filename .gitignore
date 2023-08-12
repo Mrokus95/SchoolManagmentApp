@@ -179,3 +179,4 @@ media
 
 # Backup files #
 *.bak
+.vscode/settings.json

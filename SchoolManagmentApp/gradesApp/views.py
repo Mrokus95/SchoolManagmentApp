@@ -62,7 +62,8 @@ def view_grades(request, semester=None):
     else:
         messages.error(
             request,
-            "Sorry, you do not have permission to access this page or the provided URL data is incorrect.",
+            "Sorry, you do not have permission to access this \
+                page or the provided URL data is incorrect.",
         )
         return redirect("home")
 
@@ -112,7 +113,8 @@ def view_grades_teacher(request):
             )
         else:
             messages.error(
-                request, "Wystąpił błąd. Sprawdź poprawność danych i spróbuj ponownie."
+                request, "Wystąpił błąd. Sprawdź poprawność \
+                    danych i spróbuj ponownie."
             )
             return render(request, "view_grades_teacher_menu.html",
                         {"form": form})
@@ -129,7 +131,8 @@ def view_grades_teacher_final(request, semester, class_unit, subject):
     except:
         messages.error(
             request,
-            "Sorry, you do not have permission to access this page, or the provided URL data is incorrect.",
+            "Sorry, you do not have permission to access this page, or \
+                the provided URL data is incorrect.",
         )
         return redirect("home")
 
@@ -176,5 +179,6 @@ def view_grades_teacher_final(request, semester, class_unit, subject):
             )
         else:
             messages.error(
-                request, "Wystąpił błąd. Sprawdź poprawność danych i spróbuj ponownie."
+                request, "Wystąpił błąd. Sprawdź poprawność danych i \
+                    spróbuj ponownie."
             )

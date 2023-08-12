@@ -37,7 +37,8 @@ class Profile(models.Model):
     def clean(self):
         super().clean()
 
-        if self.account_type not in [choice[0] for choice in self.TYPE_ACCOUNT_CHOICES]:
+        if self.account_type not in \
+            [choice[0] for choice in self.TYPE_ACCOUNT_CHOICES]:
             raise ValidationError({"account_type": "Invalid account type"})
 
         if self.phone_number and len(self.phone_number) != 9:
@@ -99,7 +100,8 @@ class Parent(models.Model):
 
     def __str__(self):
         return (
-            f"Parent: {self.user.user.first_name} {self.user.user.last_name}'s profile"
+            f"Parent: {self.user.user.first_name} \
+                {self.user.user.last_name}'s profile"
         )
 
 
@@ -118,4 +120,5 @@ class Student(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.user.first_name} {self.user.user.last_name} - student"
+        return f"{self.user.user.first_name} \
+            {self.user.user.last_name} - student"

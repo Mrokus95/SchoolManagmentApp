@@ -30,7 +30,8 @@ class HomeViewTest(TestCase):
             user=self.user2, account_type=Profile.STUDENT
         )
         self.student = Student.objects.create(
-            user=self.student_profile, class_unit=self.class_unit, parent=self.parent
+            user=self.student_profile, class_unit=self.class_unit, 
+            parent=self.parent
         )
         self.client = Client()
         self.home_url = reverse("home")
@@ -253,7 +254,8 @@ class ParentRegisterViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "registration.html")
 
-        for _, field_errors in response.context["registration_form"].errors.items():
+        for _, field_errors \
+            in response.context["registration_form"].errors.items():
             for error in field_errors:
                 self.assertContains(response, str(error))
 
@@ -369,7 +371,8 @@ class TeacherRegisterViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "registration.html")
 
-        for _, field_errors in response.context["registration_form"].errors.items():
+        for _, field_errors in \
+            response.context["registration_form"].errors.items():
             for error in field_errors:
                 self.assertContains(response, str(error))
 

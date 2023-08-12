@@ -173,7 +173,8 @@ def create_lesson(
     request, class_id=None, date=None, lesson_number=None, week_offset=None
 ):
     if request.method == "GET":
-        class_unit = get_object_or_404(ClassUnit, id=class_id) if class_id else None
+        class_unit = get_object_or_404(ClassUnit, id=class_id) \
+            if class_id else None
 
         lesson_form = LessonForm()
 
@@ -186,7 +187,8 @@ def create_lesson(
         return render(request, "create_lesson.html", context)
 
     if request.method == "POST":
-        class_unit = get_object_or_404(ClassUnit, id=class_id) if class_id else None
+        class_unit = get_object_or_404(ClassUnit, id=class_id) \
+            if class_id else None
         date_obj = datetime.strptime(date, "%Y-%m-%d")
         day_of_week_int = date_obj.weekday() + 1
 
@@ -202,7 +204,8 @@ def create_lesson(
             is_base = form.cleaned_data["is_base"]
 
             if is_base:
-                classroom_reservation_exists = ClassroomReservation.objects.filter(
+                classroom_reservation_exists = \
+                    ClassroomReservation.objects.filter(
                     start_date__gte=date,
                     classroom=classroom,
                     day_of_week=day_of_week,
@@ -229,14 +232,16 @@ def create_lesson(
                     ).exists()
                 )
 
-                teacher_reservation_exists = TeacherReservation.objects.filter(
+                teacher_reservation_exists = \
+                    TeacherReservation.objects.filter(
                     start_date__gte=date,
                     teacher=teacher,
                     day_of_week=day_of_week,
                     lesson_number=lesson_number,
                 ).exists()
 
-                pre_base_teacher_reservation_exists = TeacherReservation.objects.filter(
+                pre_base_teacher_reservation_exists = \
+                    TeacherReservation.objects.filter(
                     start_date__lt=date,
                     teacher=teacher,
                     day_of_week=day_of_week,
@@ -244,7 +249,8 @@ def create_lesson(
                     end_date=None,
                 ).exists()
 
-                not_base_teacher_reservation_exists = TeacherReservation.objects.filter(
+                not_base_teacher_reservation_exists = \
+                    TeacherReservation.objects.filter(
                     start_date=date,
                     teacher=teacher,
                     day_of_week=day_of_week,
@@ -253,7 +259,8 @@ def create_lesson(
                 ).exists()
 
             else:
-                classroom_reservation_exists = ClassroomReservation.objects.filter(
+                classroom_reservation_exists = \
+                    ClassroomReservation.objects.filter(
                     Q(start_date__lte=date)
                     & (Q(end_date__gte=date) | Q(end_date=None)),
                     classroom=classroom,
@@ -282,7 +289,8 @@ def create_lesson(
                     lesson_number=lesson_number,
                 ).exists()
 
-                not_base_teacher_reservation_exists = TeacherReservation.objects.filter(
+                not_base_teacher_reservation_exists = \
+                    TeacherReservation.objects.filter(
                     start_date=date,
                     teacher=teacher,
                     day_of_week=day_of_week,
@@ -303,7 +311,8 @@ def create_lesson(
                     try:
                         with transaction.atomic():
                             if is_base:
-                                new_reservation = ClassroomReservation.objects.create(
+                                new_reservation = \
+                                    ClassroomReservation.objects.create(
                                     classroom=classroom,
                                     day_of_week=day_of_week,
                                     lesson_number=lesson_number,
@@ -322,7 +331,8 @@ def create_lesson(
                                 )
 
                             else:
-                                new_reservation = ClassroomReservation.objects.create(
+                                new_reservation = \
+                                    ClassroomReservation.objects.create(
                                     classroom=classroom,
                                     day_of_week=day_of_week,
                                     lesson_number=lesson_number,
@@ -356,7 +366,8 @@ def create_lesson(
                                 teacher_reservation=new_teacher_reservation,
                             )
 
-                            sender_profile = Profile.objects.get(user=request.user)
+                            sender_profile = \
+                                Profile.objects.get(user=request.user)
 
                             students = class_name.students_in_class.all()
                             date_str = date.strftime("%Y-%m-%d")
@@ -382,7 +393,8 @@ def create_lesson(
                                     body=body,
                                 )
 
-                            messages.success(request, "Lesson created successfully")
+                            messages.success(request, 
+                                             "Lesson created successfully")
 
                             return redirect(
                                 "view_schedule",
@@ -392,7 +404,8 @@ def create_lesson(
                     except:
                         messages.error(
                             request,
-                            "Occured an error while creating - please check data and try again.",
+                            "Occured an error while creating - \
+                                please check data and try again.",
                         )
                         return redirect(
                             "view_schedule", class_id=class_id, 
@@ -400,14 +413,16 @@ def create_lesson(
                         )
                 else:
                     messages.error(
-                        request, "Classroom is curently reserved for this date."
+                        request, "Classroom is curently \
+                            reserved for this date."
                     )
                     return redirect(
                         "view_schedule", class_id=class_id, 
                         week_offset=week_offset
                     )
             else:
-                messages.error(request, "Teacher is curently reserved for this date.")
+                messages.error(request, "Teacher is curently \
+                               reserved for this date.")
                 return redirect(
                     "view_schedule", class_id=class_id, 
                     week_offset=week_offset
@@ -548,9 +563,11 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                                         user=request.user
                                     )
 
-                                    students = class_name.students_in_class.all()
+                                    students = \
+                                        class_name.students_in_class.all()
                                     date_str = date.strftime("%Y-%m-%d")
-                                    day_of_week_str = calendar.day_name[day_of_week]
+                                    day_of_week_str = \
+                                        calendar.day_name[day_of_week]
 
                                     for student in students:
                                         receiver = student.user
@@ -580,7 +597,8 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                                     )
                                 else:
                                     messages.error(
-                                        request, "Classroom is curently reserved."
+                                        request, "Classroom is curently \
+                                            reserved."
                                     )
                                     return redirect(
                                         "view_schedule",
@@ -588,7 +606,8 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                                         week_offset=week_offset,
                                     )
                             else:
-                                messages.error(request, "Teacher is curently reserved.")
+                                messages.error(request, \
+                                               "Teacher is curently reserved.")
                                 return redirect(
                                     "view_schedule",
                                     class_id=class_name.id,
@@ -598,7 +617,8 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                     except:
                         messages.error(
                             request,
-                            "Occured an error while editing - please check data and try again.",
+                            "Occured an error while editing - \
+                                please check data and try again.",
                         )
                         return redirect(
                             "view_schedule",
@@ -709,7 +729,8 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                                 else:
                                     messages.error(
                                         request,
-                                        "Classroom is curently reserved for this date.",
+                                        "Classroom is curently \
+                                            reserved for this date.",
                                     )
                                     return redirect(
                                         "view_schedule",
@@ -719,7 +740,8 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                             else:
                                 messages.error(
                                     request,
-                                    "Teacher is curently reserved for this date.",
+                                    "Teacher is curently reserved for \
+                                        this date.",
                                 )
                                 return redirect(
                                     "view_schedule",
@@ -729,7 +751,8 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                     except:
                         messages.error(
                             request,
-                            "Occured an error while editing - please check data and try again.",
+                            "Occured an error while editing - please check \
+                                data and try again.",
                         )
                         return redirect(
                             "view_schedule",
@@ -752,7 +775,8 @@ def edit_lesson(request, lesson_id, date=None, week_offset=None):
                 except:
                     messages.error(
                         request,
-                        "Occured an error while editing - please check data and try again.",
+                        "Occured an error while editing - \
+                            please check data and try again.",
                     )
                     return render(
                         request,

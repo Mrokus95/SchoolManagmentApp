@@ -204,7 +204,8 @@ class TeacherRegisterView(UserPassesTestMixin, FormView):
             self.request.POST, self.request.FILES
         )
 
-        if registration_form.is_valid() and teacher_registration_form.is_valid():
+        if registration_form.is_valid() \
+            and teacher_registration_form.is_valid():
             username = registration_form.cleaned_data["username"]
             first_name = registration_form.cleaned_data["first_name"]
             last_name = registration_form.cleaned_data["last_name"]
@@ -313,7 +314,8 @@ class StudentRegisterView(UserPassesTestMixin, FormView):
             self.request.POST, self.request.FILES
         )
 
-        if registration_form.is_valid() and student_registration_form.is_valid():
+        if registration_form.is_valid() \
+            and student_registration_form.is_valid():
             username = registration_form.cleaned_data["username"]
             first_name = registration_form.cleaned_data["first_name"]
             last_name = registration_form.cleaned_data["last_name"]

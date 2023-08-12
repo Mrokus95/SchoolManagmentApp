@@ -19,7 +19,10 @@ class Message(models.Model):
     is_delete_sender = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Message from {self.sender} to {self.receiver}, dated: {self.date}"
+        return (
+            f"Message from {self.sender} to {self.receiver}, "
+            f"dated: {self.date}"
+            )
 
     def get_absolute_url(self, is_sender=False):
         if self.is_sender:

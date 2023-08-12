@@ -10,7 +10,10 @@ class Semester(models.Model):
     end_date = models.DateField()
 
     def __str__(self):
-        return f"Semester {self.number} Year {self.start_school_year}/{self.start_school_year + 1}"
+        return (
+                f"Semester {self.number} "
+                f"Year {self.start_school_year}/{self.start_school_year + 1}"
+                )
 
     class Meta:
         unique_together = ("number", "start_school_year")
@@ -45,7 +48,10 @@ class Grades(models.Model):
     )
 
     def __str__(self):
-        return f"Student: {self.student}, class: {self.student.class_unit} Grade: {self.grade}, lesson: {self.subject}, date: {self.date}"
+        return (
+            f"Student: {self.student}, class: {self.student.class_unit} "
+            f"Grade: {self.grade}, lesson: {self.subject}, date: {self.date}"
+            )
 
     class Meta:
         ordering = ("date",)

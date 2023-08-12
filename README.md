@@ -104,7 +104,7 @@ Functions and permissions vary depending on the account type. The website offers
 
 ### UserApp:
 
-After login as admin , we can add new users by assigning them all the relevant attributes. For instance, when creating a student account, aside from standard details, we need to select a class and a parent. Conversely, for a teacher, specifying a subject is essential. Each profile also has the option to add a photo.To również miejsce, kóre odpowiada za logowanie użytkowników. Każdy z nich może edytować kluczowe dane, jak adres email czy hasło.
+After logging in as an admin, we have the capability to create new user accounts by assigning them various pertinent attributes. For instance, while setting up a student account, in addition to the usual particulars, we are required to choose a class and designate a parent. Conversely, for a teacher account, it is imperative to specify a subject. Furthermore, each profile is afforded the option to upload a photograph. This is also the section responsible for user authentication. Each user has the authority to edit crucial information such as email address or password.
 
 ![Adding_Student_By_Admin](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/8a601a25-d4ff-4d0a-a51b-9184028b2f2b)
 

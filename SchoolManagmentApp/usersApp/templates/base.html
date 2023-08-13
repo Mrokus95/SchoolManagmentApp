@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+	
+	<head>
+		<meta charset="UTF-8" />
+		
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<script
+			src="https://kit.fontawesome.com/04a6da9d09.js"
+			crossorigin="anonymous"
+		></script>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+			crossorigin="anonymous"
+		/>
+		<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="{% static '/css/base_style.css' %}" />
+		<title>{% block title %} {% endblock title %}</title>
+	</head>
+	<body>
+		{% if messages %}
+		<ul class="message" id="error">
+		  {% for message in messages %}
+			{% if message.tags == 'error' %}
+			  <li class="alert alert-danger">{{ message }}</li>
+			{% endif %}
+			{% if message.tags == 'success' %}
+			  <li class="alert alert-success">{{ message }}</li>
+			{% endif %}
+		  {% endfor %}
+		</ul>
+	  {% endif %}
+		
+		<section class="hero">
+			<div class="main-width">
+				<header class="logo">
+					<div><a href="{% url 'home' %}"><img class="logo-img" src="{% static 'img/logo.png' %}" alt="" /></a></div>
+					<nav>
+						<div class="hamb">
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+						<ul class="nav-list">
+							{%if request.user.is_authenticated%}
+
+								{% if user.profile.account_type == user.profile.TEACHER %}
+								<li><a href="{% url 'teacher_reports' %}">Your Reports</a></li>
+								<li><a href="{% url 'lesson_delivery_start' %}">Start Lesson</a></li>
+								{% endif %}
+								
+								{% if user.profile.account_type == "Admin" %}
+								<li><a href="{%url 'register_student'%}">Register student</a></li>
+								<li><a href="{%url 'register_parent'%}">Register parent</a></li>
+								<li><a href="{%url 'register_teacher'%}">Register teacher</a></li>
+								{%endif%}
+
+
+
+								{% if user.profile.account_type == "Teacher" or user.profile.account_type == "Admin" %}
+								<li><a href="{%url 'view_grades_teacher'%}">Grades</a></li>
+								{%else%}
+								<li><a href="{%url 'view_grades'%}">Grades</a></li>
+								{%endif%}
+
+								<li><a href="{%url 'view_schedule'%}">Schedule</a></li>
+								<li><a href="{%url 'events'%}">Events</a></li>
+								<li><a href="{%url 'inbox'%}">Messages</a></li>
+								<li><a href="{% url 'update_user_profile'%}"><img class='avatar-pic' src="{%if user.profile.photo.url%}
+									{{user.profile.photo.url }}
+									{%else%}
+									{% static 'img/unknown.png' %}
+									{%endif%}" alt=""></a></li>
+								<li class="px-2"><span class="text-white">Welcome <br>{{user.first_name}} {{user.last_name}}</span></li>
+								<li><a href="{% url 'logout' %}"><button id="login-nav" 
+									class="login-nav-btn" >Logout</button></a></li>
+							{%else%}
+							<li><a href="{% url 'home' %}"><button id="login-nav" 
+								class="login-nav-btn" >Login</button></a></li>
+							{%endif%}
+						</ul>
+					</nav>
+				</header>
+				{%block content%}
+				{%endblock content%}
+		<script type="text/javascript" src="{% static 'js/base_script.js' %}"></script>
+	</body>
+</html>

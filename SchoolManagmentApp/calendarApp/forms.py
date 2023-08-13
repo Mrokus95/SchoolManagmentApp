@@ -1,52 +1,57 @@
 from django import forms
-from .models import Lesson
 from usersApp.models import ClassUnit
-
+from .models import Lesson
 
 
 class LessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['subject', 'teacher', 'classroom', 'is_base']
+        fields = ["subject", "teacher", "classroom", "is_base"]
 
     def clean(self):
         cleaned_data = super().clean()
-        subject = cleaned_data.get('subject')
-        teacher = cleaned_data.get('teacher')
+        subject = cleaned_data.get("subject")
+        teacher = cleaned_data.get("teacher")
 
         if subject not in teacher.lesson_type.all():
-
-            raise forms.ValidationError("Selected subject is not taught by the selected teacher.")
+            raise forms.ValidationError(
+                "Selected subject is not taught by the selected teacher."
+            )
 
         return cleaned_data
-    
+
 
 class EditLessonForm(forms.ModelForm):
     class Meta:
         model = Lesson
-        fields = ['subject', 'teacher', 'classroom', 'is_base', 'is_cancelled']
-
+        fields = ["subject", "teacher", "classroom", "is_base", "is_cancelled"]
 
     def clean(self):
         cleaned_data = super().clean()
-        is_base = cleaned_data.get('is_base')
-        is_cancelled = cleaned_data.get('is_cancelled')
-        subject = cleaned_data.get('subject')
-        teacher = cleaned_data.get('teacher')
+        is_base = cleaned_data.get("is_base")
+        is_cancelled = cleaned_data.get("is_cancelled")
+        subject = cleaned_data.get("subject")
+        teacher = cleaned_data.get("teacher")
 
         if is_base and is_cancelled:
-            raise forms.ValidationError("Both 'is base' and 'is cancelled' cannot be selected at the same time.")
-        
-        if subject not in teacher.lesson_type.all():
+            raise forms.ValidationError(
+                "Both 'is base' and 'is cancelled' cannot be selected \
+                    at the same time."
+            )
 
-            raise forms.ValidationError("Selected subject is not taught by the selected teacher.")
+        if subject not in teacher.lesson_type.all():
+            raise forms.ValidationError(
+                "Selected subject is not taught by the selected teacher."
+            )
 
         return cleaned_data
-    
-    
+
 
 class ClassUnitForm(forms.ModelForm):
-    class_unit = forms.ModelChoiceField(queryset=ClassUnit.objects.all(), label='Class:')
+    class_unit = forms.ModelChoiceField(
+        queryset=ClassUnit.objects.all(), label="Class:"
+    )
+
     class Meta:
         model = ClassUnit
-        fields = ['class_unit']
+        fields = ["class_unit"]

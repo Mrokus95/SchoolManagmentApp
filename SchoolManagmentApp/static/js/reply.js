@@ -1,4 +1,3 @@
-// replySection 
 const replyButton = document.getElementById("reply_button");
 const replySection = document.getElementById("reply-section");
 

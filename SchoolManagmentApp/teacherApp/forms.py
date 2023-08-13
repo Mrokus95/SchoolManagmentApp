@@ -1,7 +1,10 @@
 from django import forms
-from eventApp.models import LessonReport
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+from datetime import timedelta
+from eventApp.models import LessonReport, CalendarEvents
 
-class LessonRportFilter(forms.Form):
+class LessonRportFilterForm(forms.Form):
 
     subject = forms.ChoiceField()
     class_unit = forms.ChoiceField()
@@ -13,17 +16,33 @@ class ClassSubjectChoiceForm(forms.Form):
     subject = forms.ChoiceField()    
 
 
-class LessonReportText(forms.ModelForm):
+class LessonReportTextForm(forms.ModelForm):
     class Meta:
        model = LessonReport
 
        fields = {
            'lesson_description',
-           'lesson_title'
+           'lesson_title',
        }
 
 
-
-
-
+class AddEventForm(forms.ModelForm):
+    class Meta:
+        model = CalendarEvents
+        fields = (
+            'description',
+            'event_type',
+            'realisation_time',
+            'connected_to_lesson',           
+        )
+    realisation_time = forms.DateField(
+        widget=forms.SelectDateWidget(
+            attrs={'min': (timezone.now() + timedelta(days=1)).date()}
+            )
+    )
+    def clean_realisation_time(self):
+        realisation_time = self.cleaned_data.get('realisation_time')
+        if realisation_time < (timezone.now() + timedelta(days=1)).date():
+            raise ValidationError("End date must be tomorrow or further")
+        return realisation_time
 

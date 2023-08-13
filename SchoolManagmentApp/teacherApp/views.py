@@ -1,24 +1,32 @@
-from django.shortcuts import render, redirect, reverse
-from usersApp.models import Profile, Student
-from eventApp.forms import AddEvent
-from eventApp.models import LessonReport, CalendarEvents, Subject, Attendance, Teacher
-from gradesApp.models import Grades, Semester
-# from gradesApp.forms import GradesForm
+from django.shortcuts import render, redirect
 from django.contrib import messages
-from eventApp.views import event_paginator, student_events
-from .forms import LessonRportFilter, ClassSubjectChoiceForm, LessonReportText
-from usersApp.models import ClassUnit
-from datetime import date
-from teacherApp.decorators.teacher_decorators import teacher_required
 from django.contrib.auth.decorators import login_required
+from datetime import date
+from .forms import(
+    LessonRportFilterForm,
+    ClassSubjectChoiceForm,
+    LessonReportTextForm,
+    AddEventForm
+    )
+from usersApp.models import Profile, Student, ClassUnit
+from eventApp.models import(
+    LessonReport,
+    CalendarEvents,
+    Subject,
+    Attendance,
+    Teacher
+    )
+from eventApp.views import event_paginator, student_events
+from gradesApp.models import Grades, Semester
+from teacherApp.decorators import teacher_required
 
-
-# Create your views here.
-
+EVENT_PER_PAGE = 7
 
 def current_semestr():
     if Semester.objects.all().order_by('-start_date').exists():
-        current_semester = Semester.objects.all().order_by('-start_date').first()
+        current_semester = Semester.objects.all().order_by(
+            '-start_date'
+            ).first()
     else: 
         current_semester = Semester(
             number=1,
@@ -27,8 +35,7 @@ def current_semestr():
             end_date=date(2023, 12,31))
         
     return current_semester    
-
-    
+   
 def reports_student_filter(request, queryset):
     subject_condition = request.POST.get('subject')
     start_date_condition = request.POST.get('start_date')
@@ -44,47 +51,53 @@ def reports_student_filter(request, queryset):
         condition_year = int(class_condition[0])
         condition_letter_mark = class_condition[1]
         queryset = queryset.filter(class_unit__study_year=condition_year)
-        queryset = queryset.filter(class_unit__letter_mark=condition_letter_mark)
-
+        queryset = queryset.filter(
+            class_unit__letter_mark=condition_letter_mark
+            )
     return queryset
 
 @teacher_required   
 def teacher_app_teacher(request):
     current_teacher = Teacher.objects.get(user=request.user.profile)
 
-    if LessonReport.objects.filter(teacher=current_teacher.id).exists():
-        current_reports = LessonReport.objects.filter(teacher=current_teacher.id).order_by('-create_date')
-        subject_choices =[('All', 'All')] + [(subject.name, subject.name) for subject in Subject.objects.all()]
-
-        class_choices = [('All', 'All')] + [(str(unit.study_year) + unit.letter_mark, str(unit.study_year) + unit.letter_mark) for unit in ClassUnit.objects.all()]
-        filter_form = LessonRportFilter
-
-        if request.method == 'POST':
-            current_reports = reports_student_filter(request, current_reports)
-            pages = event_paginator(request, current_reports, 7)
-
-        else:
-            pages = event_paginator(request, current_reports, 7)
-        context = {
-            'pages': pages,
-            'current_teacher': current_teacher,
-            'filter_form': filter_form,
-            'subject_choices': subject_choices,
-            'class_choices': class_choices,
-            }
-        return render(request, 'teacher_app.html', context)
-    
-    else:
+    if not LessonReport.objects.filter(teacher=current_teacher.id).exists():
         messages.error(request, "You have no reports")
-        return render(request, 'teacher_app')
-    
+        return render(request, 'teacher_app.html')
+                
+    current_reports = LessonReport.objects.filter(
+        teacher=current_teacher.id
+        ).order_by('-create_date')
+    subject_choices = [('All', 'All')] + [(
+        subject.name,
+        subject.name
+        ) for subject in Subject.objects.all()]
+    class_choices = [('All', 'All')] + [(
+        str(unit.study_year) + unit.letter_mark,
+        str(unit.study_year) + unit.letter_mark
+        ) for unit in ClassUnit.objects.all()]
+    if request.method == 'POST':
+        current_reports = reports_student_filter(request, current_reports)
+        pages = event_paginator(request, current_reports, EVENT_PER_PAGE)
+    else:
+        pages = event_paginator(request, current_reports, EVENT_PER_PAGE)
+    filter_form = LessonRportFilterForm
+    context = {
+        'pages': pages,
+        'current_teacher': current_teacher,
+        'filter_form': filter_form,
+        'subject_choices': subject_choices,
+        'class_choices': class_choices,
+        }
+    return render(request, 'teacher_app.html', context)
+     
 @login_required
 def report_detail(request, reportId, requested=False):
     current_report = LessonReport.objects.get(id=reportId)
-    connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
+    connected_events = CalendarEvents.objects.filter(
+        connected_to_lesson=current_report.id
+        )
    
-    if requested:
-        
+    if requested:       
         context={
         'current_report': current_report,
         'connected_events': connected_events,
@@ -92,8 +105,7 @@ def report_detail(request, reportId, requested=False):
         }
         return render(request, 'report_detail.html', context)
 
-    else:
-        
+    else:       
         context={
             'current_report': current_report,
             'connected_events': connected_events,
@@ -122,32 +134,38 @@ def from_event_to_raport(request, eventId):
         return report_detail(request, reportId, True)
         
     else:
-        print('przed igfem')
         current_report = LessonReport.objects.get(id=reportId)
-        connected_events = CalendarEvents.objects.filter(connected_to_lesson=current_report.id)
+        connected_events = CalendarEvents.objects.filter(
+            connected_to_lesson=current_report.id
+            )
         context={
             'connected_events': connected_events,
             'current_report': current_report,
         }
-        print('jestem pred contextem', connected_events)
         return render(request, 'pure_report.html', context)      
 
 @teacher_required
 def lesson_delivery_start(request):
-    class_choices =[(str(unit.study_year) + unit.letter_mark, str(unit.study_year) + unit.letter_mark) for unit in ClassUnit.objects.all()]
-
-    subject_choices =[(subject.name, subject.name) for subject in Subject.objects.all()]
+    class_choices =[(
+        str(unit.study_year) + unit.letter_mark,
+        str(unit.study_year) + unit.letter_mark
+        ) for unit in ClassUnit.objects.all()]
+    subject_choices =[(
+        subject.name,
+        subject.name
+        ) for subject in Subject.objects.all()]
 
     if request.method == 'POST':
         form_subject = request.POST.get('subject')
         selected_subject = Subject.objects.get(name=form_subject)
-
         form_class = request.POST.get('class_unit')
         class_year = int(form_class[0])
         class_letter_mark = form_class[1]
-        selected_class = ClassUnit.objects.filter(study_year=class_year, letter_mark=class_letter_mark)
-        current_teacher = Teacher.objects.get(user=request.user.profile)
-       
+        selected_class = ClassUnit.objects.filter(
+            study_year=class_year,
+            letter_mark=class_letter_mark
+            )
+        current_teacher = Teacher.objects.get(user=request.user.profile)    
         lesson_report = LessonReport.objects.get_or_create(
             create_date=date.today(),
             subject=selected_subject,
@@ -173,7 +191,9 @@ def lesson_delivery_start(request):
 @teacher_required
 def lesson_class_initiation(request, lesson_report_id):
     current_lesson_report = LessonReport.objects.get(id=lesson_report_id)
-    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
+    students = Student.objects.filter(
+        class_unit=current_lesson_report.class_unit
+        )
     current_class = current_lesson_report.class_unit
 
     if request.method == 'POST':
@@ -183,13 +203,12 @@ def lesson_class_initiation(request, lesson_report_id):
             if not Attendance.objects.filter(
                 lesson_report=current_lesson_report,
                 student=participant.id,
-                is_present__in=[True, False]
                 ).exists():
-
                 attendance_object = Attendance.objects.create(
                     lesson_report = current_lesson_report,
                     student = participant,
-                    is_present=request.POST.get(str(participant.id), False) == 'True'
+                    is_present=request.POST.get(str(participant.id),
+                    False) == 'True'
                     )
         messages.success(request, "Attendance checked!")
         return redirect('lesson_conducting', current_lesson_report.id)
@@ -203,15 +222,20 @@ def lesson_class_initiation(request, lesson_report_id):
 
 @teacher_required
 def lesson_conducting(request, current_lesson_report_id):
-    current_lesson_report = LessonReport.objects.get(id=current_lesson_report_id)
+    current_lesson_report = LessonReport.objects.get(
+        id=current_lesson_report_id
+        )
     initial_data = {
         'lesson_title' : current_lesson_report.lesson_title,
         'lesson_description' : current_lesson_report.lesson_description,
             }
-    lesson_report_text = LessonReportText(initial=initial_data)
+    lesson_report_text = LessonReportTextForm(initial=initial_data)
 
     if request.method=='POST':
-        updated_form = LessonReportText(request.POST, instance=current_lesson_report)
+        updated_form = LessonReportTextForm(
+            request.POST,
+            instance=current_lesson_report
+            )
 
         if updated_form.is_valid():
             updated_form.save()
@@ -231,14 +255,15 @@ def lesson_conducting(request, current_lesson_report_id):
         context={
             'lesson_report_text': lesson_report_text,
             'current_lesson_report': current_lesson_report,
-                }
-    
+                }    
         return render(request, 'lesson_conducting.html', context)
 
 @teacher_required    
 def add_event(request, current_lesson_report_id):
-    current_lesson_report = LessonReport.objects.get(id=current_lesson_report_id)
-    add_event_form = AddEvent()
+    current_lesson_report = LessonReport.objects.get(
+        id=current_lesson_report_id
+        )
+    add_event_form = AddEventForm()
     curret_teacher = Teacher.objects.get(user=request.user.profile)
 
     if request.method == 'GET':
@@ -249,21 +274,19 @@ def add_event(request, current_lesson_report_id):
         return render(request, 'add_event.html', context)
 
     else:
-        adding_form = AddEvent(request.POST)
+        adding_form = AddEventForm(request.POST)
 
         if adding_form.is_valid():
-            form = adding_form.save(commit=False)
-            if form.realisation_time <= date.today():
-                messages.error(request, 'Ralisation date must be past today')
-                return redirect('add_event', current_lesson_report.id )
-            
-            else:
-                form.author = curret_teacher
-                form.subject = current_lesson_report.subject
-                form.connected_to_lesson = current_lesson_report
-                form.save()
-                messages.success(request, "Event added successfully!")
-                return redirect ('lesson_conducting', current_lesson_report.id)
+            event = adding_form.save(commit=False)
+            event.author = curret_teacher
+            event.subject = current_lesson_report.subject
+            event.connected_to_lesson = current_lesson_report
+            event.save()
+            messages.success(request, "Event added successfully!")
+            return redirect (
+                'lesson_conducting',
+                current_lesson_report.id
+                )
         
         else:
             errors = adding_form.errors
@@ -271,14 +294,26 @@ def add_event(request, current_lesson_report_id):
 
 @teacher_required         
 def edit_attendance(request, current_lesson_report_id):
-    current_lesson_report = LessonReport.objects.get(id=current_lesson_report_id)
-    current_attendance = Attendance.objects.filter(lesson_report = current_lesson_report)
-    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
+    current_lesson_report = LessonReport.objects.get(
+        id=current_lesson_report_id
+        )
+    current_attendance = Attendance.objects.filter(
+        lesson_report = current_lesson_report
+        )
+    students = Student.objects.filter(
+        class_unit=current_lesson_report.class_unit
+        )
 
     if request.method == 'POST':
         for student in students:
-            participant = Attendance.objects.get(student=student.id, lesson_report=current_lesson_report)
-            participant.is_present = request.POST.get(str(student.id), False) == 'True'
+            participant = Attendance.objects.get(
+                student=student.id,
+                lesson_report=current_lesson_report
+                )
+            participant.is_present = request.POST.get(
+                str(student.id),
+                False
+                ) == 'True'
             participant.save()                           
         messages.success(request, "Attendance updated!")
         return redirect('lesson_conducting', current_lesson_report.id)
@@ -292,10 +327,14 @@ def edit_attendance(request, current_lesson_report_id):
 
 @teacher_required
 def grades_teacher(request, current_lesson_report_id):
-    current_lesson_report= LessonReport.objects.get(id=current_lesson_report_id)
+    current_lesson_report= LessonReport.objects.get(
+        id=current_lesson_report_id
+        )
     subject=current_lesson_report.subject
     current_teacher=Teacher.objects.get(user=request.user.profile)
-    students = Student.objects.filter(class_unit=current_lesson_report.class_unit)
+    students = Student.objects.filter(
+        class_unit=current_lesson_report.class_unit
+        )
     class_unit=current_lesson_report.class_unit
     any_grade=False
     if request.method == 'POST':
@@ -314,20 +353,28 @@ def grades_teacher(request, current_lesson_report_id):
                         submitted_by=current_teacher,
                         subject=subject,
                         semester=current_semestr()
-                        )
-                                        
-                    messages.success(request, "Grade sumbited!")
+                        )                                 
 
                 else:
-                    messages.error(request, "Description required 3-250 signs!")                 
-                
+                    messages.error(
+                        request,
+                        "Description required 3-250 signs!"
+                        )   
+                                  
+        messages.success(request, "Grade sumbited!")                
         if not any_grade:
-            messages.error(request, "Any grade required! No changes Submitted!")                 
+            messages.error(
+                request,
+                "Any grade required! No changes Submitted!"
+                )                 
         return redirect('grades_teacher', current_lesson_report_id)
 
     else:
         grades = Grades.objects.filter(subject=current_lesson_report.subject)
-        current_lesson_grades = {student: [grade.grade for grade in grades.filter(student=student)] for student in students}
+        current_lesson_grades = {
+            student: [grade.grade for grade in grades.filter(student=student)]
+            for student in students
+            }
         grade_options=[
             ('None', 'None'),
             (1, 1),
@@ -351,16 +398,19 @@ def grades_teacher(request, current_lesson_report_id):
 @teacher_required   
 def edit_student_grades(request, student_id, current_lesson_report_id):
     current_lesson = LessonReport.objects.get(id=current_lesson_report_id)
-    student_grades = Grades.objects.filter(student=student_id, subject=current_lesson.subject)
+    student_grades = Grades.objects.filter(
+        student=student_id,
+        subject=current_lesson.subject
+        )
     current_student = Student.objects.get(id=student_id)
 
     if request.method == 'POST':
         for raw in student_grades:
             if request.POST.get(str(raw.id), False) == 'True':
                 raw.delete()
-                messages.success(request, 'One grade deleted!')
+
             else:
-                changed_description = request.POST.get(f"description_{raw.id}")
+                changed_description=request.POST.get(f"description_{raw.id}")
 
                 if 3 < len(changed_description) < 250:   
                     raw.grade_description = changed_description
@@ -369,8 +419,12 @@ def edit_student_grades(request, student_id, current_lesson_report_id):
                     raw.save() 
 
                 else:
-                    messages.error(request, "Description required 3-250 signs!")
+                    messages.error(
+                        request,
+                        "Description required 3-250 signs!"
+                        )
                     redirect ('grades_teacher', current_lesson_report_id)
+          
         messages.success(request, "Grades sucesfully changed")
         return redirect ('grades_teacher', current_lesson_report_id)
     

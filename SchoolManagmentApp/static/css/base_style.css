@@ -138,7 +138,7 @@ nav .nav-list li:not(:last-child) a:hover {
   transition: 0.4s;
 }
 
-@media screen and (max-width: 930px) {
+@media screen and (max-width: 1620px) {
   nav .hamb {
     display: initial;
   }
@@ -167,8 +167,9 @@ nav .nav-list li:not(:last-child) a:hover {
     top: 90px;
     right: -65%;
     bottom: 0;
-    width: 60%;
-    height: 30%;
+    width: 40%;
+    height: 47%;
+    min-height: 860px;
     background: black;
     z-index: 2;
     padding: 6% 9%;
@@ -187,13 +188,25 @@ nav .nav-list li:not(:last-child) a:hover {
     margin-left: 0;
     margin-bottom: 40px;
   }
+
+  nav .nav-list li span {
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 400;
+    margin-left: 0;
+  }
+
+  nav .nav-list li a button{
+    margin-top: 20px;
+  }
   nav .nav-list li.btn a {
     position: absolute;
     bottom: 0%;
     right: 20%;
     left: 20%;
     padding: 7px 15px;
-    font-size: 14px;
+    font-size: 12px;
   }
   nav .nav-list.open {
     right: 0;
@@ -824,7 +837,7 @@ tr.email-list:hover {
 
 .max-width {
 	min-width: 165px;
-	width: 240px;
+	width: 241px;
 	color: white;
 	text-align: center;
 }
@@ -930,7 +943,7 @@ table.schedule thead {
 .select-clas-btn{
 	font-size: 0.85em;
 	height: 30px;
-	width: 60px;
+	width: 66px;
 	border-color: #2ecc71;
 	color:#2ecc71;
 	background-color: transparent;
@@ -1090,4 +1103,9 @@ table.schedule thead {
 
 .cards .text.visible {
   clip-path: circle(133% at 89% 6%);
+}
+
+.select-button{
+  padding-bottom: 2px;
+  height: 35px;
 }

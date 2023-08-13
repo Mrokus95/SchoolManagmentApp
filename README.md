@@ -261,4 +261,6 @@ In summary, the CalendarApp emerges as an indispensable tool for managing class 
 
 ## Authors:
 
+- [Łukasz Mroczkowski](https://github.com/Mrokus95)
+- [Mateusz Świst ](https://github.com/MateuszSwist)
 

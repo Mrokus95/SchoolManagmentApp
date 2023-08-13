@@ -11,7 +11,7 @@ Welcome to the School Management App, a web application designed to streamline a
 * [Technologies](#technologies)
 * [Tests](#tests)
 * [Features](#features)
-* [About authors](#about-authors)
+* [About authors](#Authors)
 
 
 ## Installation process:

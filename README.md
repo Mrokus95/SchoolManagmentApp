@@ -261,14 +261,31 @@ In summary, the CalendarApp emerges as an indispensable tool for managing class 
 
 ## Authors:
 
-![Lukasz](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/3b26a154-ab53-4590-a756-3c9f88681a2d)
-- [Łukasz Mroczkowski](https://github.com/Mrokus95)
-- [![CodeWars](https://www.codewars.com/users/TWÓJ_NICK/badges/small)]((https://www.codewars.com/users/Mrokus95))
-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-PROFIL-blue)]((https://www.linkedin.com/in/mroczkowski-lukasz/))
-
-
-![Mateusz](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/a6ca45f3-4579-4201-bac3-0e770780e6dd)
-- [Mateusz Świst ](https://github.com/MateuszSwist)
-- [![CodeWars](https://www.codewars.com/users/TWÓJ_NICK/badges/small)]((https://www.codewars.com/users/MatS1))
-- [![LinkedIn](https://img.shields.io/badge/LinkedIn-PROFIL-blue)](https://www.linkedin.com/in/mateusz-%C5%9Bwist/)
-
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/3b26a154-ab53-4590-a756-3c9f88681a2d" alt="Łukasz Mroczkowski" width="150px" height="150px">
+    </td>
+    <td>
+      <ul>
+        <b>Łukasz Mroczkowski</b>
+        <p>Junior Python Developer</p>
+        <li><a href="https://www.codewars.com/users/TWÓJ_NICK">CodeWars</a> <img src="https://www.codewars.com/users/Mrokus95/badges/small" alt="CodeWars"></li>
+        <li><a href="https://www.linkedin.com/in/mroczkowski-lukasz/">LinkedIn</a> <img src="https://img.shields.io/badge/LinkedIn-PROFIL-blue" alt="LinkedIn"></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/a6ca45f3-4579-4201-bac3-0e770780e6dd" alt="Łukasz Mroczkowski" width="150px" height="150px">
+    </td>
+    <td>
+      <ul>
+        <b>Mateusz Świst</b>
+        <p>Junior Python Developer</p>
+        <li><a href="https://www.codewars.com/users/TWÓJ_NICK">CodeWars</a> <img src="https://www.codewars.com/users/MatS1/badges/small" alt="CodeWars"></li>
+        <li><a href="https://www.linkedin.com/in/mateusz-%C5%9Bwist/">LinkedIn</a> <img src="https://img.shields.io/badge/LinkedIn-PROFIL-blue" alt="LinkedIn"></li>
+      </ul>
+    </td>
+  </tr>
+</table>

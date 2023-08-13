@@ -261,6 +261,14 @@ In summary, the CalendarApp emerges as an indispensable tool for managing class 
 
 ## Authors:
 
+![Lukasz](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/3b26a154-ab53-4590-a756-3c9f88681a2d)
 - [Łukasz Mroczkowski](https://github.com/Mrokus95)
+- [![CodeWars](https://www.codewars.com/users/TWÓJ_NICK/badges/small)]((https://www.codewars.com/users/Mrokus95))
+- [![LinkedIn](https://img.shields.io/badge/LinkedIn-PROFIL-blue)]((https://www.linkedin.com/in/mroczkowski-lukasz/))
+
+
+![Mateusz](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/a6ca45f3-4579-4201-bac3-0e770780e6dd)
 - [Mateusz Świst ](https://github.com/MateuszSwist)
+- [![CodeWars](https://www.codewars.com/users/TWÓJ_NICK/badges/small)]((https://www.codewars.com/users/MatS1))
+- [![LinkedIn](https://img.shields.io/badge/LinkedIn-PROFIL-blue)](https://www.linkedin.com/in/mateusz-%C5%9Bwist/)
 

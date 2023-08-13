@@ -152,7 +152,15 @@ This comprehensive array of features not only streamlines user management but al
 
 ### TeacherApp:
 
-After logging in as an admin, we have the ability to create new user accounts by assigning them the necessary attributes. For example, while setting up a student account, apart from the usual details, it's required to choose a class and link a parent. On the other hand, for a teacher account, specifying a subject is crucial. Additionally, each profile provides the option to upload a photo. This is also the section responsible for user authentication. Each user has the capability to edit vital information such as email address or password.
+ATeacherApp is a crucial component of the project, enabling lesson management and facilitating associated formalities.
+
+- At the outset, the user selects a class and subject, which serve as the foundation for report categorization.
+
+- Subsequently, they are directed to the attendance tracking view, where a list of students for the chosen class is generated.
+  
+- Finally, they access the report view, allowing them to update attendance, add grades with brief descriptions, and assign events such as tests or homework. Before finalizing, they input the lesson's topic and provide a short description. Following lesson finalization, each student and their associated parent can review the lesson's occurrences and related events.
+
+- Teachers have their dedicated dashboard for reviewing their reports, equipped with filtering capabilities based on date, class, or subject.
 
 #### Adding grades:
 ![Adding_Grades](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/e382df2d-7ce8-4b25-86c8-f2decc24f967)
@@ -225,7 +233,13 @@ In summary, GradesApp is a powerful tool for student grade management and monito
 
 ### EventsApp:
 
-Each student and parent can browse through events associated with their class or their child's class, which are additionally marked with a red exclamation mark if they haven't been viewed yet. They have the ability to filter these events based on subjects, lessons, date ranges, or view all at once. By clicking on an event, they can read its details and navigate to the corresponding report.
+The StudentApp is a significant component of the application responsible for displaying events associated with a particular student or parent.
+
+- Students can view events related to them, while parents are directed to their child's events or can choose from among them if the school has multiple students. Teachers can see all events they have added.
+
+- Each user has the ability to access event details by clicking on them and can navigate to the related lesson report view.
+
+- Events can be filtered based on subject, event type, or by selecting a date range.
 
 #### Viewing events for student:
 ![Events_Student](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/58bb1c31-dbf1-432f-866e-ab23989d4f2a)

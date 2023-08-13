@@ -6,7 +6,7 @@ from datetime import date
 from eventApp.models import CalendarEvents, Teacher
 from usersApp.models import Profile, Student, Parent
 from eventApp.forms import EventFilterStudentForm
-from teacherApp.forms import AddEvent
+from teacherApp.forms import AddEventForm
 from teacherApp.decorators import teacher_required
 from eventApp.decorators import student_required, parent_required
 
@@ -290,13 +290,13 @@ def edit_event(request, eventId):
     connected_to_lesson = edited_event.connected_to_lesson
 
     if request.method == 'GET':
-        edit_form = AddEvent(instance=edited_event)    
+        edit_form = AddEventForm(instance=edited_event)    
         context={'edit_form': edit_form,
                  'connected_to_lesson' : connected_to_lesson}
         return render(request, 'edit_event.html', context)
     
     else:
-        edited_form = AddEvent(request.POST, instance=edited_event)
+        edited_form = AddEventForm(request.POST, instance=edited_event)
 
         if edited_form.is_valid():
             edited_form.save()

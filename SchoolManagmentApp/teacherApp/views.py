@@ -6,7 +6,7 @@ from .forms import(
     LessonRportFilterForm,
     ClassSubjectChoiceForm,
     LessonReportTextForm,
-    AddEvent
+    AddEventForm
     )
 from usersApp.models import Profile, Student, ClassUnit
 from eventApp.models import(
@@ -263,7 +263,7 @@ def add_event(request, current_lesson_report_id):
     current_lesson_report = LessonReport.objects.get(
         id=current_lesson_report_id
         )
-    add_event_form = AddEvent()
+    add_event_form = AddEventForm()
     curret_teacher = Teacher.objects.get(user=request.user.profile)
 
     if request.method == 'GET':
@@ -274,7 +274,7 @@ def add_event(request, current_lesson_report_id):
         return render(request, 'add_event.html', context)
 
     else:
-        adding_form = AddEvent(request.POST)
+        adding_form = AddEventForm(request.POST)
 
         if adding_form.is_valid():
             event = adding_form.save(commit=False)

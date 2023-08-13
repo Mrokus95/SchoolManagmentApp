@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from datetime import date, timedelta
-from eventApp.forms import AddEvent, EventFilterStudentForm
+from eventApp.forms import EventFilterStudentForm
+from teacherApp.forms import AddEventForm
 from eventApp.models import LessonReport, Subject, Teacher, ClassUnit
 from gradesApp.models import Semester
 from usersApp.models import Profile
@@ -42,7 +43,7 @@ class AddEventFormTest(TestCase):
             'realisation_time': date.today()+ timedelta(days=1),
             'event_type': self.event_type
             }
-        form = AddEvent(data)
+        form = AddEventForm(data)
         self.assertTrue(form.is_valid())
 
     def test_add_event_invalid_form(self):
@@ -52,7 +53,7 @@ class AddEventFormTest(TestCase):
             'realisation_time': date.today() - timedelta(days=1),
             'event_type': 'incorrect'
             }
-        form = AddEvent(wrong_data)
+        form = AddEventForm(wrong_data)
         self.assertFalse(form.is_valid())
         self.assertEqual(len(form.errors), 4)
 

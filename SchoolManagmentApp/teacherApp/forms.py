@@ -26,7 +26,7 @@ class LessonReportTextForm(forms.ModelForm):
        }
 
 
-class AddEvent(forms.ModelForm):
+class AddEventForm(forms.ModelForm):
     class Meta:
         model = CalendarEvents
         fields = (

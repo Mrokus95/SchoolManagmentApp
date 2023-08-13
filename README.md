@@ -270,7 +270,7 @@ In summary, the CalendarApp emerges as an indispensable tool for managing class 
       <ul>
         <b>Łukasz Mroczkowski</b>
         <p>Junior Python Developer</p>
-        <li><a href="https://www.codewars.com/users/TWÓJ_NICK">CodeWars</a> <img src="https://www.codewars.com/users/Mrokus95/badges/small" alt="CodeWars"></li>
+        <li><a href="https://www.codewars.com/users/Mrokus95">CodeWars</a> <img src="https://www.codewars.com/users/Mrokus95/badges/small" alt="CodeWars"></li>
         <li><a href="https://www.linkedin.com/in/mroczkowski-lukasz/">LinkedIn</a> <img src="https://img.shields.io/badge/LinkedIn-PROFIL-blue" alt="LinkedIn"></li>
       </ul>
     </td>
@@ -283,7 +283,7 @@ In summary, the CalendarApp emerges as an indispensable tool for managing class 
       <ul>
         <b>Mateusz Świst</b>
         <p>Junior Python Developer</p>
-        <li><a href="https://www.codewars.com/users/TWÓJ_NICK">CodeWars</a> <img src="https://www.codewars.com/users/MatS1/badges/small" alt="CodeWars"></li>
+        <li><a href="https://www.codewars.com/users/MatS1">CodeWars</a> <img src="https://www.codewars.com/users/MatS1/badges/small" alt="CodeWars"></li>
         <li><a href="https://www.linkedin.com/in/mateusz-%C5%9Bwist/">LinkedIn</a> <img src="https://img.shields.io/badge/LinkedIn-PROFIL-blue" alt="LinkedIn"></li>
       </ul>
     </td>

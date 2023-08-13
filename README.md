@@ -119,11 +119,7 @@ Similarly, we meticulously tested the `eventApp` module, which handles the creat
 
 For transparency and accountability, we've provided a screenshot of the test coverage report. This report showcases the extent of code coverage achieved through our diligent testing efforts.
 
-<<<<<<< HEAD
-![Coverage Report Screenshot]() 
-=======
 ![coverage raport](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/2440620f-60e1-4e28-b2f8-f9d203c0e470)
->>>>>>> readmeChanges
 
 ## Features
 
@@ -134,7 +130,6 @@ Functions and permissions vary depending on the account type. The website offers
 ### UsersApp:
 
 The School Management App has been meticulously designed to enhance school administration and communication, providing a suite of features tailored to meet the diverse needs of the school community.
-<<<<<<< HEAD
 
 - Home Page and Login: The app also serves as the homepage with a login panel that warmly greets users when they visit our website. It's here that users initiate their interaction with the application.
 
@@ -147,8 +142,6 @@ The School Management App has been meticulously designed to enhance school admin
 - Password Reset Convenience: The app offers an efficient solution for password recovery through email communication. Users can request a password reset, receiving an email with an authentication link to securely reset their password, ensuring account security and seamless access.
 
 This comprehensive array of features not only streamlines user management but also reinforces the security and accessibility of the platform, fostering effective communication and collaboration within the school community.
-=======
->>>>>>> readmeChanges
 
 - Home Page and Login: The app also serves as the homepage with a login panel that warmly greets users when they visit our website. It's here that users initiate their interaction with the application.
 

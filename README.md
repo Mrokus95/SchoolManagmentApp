@@ -143,18 +143,6 @@ The School Management App has been meticulously designed to enhance school admin
 
 This comprehensive array of features not only streamlines user management but also reinforces the security and accessibility of the platform, fostering effective communication and collaboration within the school community.
 
-- Home Page and Login: The app also serves as the homepage with a login panel that warmly greets users when they visit our website. It's here that users initiate their interaction with the application.
-
-- User Account Creation: Administrators can effortlessly create new user accounts with relevant attributes. When setting up a student account, administrators not only provide standard details but also select a class and assign a parent, facilitating effective student-parent tracking. Similarly, while creating a teacher account, specifying the subject they will teach is crucial for clear role definition.
-
-- Customizable Profiles: User profiles are highly customizable. Users can upload a photograph to personalize their profile, enhancing visual identification and community engagement.
-
-- User Authentication and Management: This section is pivotal for user authentication. Administrators can log in with appropriate privileges to create, manage, and oversee user accounts. Each user, whether a teacher, student, or parent, has the autonomy to update crucial information like email addresses and passwords.
-
-- Password Reset Convenience: The app offers an efficient solution for password recovery through email communication. Users can request a password reset, receiving an email with an authentication link to securely reset their password, ensuring account security and seamless access.
-
-This comprehensive array of features not only streamlines user management but also reinforces the security and accessibility of the platform, fostering effective communication and collaboration within the school community.
-
 #### Adding student by admin:
 ![register student](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/58a798af-6852-4d1e-8bfa-53fd4fde166e)
 

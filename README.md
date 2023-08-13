@@ -119,7 +119,11 @@ Similarly, we meticulously tested the `eventApp` module, which handles the creat
 
 For transparency and accountability, we've provided a screenshot of the test coverage report. This report showcases the extent of code coverage achieved through our diligent testing efforts.
 
+<<<<<<< HEAD
 ![Coverage Report Screenshot]() 
+=======
+![coverage raport](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/2440620f-60e1-4e28-b2f8-f9d203c0e470)
+>>>>>>> readmeChanges
 
 ## Features
 
@@ -130,6 +134,21 @@ Functions and permissions vary depending on the account type. The website offers
 ### UsersApp:
 
 The School Management App has been meticulously designed to enhance school administration and communication, providing a suite of features tailored to meet the diverse needs of the school community.
+<<<<<<< HEAD
+
+- Home Page and Login: The app also serves as the homepage with a login panel that warmly greets users when they visit our website. It's here that users initiate their interaction with the application.
+
+- User Account Creation: Administrators can effortlessly create new user accounts with relevant attributes. When setting up a student account, administrators not only provide standard details but also select a class and assign a parent, facilitating effective student-parent tracking. Similarly, while creating a teacher account, specifying the subject they will teach is crucial for clear role definition.
+
+- Customizable Profiles: User profiles are highly customizable. Users can upload a photograph to personalize their profile, enhancing visual identification and community engagement.
+
+- User Authentication and Management: This section is pivotal for user authentication. Administrators can log in with appropriate privileges to create, manage, and oversee user accounts. Each user, whether a teacher, student, or parent, has the autonomy to update crucial information like email addresses and passwords.
+
+- Password Reset Convenience: The app offers an efficient solution for password recovery through email communication. Users can request a password reset, receiving an email with an authentication link to securely reset their password, ensuring account security and seamless access.
+
+This comprehensive array of features not only streamlines user management but also reinforces the security and accessibility of the platform, fostering effective communication and collaboration within the school community.
+=======
+>>>>>>> readmeChanges
 
 - Home Page and Login: The app also serves as the homepage with a login panel that warmly greets users when they visit our website. It's here that users initiate their interaction with the application.
 
@@ -143,8 +162,11 @@ The School Management App has been meticulously designed to enhance school admin
 
 This comprehensive array of features not only streamlines user management but also reinforces the security and accessibility of the platform, fostering effective communication and collaboration within the school community.
 
-#### Adding student by adminn:
-![Adding_Student_By_Admin](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/8a601a25-d4ff-4d0a-a51b-9184028b2f2b)
+#### Adding student by admin:
+![register student](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/58a798af-6852-4d1e-8bfa-53fd4fde166e)
+
+#### Reset password email:
+![email reset](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/de8fa275-73e5-4084-8afd-e6ac4b380fe5)
 
 
 ### TeacherApp:
@@ -185,10 +207,13 @@ A standout feature of the MessagesApp is its ability to track message read statu
 In summary, the MessagesApp transcends the conventional messaging experience by offering a comprehensive suite of features tailored for effective communication management. Users can seamlessly navigate their messages, mark them as important, and engage in responsive communication. With its robust capabilities and user-friendly interface, the MessagesApp transforms messaging into a streamlined and organized process, enhancing communication efficiency across the platform.
 
 #### Create new message:
-![New_Message](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/10f2ce30-ca29-4249-931f-ca060775ffd9)
+![Create new email](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/9cbd4379-9bac-4dac-8745-29b96b8ab87c)
 
 #### Inbox:
-![Messages_Inbox](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/d37fcfe1-1198-466e-83ee-c7066ffde6be)
+![inbox](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/9adfcdeb-b54b-436e-9557-09496a82f5ea)
+
+#### View of received email:
+![received email](https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/61d3bd2b-05a0-4af6-ab8e-cc2d1d85d90c)
 
 ### GradesApp:
 
@@ -254,9 +279,33 @@ In summary, the CalendarApp emerges as an indispensable tool for managing class 
 #### Shedule:
 ![Sheludes_Student](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/13740fa7-c73d-40a5-9a2f-3d95829c7946)
 
-#### Adding lesson:
-![Shelude_Updating_By_Admin](https://github.com/Mrokus95/SchoolManagmentApp/assets/123180025/bad9ab16-ca8f-444a-b026-0fb1c782d47d)
-
 ## Authors:
 
-
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/3b26a154-ab53-4590-a756-3c9f88681a2d" alt="Łukasz Mroczkowski" width="150px" height="150px">
+    </td>
+    <td>
+      <ul>
+        <b>Łukasz Mroczkowski</b>
+        <p>Junior Python Developer</p>
+        <li><a href="https://www.codewars.com/users/Mrokus95">CodeWars</a> <img src="https://www.codewars.com/users/Mrokus95/badges/small" alt="CodeWars"></li>
+        <li><a href="https://www.linkedin.com/in/mroczkowski-lukasz/">LinkedIn</a> <img src="https://img.shields.io/badge/LinkedIn-PROFIL-blue" alt="LinkedIn"></li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/Mrokus95/SchoolManagmentApp/assets/59625513/a6ca45f3-4579-4201-bac3-0e770780e6dd" alt="Łukasz Mroczkowski" width="150px" height="150px">
+    </td>
+    <td>
+      <ul>
+        <b>Mateusz Świst</b>
+        <p>Junior Python Developer</p>
+        <li><a href="https://www.codewars.com/users/MatS1">CodeWars</a> <img src="https://www.codewars.com/users/MatS1/badges/small" alt="CodeWars"></li>
+        <li><a href="https://www.linkedin.com/in/mateusz-%C5%9Bwist/">LinkedIn</a> <img src="https://img.shields.io/badge/LinkedIn-PROFIL-blue" alt="LinkedIn"></li>
+      </ul>
+    </td>
+  </tr>
+</table>
